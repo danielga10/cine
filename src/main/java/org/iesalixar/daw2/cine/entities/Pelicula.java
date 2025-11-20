@@ -33,8 +33,8 @@ public class Pelicula {
     private Time duracion;
 
     // Campo que almacena el identificador único del director.
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @OneToOne(cascade = CascadeType.ALL) // Cascada para persistencia
+    @JoinColumn(name = "id_director", referencedColumnName = "id") // FK en Director
     private Long id_director;
 
     /**
