@@ -32,10 +32,10 @@ public class Pelicula {
     @Column(name = "duracion", nullable = false) // Define la columna correspondiente en la tabla.
     private Time duracion;
 
-    // Campo que almacena el identificador único del director.
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_director;
+    @ManyToOne
+    @JoinColumn(name = "id_director", nullable = false)
+    private Director director; // relación con Director
+
 
     /**
      * Este es un constructor personalizado que no incluye el campo `id`.
@@ -45,13 +45,11 @@ public class Pelicula {
      `id` es autogenerado).
      * @param titulo Título de la película.
      * @param duracion Duración de la película.
-     * @param id_director Id del director.
      */
 
 
-    public Pelicula(String titulo, Time duracion, Long id_director) {
+    public Pelicula(String titulo, Time duracion) {
         this.titulo = titulo;
         this.duracion = duracion;
-        this.id_director = id_director;
     }
 }

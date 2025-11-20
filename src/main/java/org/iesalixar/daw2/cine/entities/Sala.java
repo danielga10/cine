@@ -40,7 +40,7 @@ public class Sala {
 
 
     // Lista de peliculas asociados a la sala.
-    @OneToMany(mappedBy = "funcion")
+    @OneToMany(mappedBy = "sala")
     private List<Funcion> funciones;
 
     public Sala(int numero, int capacidad) {
