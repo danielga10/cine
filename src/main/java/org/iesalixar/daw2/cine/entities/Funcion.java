@@ -3,6 +3,7 @@ package org.iesalixar.daw2.cine.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "funcion")
@@ -25,6 +26,10 @@ public class Funcion {
 
         @OneToMany(mappedBy = "funcion")
         private List<Boleto> boletos;
+
+        public Funcion(){
+
+        }
 }
 
 
