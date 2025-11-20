@@ -9,15 +9,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * La clase `Province` representa una entidad que modela una provincia dentro de la base de datos.
- * Contiene cuatro campos: `id`, `code`, `name`, y `region`, donde `id` es el identificador único de la provincia,
- * `code` es un código asociado a la provincia, `name` es el nombre de la provincia, y `region` es la relación
- * con la entidad `Region`, representando la comunidad autónoma a la que pertenece la provincia.
- *
- * Las anotaciones de Lombok ayudan a reducir el código repetitivo al generar automáticamente
- * métodos comunes como getters, setters, constructores, y otros métodos estándar de los objetos.
- */
 @Entity // Marca esta clase como una entidad JPA.
 @Table(name = "trabajador") // Define el nombre de la tabla asociada a esta entidad.
 @Data
