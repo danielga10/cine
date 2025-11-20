@@ -34,7 +34,7 @@ public class Pelicula {
 
     // Campo que almacena el identificador único del director.
     @OneToOne(cascade = CascadeType.ALL) // Cascada para persistencia
-    @JoinColumn(name = "id_director", referencedColumnName = "id") // FK en Director
+    @JoinColumn(name = "id_director", referencedColumnName = "id") // FK en Pelicula
     private Long id_director;
 
     /**
