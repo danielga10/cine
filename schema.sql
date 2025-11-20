@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS trabajador(
     FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE IF NOT EXISTS funcion(
+    id_funcion INT AUTO_INCREMENT PRIMARY KEY,
     id_sala INT NOT NULL,
     id_pelicula INT NOT NULL,
     horario TIME NOT NULL,
-    PRIMARY KEY (id_sala, id_pelicula, horario),
     FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
