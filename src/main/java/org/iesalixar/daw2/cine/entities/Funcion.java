@@ -11,7 +11,7 @@ public class Funcion {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long idFuncion; // PK simple
+        private Long id_funcion; // PK simple
 
         @ManyToOne
         @JoinColumn(name = "id_sala", nullable = false)
