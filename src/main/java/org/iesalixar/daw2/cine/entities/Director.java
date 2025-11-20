@@ -11,7 +11,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
-@Table(name = "directors") // Especifica el nombre de la tabla asociada a esta entidad.
+@Table(name = "directores") // Especifica el nombre de la tabla asociada a esta entidad.
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class Director {
     // Campo que almacena el nombre del director.
     @NotEmpty(message = "{msg.director.nombre.notEmpty}")
     @Size(max = 100, message = "{msg.director.nombre.size}")
-    @Column(name = "nombre", nullable = false, length = 2) // Define la columna correspondiente en la tabla.
+    @Column(name = "nombre", nullable = false, length = 100) // Define la columna correspondiente en la tabla.
     private String nombre;
 
     // Campo que almacena nacionalidad del director.
