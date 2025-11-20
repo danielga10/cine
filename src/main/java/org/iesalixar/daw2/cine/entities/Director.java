@@ -34,7 +34,7 @@ public class Director {
     @Column(name = "nacionalidad", nullable = false, length = 100) // Define la columna correspondiente en la tabla.
     private String nacionalidad;
 
-    // Campo que almacena nacionalidad del director.
+    // Campo que almacena fecha de nacimiento del director.
     @NotEmpty(message = "{msg.director.fecha_nacimiento.notEmpty}")
     @Column(name = "fecha_nacimiento", nullable = false) // Define la columna correspondiente en la tabla.
     private Date fecha_nacimiento;
