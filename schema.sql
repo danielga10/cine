@@ -1,0 +1,57 @@
+CREATE DATABASE IF NOT EXISTS cine;
+
+CREATE TABLE IF NOT EXISTS director(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(20) NOT NULL,
+    nacionalidad VARCHAR(30) NOT NULL,
+    nacimiento DATE NOT NULL
+);
+CREATE TABLE IF NOT EXISTS pelicula(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(30) NOT NULL,
+    duracion TIME NOT NULL,
+    id_director INT NOT NULL,
+    FOREIGN KEY (id_director) REFERENCES director(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS sala(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero INT NOT NULL,
+    capacidad INT NOT NULL,
+    id_pelicula INT NOT NULL,
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS trabajador(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(20) NOT NULL,
+    telefono VARCHAR(9) NOT NULL,
+    correo VARCHAR(35) NOT NULL,
+    id_sala INT NOT NULL UNIQUE,
+    FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS funcion(
+    id_sala INT NOT NULL,
+    id_pelicula INT NOT NULL,
+    horario TIME NOT NULL,
+    PRIMARY KEY (id_sala, id_pelicula, horario),
+    FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS cliente(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(35) NOT NULL,
+    nombre VARCHAR(25) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS boleto(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    asiento VARCHAR(5) NOT NULL,
+    precio DECIMAL(4,2) NOT NULL,
+    id_cliente INT NOT NULL,
+    id_sala INT NOT NULL,
+    id_pelicula INT NOT NULL,
+    horario TIME NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_sala, id_pelicula, horario)
+        REFERENCES funcion(id_sala, id_pelicula, horario)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
