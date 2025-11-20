@@ -46,12 +46,9 @@ CREATE TABLE IF NOT EXISTS boleto(
     asiento VARCHAR(5) NOT NULL,
     precio DECIMAL(4,2) NOT NULL,
     id_cliente INT NOT NULL,
-    id_sala INT NOT NULL,
-    id_pelicula INT NOT NULL,
+    id_funcion INT NOT NULL,
     horario TIME NOT NULL,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_sala, id_pelicula, horario)
-        REFERENCES funcion(id_sala, id_pelicula, horario)
-        ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_funcion) REFERENCES funcion(id) ON DELETE CASCADE, ON UPDATE CASCADE
 );
 
