@@ -11,7 +11,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
-@Table(name = "directores") // Especifica el nombre de la tabla asociada a esta entidad.
+@Table(name = "director") // Especifica el nombre de la tabla asociada a esta entidad.
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
