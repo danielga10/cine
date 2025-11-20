@@ -1,3 +1,5 @@
+--Data de la base de datos actualizada a los cambios realizados anteriormente
+
 USE cine;
 -- DIRECTORES
 INSERT INTO director (nombre, nacionalidad, nacimiento) VALUES
