@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Time;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
-@Table(name = "peliculas") // Especifica el nombre de la tabla asociada a esta entidad.
+@Table(name = "pelicula") // Especifica el nombre de la tabla asociada a esta entidad.
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
