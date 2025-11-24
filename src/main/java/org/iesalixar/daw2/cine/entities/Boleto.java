@@ -7,9 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 
 @Entity // Marca esta clase como una entidad JPA.
-@Table(name = "boletos") // Define el nombre de la tabla asociada a esta entidad.
+@Table(name = "boleto") // Define el nombre de la tabla asociada a esta entidad.
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,6 +26,10 @@ public class Boleto {
     @Size(max = 3, message = "{msg.boleto.asiento.size}")
     @Column(name = "asiento", nullable = false, length = 3) // Define la columna correspondiente en la tabla.
     private String asiento;
+
+    @NotNull(message = "{msg.boleto.horario.notNull}")
+    @Column(name = "horario", nullable = false)
+    private LocalTime horario;
 
     @NotNull(message = "{msg.boleto.precio.notNull}")
     @DecimalMin(value = "0.0", inclusive = false, message = "{msg.boleto.precio.min}")
@@ -44,7 +49,7 @@ public class Boleto {
     @JoinColumn(name = "id_funcion", nullable = false) // Clave foránea en la tabla boleto que referencia a la tabla funcion.
     private Funcion funcion;
 
-    public Boleto(String asiento, BigDecimal precio) {
+    public Boleto(String asiento, BigDecimal precio, Cliente cliente, Funcion funcion) {
         this.asiento = asiento;
         this.precio = precio;
         this.cliente = cliente;
