@@ -31,7 +31,7 @@ public class Sala {
     @NotEmpty(message = "{msg.sala.numero.notEmpty}")
     @Size(min = 2, max = 100, message = "{msg.sala.numero.size}")
     @Column(name = "numero", nullable = false)
-    private int numero;
+    private String numero;
 
     // Capacidad total de la sala.
     @NotNull(message = "{msg.sala.capacidad.notNull}")
@@ -43,7 +43,7 @@ public class Sala {
     @OneToMany(mappedBy = "sala")
     private List<Funcion> funciones;
 
-    public Sala(int numero, int capacidad) {
+    public Sala(String numero, int capacidad) {
         this.numero = numero;
         this.capacidad = capacidad;
     }

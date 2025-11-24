@@ -13,8 +13,8 @@ import org.springframework.data.repository.query.Param;
 public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     Page<Pelicula> findAll(Pageable pageable);
 
-    Page<Pelicula> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Pelicula> findByTituloContainingIgnoreCase(String titulo, Pageable pageable);
 
-    long countByNameContainingIgnoreCase(String name);
+    long countByTituloContainingIgnoreCase(String name);
 
 }

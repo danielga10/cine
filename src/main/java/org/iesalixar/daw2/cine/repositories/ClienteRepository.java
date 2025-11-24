@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface ClienteRepository {
     Page<Cliente> findAll(Pageable pageable);
 
-    Page<Cliente> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Cliente> findByEmailContainingIgnoreCase(String email, Pageable pageable);
 
-    long countByNameContainingIgnoreCase(String name);
+    long countByEmailContainingIgnoreCase(String email);
 }
