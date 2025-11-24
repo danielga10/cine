@@ -9,14 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * La clase `Cliente` representa una entidad que modela una región dentro de la base de datos.
- * Contiene tres campos: `id`, `code` y `name`, donde `id` es el identificador único de la región,
- * `code` es un código asociado a la región, y `name` es el nombre de la región.
- *
- * Las anotaciones de Lombok ayudan a reducir el código repetitivo al generar automáticamente
- * métodos comunes como getters, setters, constructores, y otros métodos estándar de los objetos.
- */
 @Entity // Marca esta clase como una entidad gestionada por JPA.
 @Table(name = "clientes") // Especifica el nombre de la tabla asociada a esta entidad.
 @Data
