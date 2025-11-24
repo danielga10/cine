@@ -18,6 +18,4 @@ public interface DirectorRepository extends JpaRepository<Director, Long> {
     long countByNameContainingIgnoreCase(String name);
 
     boolean existsDirectorByCode(String code);
-    @Query("SELECT COUNT(p) > 0 FROM Director p WHERE p.code = :code AND p.id != :id")
-    boolean existsDirectorByCodeAndNotId(@Param("code") String code, @Param("id") Long id);
 }
