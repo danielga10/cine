@@ -9,27 +9,30 @@ import java.util.List;
 @Table(name = "funcion")
 public class Funcion {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id_funcion; // PK simple
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_funcion;
 
-        @ManyToOne
-        @JoinColumn(name = "id_sala", nullable = false)
-        private Sala sala;
+    @ManyToOne
+    @JoinColumn(name = "id_sala", nullable = false)
+    private Sala sala;
 
-        @ManyToOne
-        @JoinColumn(name = "id_pelicula", nullable = false)
-        private Pelicula pelicula;
+    @ManyToOne
+    @JoinColumn(name = "id_pelicula", nullable = false)
+    private Pelicula pelicula;
 
-        @Column(name = "horario", nullable = false)
-        private LocalTime horario;
+    @Column(name = "horario", nullable = false)
+    private LocalTime horario;
 
-        @OneToMany(mappedBy = "funcion")
-        private List<Boleto> boletos;
+    @OneToMany(mappedBy = "funcion")
+    private List<Boleto> boletos;
 
-        public Funcion(){
+    public Funcion() {
+    }
 
-        }
+    public Funcion(Sala sala, Pelicula pelicula, LocalTime horario) {
+        this.sala = sala;
+        this.pelicula = pelicula;
+        this.horario = horario;
+    }
 }
-
-
