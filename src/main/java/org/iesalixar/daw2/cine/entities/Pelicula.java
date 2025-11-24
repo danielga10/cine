@@ -2,6 +2,7 @@ package org.iesalixar.daw2.cine.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,19 +24,19 @@ public class Pelicula {
 
     // Campo que almacena el título de la película.
     @NotEmpty(message = "{msg.pelicula.titulo.notEmpty}")
-    @Size(max = 100, message = "{msg.pelicula.titulo.size}")
-    @Column(name = "titulo", nullable = false, length = 100) // Define la columna correspondiente en la tabla.
+    @Size(max = 30, message = "{msg.pelicula.titulo.size}") // Ajustado a SQL
+    @Column(name = "titulo", nullable = false, length = 30)
     private String titulo;
 
     // Campo que almacena duración la película.
-    @NotEmpty(message = "{msg.pelicula.duracion.notEmpty}")
-    @Column(name = "duracion", nullable = false) // Define la columna correspondiente en la tabla.
+    @NotNull(message = "{msg.pelicula.duracion.notNull}")
+    @Column(name = "duracion", nullable = false)
     private Time duracion;
 
     // Campo que almacena el identificador único del director.
     @ManyToOne
     @JoinColumn(name = "id_director", nullable = false)
-    private Director director; // relación con Director
+    private Director director;
 
 
     /**
