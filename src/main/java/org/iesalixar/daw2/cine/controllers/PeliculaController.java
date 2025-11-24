@@ -35,8 +35,8 @@ public class PeliculaController {
         Page<Pelicula> peliculas;
         int totalPages = 0;
         if (search != null && !search.isBlank()) {
-            peliculas = peliculaRepository.findByNameContainingIgnoreCase(search, pageable);
-            totalPages = (int) Math.ceil((double) peliculaRepository.countByNameContainingIgnoreCase(search) / 5);
+            peliculas = peliculaRepository.findByTituloContainingIgnoreCase(search, pageable);
+            totalPages = (int) Math.ceil((double) peliculaRepository.countByTituloContainingIgnoreCase(search) / 5);
         } else {
             peliculas = peliculaRepository.findAll(pageable);
             totalPages = (int) Math.ceil((double) peliculaRepository.count() / 5);
