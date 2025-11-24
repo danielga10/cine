@@ -1,10 +1,7 @@
 package org.iesalixar.daw2.cine.entities;
 
-import org.iesalixar.daw2.cine.entities.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -28,23 +25,26 @@ public class Sala {
     private Long id;
 
     // Numero de la sala.
-    @NotEmpty(message = "{msg.sala.numero.notEmpty}")
-    @Size(min = 2, max = 100, message = "{msg.sala.numero.size}")
+    @NotNull(message = "{msg.sala.numero.notNull}")
     @Column(name = "numero", nullable = false)
-    private int numero;
+    private Integer numero;
 
     // Capacidad total de la sala.
     @NotNull(message = "{msg.sala.capacidad.notNull}")
     @Column(name = "capacidad", nullable = false)
-    private int capacidad;
+    private Integer capacidad;
 
+    @ManyToOne
+    @JoinColumn(name = "id_pelicula", nullable = false)
+    private Pelicula pelicula;
 
     // Lista de peliculas asociados a la sala.
     @OneToMany(mappedBy = "sala")
     private List<Funcion> funciones;
 
-    public Sala(int numero, int capacidad) {
+    public Sala(Integer numero, Integer capacidad, Pelicula pelicula) {
         this.numero = numero;
         this.capacidad = capacidad;
+        this.pelicula = pelicula;
     }
 }

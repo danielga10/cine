@@ -23,8 +23,8 @@ public class Boleto {
     // Campo que almacena el asiento del boleto, normalmente una cadena corta que identifica el boleto.
     // Ejemplo: "23" para boleto con id 1.
     @NotEmpty(message = "{msg.boleto.asiento.notEmpty}")
-    @Size(max = 3, message = "{msg.boleto.asiento.size}")
-    @Column(name = "asiento", nullable = false, length = 3) // Define la columna correspondiente en la tabla.
+    @Size(max = 5, message = "{msg.boleto.asiento.size}")
+    @Column(name = "asiento", nullable = false, length = 5)
     private String asiento;
 
     @NotNull(message = "{msg.boleto.horario.notNull}")
@@ -33,20 +33,20 @@ public class Boleto {
 
     @NotNull(message = "{msg.boleto.precio.notNull}")
     @DecimalMin(value = "0.0", inclusive = false, message = "{msg.boleto.precio.min}")
-    @Digits(integer = 10, fraction = 2, message = "{msg.boleto.precio.digits}")
-    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
+    @Digits(integer = 2, fraction = 2, message = "{msg.boleto.precio.digits}")
+    @Column(name = "precio", nullable = false, precision = 4, scale = 2)
     private BigDecimal precio;
 
     // Relación con la entidad `Cliente`, representando el boleto al que pertenece el cliente.
     @NotNull(message = "{msg.boleto.cliente.notNull}")
-    @ManyToOne(fetch = FetchType.LAZY) // Relación de muchos boletos a un cliente.
-    @JoinColumn(name = "id_cliente", nullable = false) // Clave foránea en la tabla boleto que referencia a la tabla cliente.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
     // Relación con la entidad `Funcion`, representando el boleto al que pertenece la funcion.
     @NotNull(message = "{msg.boleto.funcion.notNull}")
-    @ManyToOne(fetch = FetchType.LAZY) // Relación de muchos boletos a una funcion.
-    @JoinColumn(name = "id_funcion", nullable = false) // Clave foránea en la tabla boleto que referencia a la tabla funcion.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_funcion", nullable = false)
     private Funcion funcion;
 
     public Boleto(String asiento, BigDecimal precio, Cliente cliente, Funcion funcion) {

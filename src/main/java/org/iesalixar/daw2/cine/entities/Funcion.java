@@ -1,7 +1,6 @@
 package org.iesalixar.daw2.cine.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalTime;
 import java.util.List;
 
@@ -11,6 +10,7 @@ public class Funcion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_funcion")
     private Long id_funcion;
 
     @ManyToOne

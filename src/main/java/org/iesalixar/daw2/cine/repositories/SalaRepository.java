@@ -1,20 +1,14 @@
 package org.iesalixar.daw2.cine.repositories;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.iesalixar.daw2.cine.entities.Sala;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface SalaRepository extends JpaRepository<Sala, Long> {
-    Page<Sala> findAll(Pageable pageable);
 
-    Page<Sala> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    // Buscar salas por número
+    Page<Sala> findByNumero(Integer numero, Pageable pageable);
 
-    long countByNameContainingIgnoreCase(String name);
-
+    long countByNumero(Integer numero);
 }
