@@ -17,5 +17,4 @@ public interface DirectorRepository extends JpaRepository<Director, Long> {
 
     long countByNameContainingIgnoreCase(String name);
 
-    boolean existsDirectorByCode(String code);
 }
