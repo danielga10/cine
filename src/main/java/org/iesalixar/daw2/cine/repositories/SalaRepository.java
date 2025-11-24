@@ -17,6 +17,4 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
 
     long countByNameContainingIgnoreCase(String name);
 
-    boolean existsSalaByCode(String code);
-
 }
