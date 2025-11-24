@@ -18,6 +18,5 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     long countByNameContainingIgnoreCase(String name);
 
     boolean existsPeliculaByCode(String code);
-    @Query("SELECT COUNT(p) > 0 FROM Pelicula p WHERE p.code = :code AND p.id != :id")
-    boolean existsPeliculaByCodeAndNotId(@Param("code") String code, @Param("id") Long id);
+
 }
