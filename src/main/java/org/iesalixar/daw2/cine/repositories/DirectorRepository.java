@@ -13,8 +13,8 @@ import org.springframework.data.repository.query.Param;
 public interface DirectorRepository extends JpaRepository<Director, Long> {
     Page<Director> findAll(Pageable pageable);
 
-    Page<Director> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Director> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
 
-    long countByNameContainingIgnoreCase(String name);
+    long countByNombreContainingIgnoreCase(String nombre);
 
 }

@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 public interface FuncionRepository {
     Page<Boleto> findAll(Pageable pageable);
 
-    Page<Boleto> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Boleto> findByCodeContainingIgnoreCase(String code, Pageable pageable);
 }
