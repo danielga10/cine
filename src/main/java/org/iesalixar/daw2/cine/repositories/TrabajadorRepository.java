@@ -17,6 +17,4 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
 
     long countByNameContainingIgnoreCase(String name);
 
-    boolean existsTrabajadorByCode(String code);
-
 }
