@@ -13,8 +13,8 @@ import org.springframework.data.repository.query.Param;
 public interface SalaRepository extends JpaRepository<Sala, Long> {
     Page<Sala> findAll(Pageable pageable);
 
-    Page<Sala> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Sala> findByNumeroContainingIgnoreCase(String numero, Pageable pageable);
 
-    long countByNameContainingIgnoreCase(String name);
+    long countByNumeroContainingIgnoreCase(String numero);
 
 }

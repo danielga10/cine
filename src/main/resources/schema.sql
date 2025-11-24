@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS pelicula(
 
 CREATE TABLE IF NOT EXISTS sala(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    numero INT NOT NULL,
+    numero VARCHAR(2) NOT NULL,
     capacidad INT NOT NULL,
     id_pelicula INT NOT NULL,
     FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS cliente(
 
 CREATE TABLE IF NOT EXISTS funcion(
     id_funcion INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(4) NOT NULL,
     id_sala INT NOT NULL,
     id_pelicula INT NOT NULL,
     horario TIME NOT NULL,
@@ -55,6 +56,7 @@ CREATE TABLE IF NOT EXISTS funcion(
 
 CREATE TABLE IF NOT EXISTS boleto(
     id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(4) NOT NULL,
     asiento VARCHAR(5) NOT NULL,
     precio DECIMAL(4,2) NOT NULL,
     id_cliente INT NOT NULL,
