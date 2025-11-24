@@ -17,6 +17,4 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
     long countByNameContainingIgnoreCase(String name);
 
-    boolean existsPeliculaByCode(String code);
-
 }
