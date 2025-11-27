@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Cine - Listado de Salas')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1>Salas</h1>
+
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <p th:text="${mensajeError}"></p>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Número</th>
+            <th>Capacidad</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sala : ${salas}">
+            <td th:text="${sala.id}"></td>
+            <td th:text="${sala.numero}"></td>
+            <td th:text="${sala.capacidad}"></td>
+            <td>
+                <a th:href="@{/salas/edit(id=${sala.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <form th:action="@{/salas/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${sala.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('¿Seguro que quieres borrar esta sala?');|">
+                        Borrar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/salas/new}" class="btn btn-success mt-3">Añadir nueva Sala</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

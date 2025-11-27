@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Cine - Listado de Películas')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1>Películas</h1>
+
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <p th:text="${mensajeError}"></p>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Duración</th>
+            <th>Director</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pelicula : ${peliculas}">
+            <td th:text="${pelicula.id}"></td>
+            <td th:text="${pelicula.titulo}"></td>
+            <td th:text="${pelicula.duracion}"></td>
+            <td th:text="${pelicula.director != null ? pelicula.director.nombre : ''}"></td>
+            <td>
+                <a th:href="@{/peliculas/edit(id=${pelicula.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <form th:action="@{/peliculas/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${pelicula.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('¿Seguro que quieres borrar esta película?');|">
+                        Borrar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/peliculas/new}" class="btn btn-success mt-3">Añadir nueva Película</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
