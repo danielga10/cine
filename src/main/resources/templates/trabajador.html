@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Cine - Listado de Trabajadores')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1>Trabajadores</h1>
+
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <p th:text="${mensajeError}"></p>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Sala</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="trabajador : ${trabajadores}">
+            <td th:text="${trabajador.id}"></td>
+            <td th:text="${trabajador.nombre}"></td>
+            <td th:text="${trabajador.telefono}"></td>
+            <td th:text="${trabajador.correo}"></td>
+            <td th:text="${trabajador.sala != null ? trabajador.sala.numero : ''}"></td>
+            <td>
+                <a th:href="@{/trabajadores/edit(id=${trabajador.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <form th:action="@{/trabajadores/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${trabajador.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('¿Seguro que quieres borrar este trabajador?');|">
+                        Borrar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/trabajadores/new}" class="btn btn-success mt-3">Añadir nuevo Trabajador</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

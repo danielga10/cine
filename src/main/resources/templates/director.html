@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Cine - Listado de Directores')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1>Directores</h1>
+
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <p th:text="${mensajeError}"></p>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Nacionalidad</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="director : ${directores}">
+            <td th:text="${director.id}"></td>
+            <td th:text="${director.nombre}"></td>
+            <td th:text="${director.nacionalidad}"></td>
+            <td th:text="${director.fecha_nacimiento} != null ? #dates.format(director.fecha_nacimiento, 'dd/MM/yyyy') : ''"></td>
+            <td>
+                <a th:href="@{/directores/edit(id=${director.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <form th:action="@{/directores/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${director.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('¿Seguro que quieres borrar este director?');|">
+                        Borrar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/directores/new}" class="btn btn-success mt-3">Añadir nuevo Director</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

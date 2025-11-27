@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Cine - Listado de Clientes')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+    <h1>Clientes</h1>
+
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <p th:text="${mensajeError}"></p>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente : ${clientes}">
+            <td th:text="${cliente.id}"></td>
+            <td th:text="${cliente.nombre}"></td>
+            <td th:text="${cliente.email}"></td>
+            <td>
+                <a th:href="@{/clientes/edit(id=${cliente.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <form th:action="@{/clientes/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${cliente.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('¿Seguro que quieres borrar este cliente?');|">
+                        Borrar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/clientes/new}" class="btn btn-success mt-3">Añadir nuevo Cliente</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
