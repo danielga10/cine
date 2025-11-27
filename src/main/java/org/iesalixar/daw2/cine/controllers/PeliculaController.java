@@ -50,7 +50,6 @@ public class PeliculaController {
         return "pelicula"; // Nombre de la plantilla Thymeleaf a renderizar
     }
 
-
     /** Formulario para crear una nueva pelicula */
     @GetMapping("/new")
     public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
