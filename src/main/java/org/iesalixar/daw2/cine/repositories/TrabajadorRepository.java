@@ -16,5 +16,10 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     Page<Trabajador> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     long countByNameContainingIgnoreCase(String name);
-
+    @Query("""
+       SELECT DISTINCT t
+       FROM Trabajador t
+       LEFT JOIN FETCH t.salas
+       """)
+    List<Trabajador> findAllWithSalas();
 }
