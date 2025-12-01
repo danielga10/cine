@@ -1,6 +1,5 @@
 package org.iesalixar.daw2.cine.controllers;
 
-
 import org.iesalixar.daw2.cine.entities.Pelicula;
 import org.iesalixar.daw2.cine.entities.Sala;
 import org.iesalixar.daw2.cine.entities.Funcion;

@@ -13,6 +13,9 @@ public class Funcion {
     @Column(name = "id_funcion")
     private Long id_funcion;
 
+    @Column(name="code", nullable=false)
+    private String code;
+
     @ManyToOne
     @JoinColumn(name = "id_sala", nullable = false)
     private Sala sala;

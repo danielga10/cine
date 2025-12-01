@@ -20,6 +20,9 @@ public class Boleto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "code", nullable = false)
+    private String code;
+
     // Campo que almacena el asiento del boleto, normalmente una cadena corta que identifica el boleto.
     // Ejemplo: "23" para boleto con id 1.
     @NotEmpty(message = "{msg.boleto.asiento.notEmpty}")
