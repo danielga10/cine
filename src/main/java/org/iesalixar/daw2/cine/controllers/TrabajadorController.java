@@ -56,7 +56,7 @@ public class TrabajadorController {
     public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("trabajador", new Trabajador());
         try {
-            List<Trabajador> listTrabajadores = trabajadorRepository.findAll();
+            List<Trabajador> listTrabajadores = trabajadorRepository.findAllWithSalas();
             model.addAttribute("trabajadores", listTrabajadores);
         } catch (Exception e) {
             e.printStackTrace(); // imprime la causa exacta del error 500
