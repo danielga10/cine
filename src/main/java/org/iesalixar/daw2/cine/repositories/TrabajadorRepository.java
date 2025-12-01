@@ -20,7 +20,7 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     @Query("""
        SELECT DISTINCT t
        FROM Trabajador t
-       LEFT JOIN FETCH t.salas
+       LEFT JOIN FETCH t.sala
        """)
     List<Trabajador> findAllWithSalas();
 
