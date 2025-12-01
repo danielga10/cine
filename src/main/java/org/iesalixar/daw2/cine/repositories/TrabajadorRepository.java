@@ -14,9 +14,9 @@ import org.springframework.data.repository.query.Param;
 public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     Page<Trabajador> findAll(Pageable pageable);
 
-    Page<Trabajador> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Trabajador> findByNombreContainingIgnoreCase(String name, Pageable pageable);
 
-    long countByNameContainingIgnoreCase(String name);
+    long countByNombreContainingIgnoreCase(String name);
     @Query("""
        SELECT DISTINCT t
        FROM Trabajador t
