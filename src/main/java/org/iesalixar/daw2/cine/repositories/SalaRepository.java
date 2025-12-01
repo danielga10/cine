@@ -17,4 +17,13 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
 
     long countByNumeroContainingIgnoreCase(String numero);
 
+    @Query("""
+       SELECT DISTINCT s
+       FROM Sala s
+       LEFT JOIN FETCH s.funciones f
+       LEFT JOIN FETCH f.pelicula
+       """)
+    List<Sala> findAllWithFunciones();
+
+
 }
