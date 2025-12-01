@@ -13,8 +13,8 @@ import org.springframework.data.repository.query.Param;
 public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     Page<Trabajador> findAll(Pageable pageable);
 
-    Page<Trabajador> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
+    Page<Trabajador> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    long countByNombreContainingIgnoreCase(String nombre);
+    long countByNameContainingIgnoreCase(String name);
 
 }
