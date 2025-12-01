@@ -3,6 +3,7 @@ package org.iesalixar.daw2.cine.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.iesalixar.daw2.cine.entities.Sala;
 import org.iesalixar.daw2.cine.entities.Trabajador;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,5 +17,12 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     Page<Trabajador> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     long countByNameContainingIgnoreCase(String name);
+    @Query("""
+       SELECT DISTINCT t
+       FROM Trabajador t
+       LEFT JOIN FETCH t.salas
+       """)
+    List<Trabajador> findAllWithSalas();
+
 
 }
