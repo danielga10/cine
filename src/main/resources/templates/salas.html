@@ -40,7 +40,9 @@
 
                 <ul th:if="${!#lists.isEmpty(sala.funciones)}" class="mb-0">
                     <li th:each="funcion : ${sala.funciones}">
-                        <span th:text="${funcion.pelicula}">Pelicula</span>
+                        <span th:text="${funcion.code}"></span> -
+                        <span th:text="${funcion.pelicula.titulo}"></span> -
+                        <span th:text="${funcion.horario}"></span>
                     </li>
                 </ul>
             </td>

@@ -55,7 +55,7 @@ public class SalaController {
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("sala", new Sala());
         try {
-            List<Sala> listSalas = salaRepository.findAll();
+            List<Sala> listSalas = salaRepository.findAllWithFunciones();
             model.addAttribute("salas", listSalas);
         } catch (Exception e) {
             e.printStackTrace(); // imprime la causa exacta del error 500

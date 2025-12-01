@@ -3,6 +3,14 @@ package org.iesalixar.daw2.cine.entities;
 import jakarta.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+@Getter
+@Setter
 
 @Entity
 @Table(name = "funcion")
