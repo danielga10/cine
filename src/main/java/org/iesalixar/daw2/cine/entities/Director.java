@@ -1,5 +1,6 @@
 package org.iesalixar.daw2.cine.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -43,6 +44,7 @@ public class Director {
 
     // Lista de peliculas asociados al director.
     @OneToMany(mappedBy = "director")
+    @JsonIgnore
     private List<Pelicula> peliculas;
 
     /**
