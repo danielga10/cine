@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head ('Cine - Listado de Peliculas')}"></head>
+<head th:replace="~{fragments/head :: head ('Cine - Listado de Películas')}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
@@ -26,21 +26,24 @@
             <th>Título</th>
             <th>Duración</th>
             <th>Director</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Cambiado a listPeliculas, que es lo que tu controlador envía -->
         <tr th:each="pelicula : ${listPeliculas}">
             <td th:text="${pelicula.id}"></td>
             <td th:text="${pelicula.titulo}"></td>
             <td th:text="${pelicula.duracion}"></td>
-            <td th:text="${pelicula.director.nombre}"></td>
+
+            <!-- Director corregido -->
+            <td th:text="${pelicula.director != null ? pelicula.director.nombre : 'Sin director'}"></td>
 
             <td>
-                <a th:href="@{/peliculas/edit(id=${pelicula.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <a th:href="@{/peliculas/edit(id=${pelicula.id})}"
+                   class="btn btn-primary btn-sm">Editar</a>
 
                 <form th:action="@{/peliculas/delete}" method="post" class="d-inline">
-                    <input type="hidden" name="id" th:value="${pelicula.id}" />
+                    <input type="hidden" name="id" th:value="${pelicula.id}"/>
                     <button type="submit" class="btn btn-danger btn-sm"
                             th:onclick="|return confirm('¿Seguro que quieres borrar esta película?');|">
                         Borrar
@@ -48,7 +51,6 @@
                 </form>
             </td>
         </tr>
-
         </tbody>
     </table>
 
@@ -59,7 +61,9 @@
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{/peliculas(page=${i}, search=${search}, sort=${sort})}" th:text="${i}">1</a>
+                <a class="page-link"
+                   th:href="@{/peliculas(page=${i}, search=${search}, sort=${sort})}"
+                   th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link" th:href="@{/peliculas(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
