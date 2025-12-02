@@ -2,6 +2,7 @@ package org.iesalixar.daw2.cine.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
 @Table(name = "director") // Especifica el nombre de la tabla asociada a esta entidad.
