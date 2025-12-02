@@ -20,7 +20,7 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     @Query("""
        SELECT DISTINCT p
        FROM Pelicula p
-       LEFT JOIN FETCH t.director
+       LEFT JOIN FETCH p.director
        """)
     List<Pelicula> findAllWithDirector();
 
