@@ -1,19 +1,12 @@
 package org.iesalixar.daw2.cine.entities;
 
-import org.iesalixar.daw2.cine.entities.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * La clase `Sala` representa una entidad que representa una sala del cine.
- * Contiene campos como `id`, `numero`, `capacidad` y `id_cliente`,
- */
 @Entity
 @Table(name = "sala")
 @Getter
@@ -22,28 +15,33 @@ import java.util.List;
 @AllArgsConstructor
 public class Sala {
 
-    // Identificador único de la sala. Es autogenerado y clave primaria.
+    // Identificador único de la sala
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Numero de la sala.
-    @NotEmpty(message = "{msg.sala.numero.notEmpty}")
-    @Size(min = 2, max = 100, message = "{msg.sala.numero.size}")
-    @Column(name = "numero", nullable = false)
-    private String numero;
+    // Número de sala (>=1)
+    @NotNull(message = "{msg.sala.numero.notNull}")
+    @Min(value = 1, message = "{msg.sala.numero.min}")
+    @Column(nullable = false)
+    private Integer numero;
 
-    // Capacidad total de la sala.
+    // Capacidad de la sala (>=1)
     @NotNull(message = "{msg.sala.capacidad.notNull}")
-    @Column(name = "capacidad", nullable = false)
-    private int capacidad;
+    @Min(value = 1, message = "{msg.sala.capacidad.min}")
+    @Column(nullable = false)
+    private Integer capacidad;
 
+    // Relación 1:1 con Trabajador (lado inverso, la FK está en Trabajador)
+    @OneToOne(mappedBy = "sala")
+    private Trabajador trabajador;
 
-    // Lista de peliculas asociados a la sala.
+    // Relación 1:N con Funciones
     @OneToMany(mappedBy = "sala")
     private List<Funcion> funciones;
 
-    public Sala(String numero, int capacidad) {
+    // Constructor sin ID
+    public Sala(Integer numero, Integer capacidad) {
         this.numero = numero;
         this.capacidad = capacidad;
     }
