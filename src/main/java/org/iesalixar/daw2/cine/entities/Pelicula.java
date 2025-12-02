@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import java.util.List;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
 @Table(name = "pelicula") // Especifica el nombre de la tabla asociada a esta entidad.
@@ -38,6 +39,10 @@ public class Pelicula {
     @JoinColumn(name = "id_director", nullable = false)
     private Director director;
 
+
+    // Lista de peliculas asociadas al director.
+    @OneToMany(mappedBy = "director")
+    private List<Pelicula> peliculas;
 
     /**
      * Este es un constructor personalizado que no incluye el campo `id`.
