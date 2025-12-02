@@ -17,4 +17,11 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
     long countByTituloContainingIgnoreCase(String name);
 
+    @Query("""
+       SELECT DISTINCT p
+       FROM Pelicula p
+       LEFT JOIN FETCH t.director
+       """)
+    List<Pelicula> findAllWithDirector();
+
 }
