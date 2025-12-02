@@ -47,7 +47,7 @@ public class TrabajadorController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "trabajador"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "trabajadores"; // Nombre de la plantilla Thymeleaf a renderizar
     }
 
 

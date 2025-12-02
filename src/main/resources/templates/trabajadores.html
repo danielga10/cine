@@ -27,6 +27,7 @@
             <th>Telefono</th>
             <th>Correo</th>
             <th>Sala</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +37,15 @@
             <td th:text="${trabajador.nombre}"></td>
             <td th:text="${trabajador.telefono}"></td>
             <td th:text="${trabajador.correo}"></td>
-            <td th:text="${trabajador.sala}"></td>
+            <td>
+                <span th:if="${#lists.isEmpty(trabajador.sala)}">Sin salas</span>
+
+                <ul th:if="${!#lists.isEmpty(trabajador.sala)}" class="mb-0">
+                    <li th:each="sala : ${trabajador.sala}">
+                        <span th:text="${sala.numero}"></span>
+                    </li>
+                </ul>
+            </td>
             <td>
                 <a th:href="@{/trabajadores/edit(id=${trabajador.id})}" class="btn btn-primary btn-sm">Editar</a>
                 <form th:action="@{/trabajadores/delete}" method="post" class="d-inline">

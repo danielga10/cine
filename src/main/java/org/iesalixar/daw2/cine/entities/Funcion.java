@@ -18,8 +18,8 @@ public class Funcion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_funcion")
-    private Long id_funcion;
+    @Column(name = "id")
+    private Long id;
 
     @Column(name="code", nullable=false)
     private String code;
