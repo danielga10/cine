@@ -34,11 +34,13 @@
             <td th:text="${pelicula.id}"></td>
             <td th:text="${pelicula.titulo}"></td>
             <td th:text="${pelicula.duracion}"></td>
-            <td th:text="${pelicula.director}"></td>
+            <td th:text="${pelicula.director.nombre}"></td>
+
             <td>
                 <a th:href="@{/peliculas/edit(id=${pelicula.id})}" class="btn btn-primary btn-sm">Editar</a>
+
                 <form th:action="@{/peliculas/delete}" method="post" class="d-inline">
-                    <input type="hidden" name="id" th:value="${pelicula.id}"/>
+                    <input type="hidden" name="id" th:value="${pelicula.id}" />
                     <button type="submit" class="btn btn-danger btn-sm"
                             th:onclick="|return confirm('¿Seguro que quieres borrar esta película?');|">
                         Borrar
@@ -46,6 +48,7 @@
                 </form>
             </td>
         </tr>
+
         </tbody>
     </table>
 
