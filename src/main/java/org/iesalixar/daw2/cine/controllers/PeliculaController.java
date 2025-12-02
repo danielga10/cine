@@ -1,6 +1,7 @@
 package org.iesalixar.daw2.cine.controllers;
 
 import org.iesalixar.daw2.cine.entities.Pelicula;
+import org.iesalixar.daw2.cine.entities.Trabajador;
 import org.iesalixar.daw2.cine.repositories.PeliculaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class PeliculaController {
     public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("pelicula", new Pelicula());
         try {
-            List<Pelicula> listPeliculas = peliculaRepository.findAll();
+            List<Pelicula> listPeliculas = peliculaRepository.findAllWithDirector();
             model.addAttribute("peliculas", listPeliculas);
         } catch (Exception e) {
             e.printStackTrace(); // imprime la causa exacta del error 500
