@@ -36,6 +36,14 @@
             <td th:text="${pelicula.duracion}"></td>
             <td th:text="${pelicula.director}"></td>
             <td>
+                <span th:if="${#lists.isEmpty(pelicula.director)}">Sin director</span>
+
+                <ul th:if="${!#lists.isEmpty(pelicula.director)}" class="mb-0">
+                    <li th:each="director : ${pelicula.director}">
+                        <span th:text="${director.nombre}"></span>
+                    </li>
+                </ul>
+            </td>
                 <a th:href="@{/peliculas/edit(id=${pelicula.id})}" class="btn btn-primary btn-sm">Editar</a>
                 <form th:action="@{/peliculas/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${pelicula.id}"/>
