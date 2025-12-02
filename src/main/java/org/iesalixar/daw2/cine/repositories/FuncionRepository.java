@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface FuncionRepository extends JpaRepository{
+public interface FuncionRepository extends JpaRepository<Funcion, Long>{
     Page<Funcion> findAll(Pageable pageable);
 
     Page<Funcion> findByCodeContainingIgnoreCase(String code, Pageable pageable);
