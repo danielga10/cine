@@ -23,11 +23,23 @@
         </thead>
         <tbody>
         <tr th:each="funcion : ${funciones}">
-            <td th:text="${funcion.id_funcion}"></td>
+            <td th:text="${funcion.id}"></td>
             <td th:text="${funcion.sala != null ? funcion.sala.numero : ''}"></td>
             <td th:text="${funcion.pelicula != null ? funcion.pelicula.titulo : ''}"></td>
             <td th:text="${funcion.horario}"></td>
             <td>
+            // Pendiente
+            <td>
+                <span th:if="${#lists.isEmpty(sala.funciones)}">Sin funciones</span>
+
+                <ul th:if="${!#lists.isEmpty(sala.funciones)}" class="mb-0">
+                    <li th:each="funcion : ${sala.funciones}">
+                        <span th:text="${funcion.code}"></span> -
+                        <span th:text="${funcion.pelicula.titulo}"></span> -
+                        <span th:text="${funcion.horario}"></span>
+                    </li>
+                </ul>
+            </td>
                 <a th:href="@{/funciones/edit(id=${funcion.id_funcion})}" class="btn btn-primary btn-sm">Editar</a>
                 <form th:action="@{/funciones/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${funcion.id_funcion}"/>
