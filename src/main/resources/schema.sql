@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS cliente(
 );
 
 CREATE TABLE IF NOT EXISTS funcion(
-    id_funcion INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(4) NOT NULL,
     id_sala INT NOT NULL,
     id_pelicula INT NOT NULL,
