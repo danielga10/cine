@@ -29,7 +29,7 @@ public class Sala {
 
     // Numero de la sala.
     @NotEmpty(message = "{msg.sala.numero.notEmpty}")
-    @Size(min = 2, max = 100, message = "{msg.sala.numero.size}")
+    @Size(min = 1, max = 100, message = "{msg.sala.numero.size}")
     @Column(name = "numero", nullable = false)
     private String numero;
 
