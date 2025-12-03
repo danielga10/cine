@@ -31,26 +31,39 @@ public class SalaController {
     private SalaRepository salaRepository;
 
     @GetMapping()
-    public String listSalas(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model ) {
+    public String listSalas(@RequestParam(defaultValue = "1") int page,
+                            @RequestParam(required = false) String search,
+                            @RequestParam(required = false) String sort,
+                            Model model) {
         logger.info("Solicitando listado de todas las salas..." + search);
         Pageable pageable = PageRequest.of(page - 1, 5, getSort(sort));
         Page<Sala> salas;
         int totalPages = 0;
+
         if (search != null && !search.isBlank()) {
-            salas = salaRepository.findByNumeroContainingIgnoreCase(search, pageable);
-            totalPages = (int) Math.ceil((double) salaRepository.countByNumeroContainingIgnoreCase(search) / 5);
+            try {
+                int numeroSala = Integer.parseInt(search);
+                salas = salaRepository.findByNumero(numeroSala, pageable);
+                totalPages = (int) Math.ceil((double) salaRepository.countByNumero(numeroSala) / 5);
+            } catch (NumberFormatException e) {
+                // Si el usuario ingresa texto en lugar de un número, mostrar lista vacía
+                salas = Page.empty(pageable);
+                totalPages = 0;
+            }
         } else {
             salas = salaRepository.findAll(pageable);
             totalPages = (int) Math.ceil((double) salaRepository.count() / 5);
         }
-        logger.info("Se han cargado {} peliculas.", salas.toList().size());
-        model.addAttribute("listSalas", salas.toList()); // Pasar la lista de salas al modelo
+
+        logger.info("Se han cargado {} salas.", salas.toList().size());
+        model.addAttribute("listSalas", salas.toList());
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "salas"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "salas";
     }
+
     @GetMapping("/new")
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("sala", new Sala());
