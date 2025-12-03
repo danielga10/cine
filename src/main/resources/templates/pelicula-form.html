@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Cine - Insertar/Actualizar Pelicula')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<main class="container mt-5">
+    <h1 th:text="${pelicula.id == null ? 'Add New Pelicula' : 'Edit Pelicula'}"></h1>
+
+    <!-- Mensaje de error -->
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <form th:action="${pelicula.id == null} ? @{/peliculas/insert} : @{/peliculas/update}"
+          th:object="${pelicula}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Titulo:</label>
+            <input type="text" th:field="*{titulo}" id="titulo" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="duracion" class="form-label">Duracion:</label>
+            <input type="time" th:field="*{duracion}" id="duracion" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <select th:field="*{directorId}" id="director" class="form-select" required>
+                <option value="" disabled selected>-- Selecciona un director --</option>
+                <option th:each="d : ${directores}"
+                        th:value="${d.id}"
+                        th:text="${d.nombre}">
+                </option>
+            </select>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-primary" th:text="${pelicula.id == null ? 'Create' : 'Update'}"></button>
+    </form>
+
+    <a th:href="@{/peliculas}" class="btn btn-secondary mt-3">Back to List</a>
+</main>
+</body>
+</html>

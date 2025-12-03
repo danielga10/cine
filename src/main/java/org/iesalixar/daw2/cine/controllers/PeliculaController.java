@@ -1,7 +1,10 @@
 package org.iesalixar.daw2.cine.controllers;
 
+import org.iesalixar.daw2.cine.entities.Funcion;
 import org.iesalixar.daw2.cine.entities.Pelicula;
-import org.iesalixar.daw2.cine.entities.Trabajador;
+import org.iesalixar.daw2.cine.entities.Director;
+import org.iesalixar.daw2.cine.entities.Sala;
+import org.iesalixar.daw2.cine.repositories.DirectorRepository;
 import org.iesalixar.daw2.cine.repositories.PeliculaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +30,8 @@ public class PeliculaController {
 
     @Autowired
     private PeliculaRepository peliculaRepository;
+    @Autowired
+    private DirectorRepository directorRepository;
 
     /** Lista todas las peliculas */
     @GetMapping()
@@ -54,37 +59,23 @@ public class PeliculaController {
 
     /** Formulario para crear una nueva pelicula */
     @GetMapping("/new")
-    public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
+    public String showNewForm(Model model) {
         model.addAttribute("pelicula", new Pelicula());
-        try {
-            List<Pelicula> listPeliculas = peliculaRepository.findAllWithDirector();
-            model.addAttribute("peliculas", listPeliculas);
-        } catch (Exception e) {
-            e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar peliculas.");
-            return "redirect:/peliculas";
-        }
+
+        List<Director> directores = directorRepository.findAll();
+        model.addAttribute("directores", directores);
+
         return "pelicula-form";
     }
 
     /** Formulario para editar una pelicula existente */
     @GetMapping("/edit")
-    public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            if (peliculaRepository == null) {
-                throw new IllegalStateException("peliculaDAO no inyectado");
-            }
-            Optional<Pelicula> pelicula = peliculaRepository.findById(id);
-            if (pelicula == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Pelicula no encontrada.");
-                return "redirect:/peliculas";
-            }
-            model.addAttribute("pelicula", pelicula);
-        } catch (Exception e) {
-            logger.error("Error inesperado: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
-            return "redirect:/peliculas";
-        }
+    public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttrs) {
+        Pelicula pelicula = peliculaRepository.findById(id).orElseThrow();
+        List<Director> directores = directorRepository.findAll();
+
+        model.addAttribute("pelicula", pelicula);
+        model.addAttribute("directores", directores);
         return "pelicula-form";
     }
 
@@ -106,6 +97,38 @@ public class PeliculaController {
             logger.error("Error inesperado al eliminar la pelicula: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
         }
+        return "redirect:/peliculas";
+    }
+    @PostMapping("/insert")
+    public String insertPelicula(@ModelAttribute Pelicula pelicula,
+                                 @RequestParam("directorId") Long directorId,
+                                 RedirectAttributes redirectAttrs) {
+        try {
+            Director director = directorRepository.findById(directorId).orElseThrow(() -> new RuntimeException("Director no encontrado"));
+
+            pelicula.setDirector(director);
+            peliculaRepository.save(pelicula);
+
+            redirectAttrs.addFlashAttribute("successMessage", "Película creada correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttrs.addFlashAttribute("errorMessage", "Error al crear la película.");
+        }
+        return "redirect:/peliculas";
+    }
+
+    // Actualizar película existente
+    @PostMapping("/update")
+    public String updatePelicula(@ModelAttribute Pelicula pelicula) {
+        // Cargar director real desde la BD
+        if (pelicula.getDirector() != null && pelicula.getDirector().getId() != null) {
+            Director director = directorRepository.findById(pelicula.getDirector().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Director no válido"));
+            pelicula.setDirector(director);
+        }
+
+        peliculaRepository.save(pelicula);
+
         return "redirect:/peliculas";
     }
     private Sort getSort(String sort) {

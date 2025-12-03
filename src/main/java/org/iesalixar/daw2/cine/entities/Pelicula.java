@@ -2,12 +2,14 @@ package org.iesalixar.daw2.cine.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
 @Table(name = "pelicula") // Especifica el nombre de la tabla asociada a esta entidad.
@@ -28,14 +30,25 @@ public class Pelicula {
     private String titulo;
 
     // Campo que almacena duración la película.
-    @NotEmpty(message = "{msg.pelicula.duracion.notEmpty}")
+    @NotNull
     @Column(name = "duracion", nullable = false) // Define la columna correspondiente en la tabla.
-    private Time duracion;
+    private LocalTime duracion;
 
     // Campo que almacena el identificador único del director.
     @ManyToOne
     @JoinColumn(name = "id_director", nullable = false)
     private Director director; // relación con Director
+    // Para binding en Thymeleaf
+    public Long getDirectorId() {
+        return director != null ? director.getId() : null;
+    }
+
+    public void setDirectorId(Long directorId) {
+        if (director == null) {
+            director = new Director();
+        }
+        director.setId(directorId);
+    }
 
 
     /**
@@ -49,7 +62,7 @@ public class Pelicula {
      */
 
 
-    public Pelicula(String titulo, Time duracion) {
+    public Pelicula(String titulo, LocalTime duracion) {
         this.titulo = titulo;
         this.duracion = duracion;
     }
