@@ -53,7 +53,7 @@ public class DirectorController {
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("director", new Director());
         try {
-            List<Director> listDirectores = directorRepository.findAll();
+            List<Director> listDirectores = directorRepository.findAllWithPeliculas();
             model.addAttribute("directores", listDirectores);
         } catch (Exception e) {
             e.printStackTrace(); // imprime la causa exacta del error 500

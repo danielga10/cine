@@ -28,6 +28,15 @@
             <td th:text="${director.nacionalidad}"></td>
             <td th:text="${director.fecha_nacimiento} != null ? #dates.format(director.fecha_nacimiento, 'dd/MM/yyyy') : ''"></td>
             <td>
+                <span th:if="${#lists.isEmpty(director.peliculas)}">Sin funciones</span>
+
+                <ul th:if="${!#lists.isEmpty(director.peliculas)}" class="mb-0">
+                    <li th:each="pelicula : ${director.peliculas}">
+                        <span th:text="${peliculas.titulo}"></span>
+                    </li>
+                </ul>
+            </td>
+            <td>
                 <a th:href="@{/directores/edit(id=${director.id})}" class="btn btn-primary btn-sm">Editar</a>
                 <form th:action="@{/directores/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${director.id}"/>
