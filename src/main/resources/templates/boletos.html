@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head ('Cine - Listado de Boletos')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container mt-5">
+    <h1>Boletos</h1>
+
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form th:action="@{/boletos}" method="get" class="mb-3">
+        <input type="hidden" name="sort" th:value="${sort}"/>
+
+        <input type="text" name="search" th:value="${search}" placeholder="Buscar por Asiento" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    <a th:href="@{/boletos/new}" class="btn btn-success mt-3 mb-3">Añadir nuevo Boleto</a>
+
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>
+                <a th:href="@{/boletos(page=${currentPage}, search=${search}, sort=${sort == 'nameAsc' ? 'nameDesc' : 'nameAsc'})}">Asiento</a>
+            </th>
+            <th>Precio</th>
+            <th>Cliente</th>
+            <th>Función (Película)</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="boleto : ${listBoletos}">
+            <td th:text="${boleto.id}"></td>
+            <td th:text="${boleto.code}"></td>
+            <td th:text="${boleto.asiento}"></td>
+            <td th:text="${#numbers.formatCurrency(boleto.precio)}"></td>
+
+            <td>
+                <span th:text="${boleto.cliente?.nombre}"></span>
+            </td>
+
+            <td>
+                <span th:text="${boleto.funcion?.code}"></span> -
+                <span th:text="${boleto.funcion?.pelicula?.titulo}"></span>
+            </td>
+
+            <td>
+                <a th:href="@{/boletos/edit(id=${boleto.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <form th:action="@{/boletos/delete}" method="post" class="d-inline">
+                    <input type="hidden" name="id" th:value="${boleto.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            th:onclick="|return confirm('¿Seguro que quieres borrar este boleto ${boleto.id} - ${boleto.asiento}?');|">
+                        Borrar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${totalPages > 1}" aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/boletos(page=${currentPage - 1}, search=${search}, sort=${sort})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/boletos(page=${i}, search=${search}, sort=${sort})}" th:text="${i}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/boletos(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
