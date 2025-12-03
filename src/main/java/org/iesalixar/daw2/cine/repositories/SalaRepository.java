@@ -25,5 +25,8 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
        """)
     List<Sala> findAllWithFunciones();
 
+    @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END FROM Sala s WHERE s.numero = :numero")
+    boolean existsSalaByNumero(@Param("numero") String numero);
+
 
 }
