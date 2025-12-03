@@ -4,6 +4,9 @@ import org.iesalixar.daw2.cine.entities.Director;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface DirectorRepository extends JpaRepository<Director, Long> {
     Page<Director> findAll(Pageable pageable);
@@ -11,5 +14,12 @@ public interface DirectorRepository extends JpaRepository<Director, Long> {
     Page<Director> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
 
     long countByNombreContainingIgnoreCase(String nombre);
+
+    @Query("""
+       SELECT DISTINCT d
+       FROM Director d
+       LEFT JOIN FETCH d.peliculas
+       """)
+    List<Director> findAllWithPeliculas();
 
 }
