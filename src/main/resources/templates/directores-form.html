@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Cine - Insertar/Actualizar Directores')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<main class="container mt-5">
+    <h1 th:text="${sala.id == null ? 'Add New Director' : 'Edit Director'}"></h1>
+
+    <!-- Mensaje de error -->
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <form th:action="${director.id == null} ? @{/directores/insert} : @{/directores/update}"
+          th:object="${director}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" th:field="*{nombre}" id="nombre" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="nacionalidad" class="form-label">Nacionalidad:</label>
+            <input type="text" th:field="*{nacionalidad}" id="nacionalidad" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
+            <input type="text" th:field="*{fecha_nacimiento}" id="fecha_nacimiento" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="pelicula" class="form-label">Peliculas:</label>
+            <select th:field="*{peliculas}" id="pelicula" class="form-select" required>
+                <option value="" disabled selected>-- Selecciona una pelicula --</option>
+                <option th:each="pelicula : ${peliculas}"
+                        th:value="${pelicula.nombre}">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="${pelicula.id == null ? 'Create' : 'Update'}"></button>
+    </form>
+
+    <a th:href="@{/peliculas}" class="btn btn-secondary mt-3">Back to List</a>
+</main>
+</body>
+</html>
