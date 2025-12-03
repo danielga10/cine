@@ -28,7 +28,7 @@
             <select th:field="*{funciones}" id="funcion" class="form-select" required>
                 <option value="" disabled selected>-- Selecciona una función --</option>
                 <option th:each="funcion : ${funciones}"
-                        th:value="${funcion.id_funcion}"
+                        th:value="${funcion.id}"
                         th:text="${funcion.pelicula.titulo + ' - ' + #temporals.format(funcion.horario, 'HH:mm')}">
                 </option>
             </select>

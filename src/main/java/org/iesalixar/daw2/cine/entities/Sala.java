@@ -3,6 +3,7 @@ package org.iesalixar.daw2.cine.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
@@ -22,9 +23,9 @@ public class Sala {
 
     // Número de sala (>=1)
     @NotNull(message = "{msg.sala.numero.notNull}")
-    @Min(value = 1, message = "{msg.sala.numero.min}")
+    @Size(min = 1, max = 100, message = "{msg.sala.numero.size}")
     @Column(nullable = false)
-    private Integer numero;
+    private String numero;
 
     // Capacidad de la sala (>=1)
     @NotNull(message = "{msg.sala.capacidad.notNull}")
@@ -41,7 +42,7 @@ public class Sala {
     private List<Funcion> funciones;
 
     // Constructor sin ID
-    public Sala(Integer numero, Integer capacidad) {
+    public Sala(String numero, Integer capacidad) {
         this.numero = numero;
         this.capacidad = capacidad;
     }
