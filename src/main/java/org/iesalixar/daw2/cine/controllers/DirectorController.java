@@ -1,7 +1,12 @@
 package org.iesalixar.daw2.cine.controllers;
 
 import org.iesalixar.daw2.cine.entities.Director;
+import org.iesalixar.daw2.cine.entities.Funcion;
+import org.iesalixar.daw2.cine.entities.Pelicula;
+import org.iesalixar.daw2.cine.entities.Sala;
 import org.iesalixar.daw2.cine.repositories.DirectorRepository;
+import org.iesalixar.daw2.cine.repositories.FuncionRepository;
+import org.iesalixar.daw2.cine.repositories.PeliculaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,6 +29,10 @@ public class DirectorController {
 
     @Autowired
     private DirectorRepository directorRepository;
+
+    @Autowired
+    private PeliculaRepository peliculaRepository;
+
 
     @GetMapping()
     public String listDirectores(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model ) {
@@ -60,7 +66,7 @@ public class DirectorController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar directores.");
             return "redirect:/directores";
         }
-        return "director-form";
+        return "directores-form";
     }
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
@@ -79,8 +85,63 @@ public class DirectorController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/directores";
         }
-        return "director-form";
+        return "directores-form";
     }
+
+    @PostMapping("/insert")
+    public String insertDirector(@ModelAttribute("director") Director director,
+                             @RequestParam("peliculas") List<Long> peliculasIds,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            List<Pelicula> peliculasSeleccionadas = peliculaRepository.findAllById(peliculasIds);
+
+            // Asignar la sala a cada funcion antes de guardar
+            for (Pelicula p : peliculasSeleccionadas) {
+                p.setDirector(director);
+            }
+
+            director.setPeliculas(peliculasSeleccionadas);
+            directorRepository.save(director);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Director creado correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el director.");
+        }
+
+        return "redirect:/directores";
+    }
+
+    @PostMapping("/update")
+    public String updateDirector(@ModelAttribute("director") Director director,
+                             @RequestParam("peliculas") List<Long> peliculasIds,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            Director existingDirector = directorRepository.findById(director.getId()).orElseThrow(() -> new RuntimeException("Pelicula no encontrada"));
+
+            existingDirector.setNombre(director.getNombre());
+            existingDirector.setNacionalidad(director.getNacionalidad());
+
+            // Actualizar funciones seleccionadas
+            List<Pelicula> peliculasSeleccionadas = peliculaRepository.findAllById(peliculasIds);
+
+            // Asignar la sala a cada funcion
+            for (Pelicula p : peliculasSeleccionadas) {
+                p.setDirector(existingDirector);
+            }
+
+            existingDirector.setPeliculas(peliculasSeleccionadas);
+            directorRepository.save(existingDirector);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Sala actualizada correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar la sala.");
+        }
+
+        return "redirect:/directores";
+    }
+
     @PostMapping("/delete")
     public String deleteDirector(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         try {
