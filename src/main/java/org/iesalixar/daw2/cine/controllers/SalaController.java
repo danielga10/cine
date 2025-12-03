@@ -42,9 +42,8 @@ public class SalaController {
 
         if (search != null && !search.isBlank()) {
             try {
-                int numeroSala = Integer.parseInt(search);
-                salas = salaRepository.findByNumero(numeroSala, pageable);
-                totalPages = (int) Math.ceil((double) salaRepository.countByNumero(numeroSala) / 5);
+                salas = salaRepository.findByNumeroContainingIgnoreCase(search, pageable);
+                totalPages = (int) Math.ceil((double) salaRepository.countByNumeroContainingIgnoreCase(search) / 5);
             } catch (NumberFormatException e) {
                 // Si el usuario ingresa texto en lugar de un número, mostrar lista vacía
                 salas = Page.empty(pageable);
@@ -75,7 +74,7 @@ public class SalaController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar salas.");
             return "redirect:/salas";
         }
-        return "sala-form";
+        return "salas-form";
     }
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
@@ -94,7 +93,7 @@ public class SalaController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/salas";
         }
-        return "sala-form";
+        return "salas-form";
     }
     @PostMapping("/delete")
     public String deleteSala(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {

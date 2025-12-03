@@ -13,9 +13,9 @@ import org.springframework.data.repository.query.Param;
 public interface SalaRepository extends JpaRepository<Sala, Long> {
     Page<Sala> findAll(Pageable pageable);
 
-    Page<Sala> findByNumero(int numero, Pageable pageable);
+    Page<Sala> findByNumeroContainingIgnoreCase(String numero, Pageable pageable);
 
-    long countByNumero(int numero);
+    long countByNumeroContainingIgnoreCase(String numero);
 
     @Query("""
        SELECT DISTINCT s
