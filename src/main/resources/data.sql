@@ -86,13 +86,13 @@ INSERT INTO funcion (code, id_sala, id_pelicula, horario) VALUES
 -- ===============================
 -- 7️⃣ INSERTS EN BOLETO
 -- ===============================
-INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion, horario) VALUES
-('A001', 'A1', 8.50, 1, 1, '15:00:00');
-INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion, horario) VALUES
-('A002', 'B3', 9.00, 2, 2, '17:00:00');
-INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion, horario) VALUES
-('A003', 'C2', 7.50, 3, 3, '18:30:00');
-INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion, horario) VALUES
-('A004', 'D4', 9.20, 4, 4, '20:00:00');
-INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion, horario) VALUES
-('A005', 'E5', 8.80, 5, 5, '21:30:00');
+INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion) VALUES
+('A001', 'A1', 8.50, 1, 1);
+INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion) VALUES
+('A002', 'B3', 9.00, 2, 2);
+INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion) VALUES
+('A003', 'C2', 7.50, 3, 3);
+INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion) VALUES
+('A004', 'D4', 9.20, 4, 4);
+INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion) VALUES
+('A005', 'E5', 8.80, 5, 5);
