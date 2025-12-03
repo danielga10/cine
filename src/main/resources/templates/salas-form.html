@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Cine - Insertar/Actualizar Sala')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<main class="container mt-5">
+    <h1 th:text="${sala.id == null ? 'Add New Sala' : 'Edit Sala'}"></h1>
+
+    <!-- Mensaje de error -->
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <form th:action="${sala.id == null} ? @{/salas/insert} : @{/salas/update}"
+          th:object="${sala}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="numero" class="form-label">Número:</label>
+            <input type="text" th:field="*{numero}" id="numero" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="capacidad" class="form-label">Capacidad:</label>
+            <input type="text" th:field="*{capacidad}" id="capacidad" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="funcion" class="form-label">Funciones:</label>
+            <select th:field="*{funciones}" id="funcion" class="form-select" required>
+                <option value="" disabled selected>-- Selecciona una función --</option>
+                <option th:each="funcion : ${funciones}"
+                        th:value="${funcion.id_funcion}"
+                        th:text="${funcion.pelicula.titulo + ' - ' + #temporals.format(funcion.horario, 'HH:mm')}">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="${sala.id == null ? 'Create' : 'Update'}"></button>
+    </form>
+
+    <a th:href="@{/salas}" class="btn btn-secondary mt-3">Back to List</a>
+</main>
+</body>
+</html>
