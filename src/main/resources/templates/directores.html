@@ -18,21 +18,22 @@
             <th>Nombre</th>
             <th>Nacionalidad</th>
             <th>Fecha de Nacimiento</th>
+            <th>Peliculas</th>
             <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="director : ${directores}">
+        <tr th:each="director : ${listDirectores}">
             <td th:text="${director.id}"></td>
             <td th:text="${director.nombre}"></td>
             <td th:text="${director.nacionalidad}"></td>
-            <td th:text="${director.fecha_nacimiento} != null ? #dates.format(director.fecha_nacimiento, 'dd/MM/yyyy') : ''"></td>
+            <td th:text="${director.fecha_nacimiento != null ? #dates.format(director.fecha_nacimiento, 'dd/MM/yyyy') : ''}"></td>
             <td>
                 <span th:if="${#lists.isEmpty(director.peliculas)}">Sin funciones</span>
 
                 <ul th:if="${!#lists.isEmpty(director.peliculas)}" class="mb-0">
                     <li th:each="pelicula : ${director.peliculas}">
-                        <span th:text="${peliculas.titulo}"></span>
+                        <span th:text="${pelicula.titulo}"></span>
                     </li>
                 </ul>
             </td>
