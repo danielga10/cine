@@ -15,7 +15,7 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
 
     Page<Sala> findByNumeroContainingIgnoreCase(String numero, Pageable pageable);
 
-    long countByNumeroContainingIgnoreCase(String numero);
+    long countByNumero(int numero);
 
     @Query("""
        SELECT DISTINCT s
