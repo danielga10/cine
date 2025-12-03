@@ -58,10 +58,9 @@ CREATE TABLE IF NOT EXISTS boleto(
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(4) NOT NULL,
     asiento VARCHAR(5) NOT NULL,
-    precio DECIMAL(4,2) NOT NULL,
+    precio DECIMAL(6,2) NOT NULL,
     id_cliente INT NOT NULL,
     id_funcion INT NOT NULL,
-    horario TIME NOT NULL,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_funcion) REFERENCES funcion(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

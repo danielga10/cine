@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoletoRepository extends JpaRepository<Boleto, Long> {
     Page<Boleto> findByAsientoContainingIgnoreCase(String asiento, Pageable pageable);
-    long countByAsientoContainingIgnoreCase(String email);
+    long countByAsientoContainingIgnoreCase(String asiento);
 
 }

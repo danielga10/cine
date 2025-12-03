@@ -1,9 +1,10 @@
 package org.iesalixar.daw2.cine.controllers;
 
-
-
+import jakarta.validation.Valid; // Necesario para validar los @NotNull de la entidad
 import org.iesalixar.daw2.cine.entities.Boleto;
 import org.iesalixar.daw2.cine.repositories.BoletoRepository;
+import org.iesalixar.daw2.cine.repositories.ClienteRepository;
+import org.iesalixar.daw2.cine.repositories.FuncionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -29,6 +28,11 @@ public class BoletoController {
 
     @Autowired
     private BoletoRepository boletoRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+    @Autowired
+    private FuncionRepository funcionRepository;
 
     @GetMapping()
     public String listBoletos(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model ) {
@@ -44,38 +48,53 @@ public class BoletoController {
             totalPages = (int) Math.ceil((double) boletoRepository.count() / 5);
         }
         logger.info("Se han cargado {} boletos.", boletos.toList().size());
-        model.addAttribute("listBoletos", boletos.toList()); // Pasar la lista de boletos al modelo
+        model.addAttribute("listBoletos", boletos.toList());
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "boletos"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "boletos";
     }
+
     @GetMapping("/new")
-    public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
+    public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("boleto", new Boleto());
         try {
             List<Boleto> listBoletos = boletoRepository.findAll();
             model.addAttribute("boletos", listBoletos);
+
+            // Cargar listas para los desplegables
+            model.addAttribute("listaClientes", clienteRepository.findAll());
+            model.addAttribute("listaFunciones", funcionRepository.findAll());
+
         } catch (Exception e) {
-            e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar boletos.");
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos.");
             return "redirect:/boletos";
         }
         return "boleto-form";
     }
+
     @GetMapping("/edit")
-    public String showEditForm(@RequestParam("id") Long id, org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
+    public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             if (boletoRepository == null) {
                 throw new IllegalStateException("boletoDAO no inyectado");
             }
             Optional<Boleto> boleto = boletoRepository.findById(id);
-            if (boleto == null) {
+
+            // Optional nunca es null, hay que usar isEmpty() o isPresent()
+            if (boleto.isEmpty()) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Boleto no encontrada.");
                 return "redirect:/boletos";
             }
-            model.addAttribute("boleto", boleto);
+
+            // Hay que pasar boleto.get(), no el Optional entero
+            model.addAttribute("boleto", boleto.get());
+
+            model.addAttribute("listaClientes", clienteRepository.findAll());
+            model.addAttribute("listaFunciones", funcionRepository.findAll());
+
         } catch (Exception e) {
             logger.error("Error inesperado: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
@@ -83,6 +102,26 @@ public class BoletoController {
         }
         return "boleto-form";
     }
+
+    // Metod para guardar
+    @PostMapping("/save")
+    public String saveBoleto(@Valid @ModelAttribute Boleto boleto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                // Si hay errores, hay que volver a cargar las listas para que no explote el html
+                model.addAttribute("listaClientes", clienteRepository.findAll());
+                model.addAttribute("listaFunciones", funcionRepository.findAll());
+                return "boleto-form";
+            }
+            boletoRepository.save(boleto);
+            redirectAttributes.addFlashAttribute("successMessage", "Boleto guardado correctamente");
+        } catch (Exception e) {
+            logger.error("Error al guardar: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar el boleto.");
+        }
+        return "redirect:/boletos";
+    }
+
     @PostMapping("/delete")
     public String deleteBoleto(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         try {
@@ -90,7 +129,8 @@ public class BoletoController {
                 throw new IllegalStateException("boletoDAO no inyectado");
             }
             Optional<Boleto> boleto = boletoRepository.findById(id);
-            if (boleto == null) {
+
+            if (boleto.isEmpty()) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Boleto no encontrada.");
                 return "redirect:/boletos";
             }
@@ -102,13 +142,14 @@ public class BoletoController {
         }
         return "redirect:/boletos";
     }
+
     private Sort getSort(String sort) {
         if (sort == null) {
             return Sort.by("id").ascending();
         }
         return switch (sort) {
-            case "nameAsc" -> Sort.by("name").ascending();
-            case "nameDesc" -> Sort.by("name").descending();
+            case "nameAsc" -> Sort.by("asiento").ascending();
+            case "nameDesc" -> Sort.by("asiento").descending();
             case "idDesc" -> Sort.by("id").descending();
             default -> Sort.by("id").ascending();
         };
