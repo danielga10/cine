@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -45,6 +46,7 @@ public class Director {
     // Lista de peliculas asociados al director.
     @OneToMany(mappedBy = "director")
     @JsonIgnore
+    @ToString.Exclude
     private List<Pelicula> peliculas;
 
     /**
