@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head ('Cine - Listado de Directores')"></head>
+<head th:replace="~{fragments/head :: head ('Cine - Listado de Directores')}"></head>
 <body>
-<header th:replace="fragments/header :: header"></header>
+<header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
     <h1>Directores</h1>
@@ -10,6 +10,14 @@
     <div th:if="${mensajeError}" class="alert alert-danger">
         <p th:text="${mensajeError}"></p>
     </div>
+    <div th:if="${mensajeExito}" class="alert alert-success">
+        <p th:text="${mensajeExito}"></p>
+    </div>
+
+    <form th:action="@{/directores}" method="get" class="mb-3">
+        <input type="text" name="search" th:value="${search}" placeholder="Buscar por Nombre" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
 
     <table class="table table-bordered mt-3">
         <thead>
@@ -17,8 +25,8 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Nacionalidad</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Peliculas</th>
+            <th>Fecha de nacimiento</th>
+            <th>Películas</th>
             <th>Acciones</th>
         </tr>
         </thead>
@@ -51,10 +59,25 @@
         </tbody>
     </table>
 
+    <nav th:if="${totalPages > 1}" aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/directores(page=${currentPage - 1}, search=${search}, sort=${sort})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/directores(page=${i}, search=${search}, sort=${sort})}" th:text="${i}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/directores(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+
     <a th:href="@{/directores/new}" class="btn btn-success mt-3">Añadir nuevo Director</a>
     <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
 </main>
 
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

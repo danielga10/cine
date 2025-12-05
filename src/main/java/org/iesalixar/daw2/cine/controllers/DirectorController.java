@@ -68,23 +68,14 @@ public class DirectorController {
         }
         return "directores-form";
     }
+    /** Formulario para editar un director existente */
     @GetMapping("/edit")
-    public String showEditForm(@RequestParam("id") Long id, org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
-        try {
-            if (directorRepository == null) {
-                throw new IllegalStateException("directorDAO no inyectado");
-            }
-            Optional<Director> director = directorRepository.findById(id);
-            if (director == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Director no encontrada.");
-                return "redirect:/director";
-            }
-            model.addAttribute("director", director);
-        } catch (Exception e) {
-            logger.error("Error inesperado: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
-            return "redirect:/directores";
-        }
+    public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttrs) {
+        Director director = directorRepository.findById(id).orElseThrow();
+        List<Pelicula> peliculas = peliculaRepository.findAll();
+
+        model.addAttribute("director", director);
+        model.addAttribute("peliculas", peliculas);
         return "directores-form";
     }
 
