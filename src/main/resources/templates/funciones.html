@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head ('Cine - Listado de Funciones')"></head>
+<head th:replace="fragments/head :: head('Cine - Listado de Funciones')"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 
@@ -15,41 +15,46 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>Code</th>
             <th>Sala</th>
-            <th>Pelicula</th>
+            <th>Película</th>
             <th>Horario</th>
+            <th>Boletos</th>
             <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
+
         <tr th:each="funcion : ${funciones}">
             <td th:text="${funcion.id}"></td>
-            <td th:text="${funcion.sala != null ? funcion.sala.numero : ''}"></td>
-            <td th:text="${funcion.pelicula != null ? funcion.pelicula.titulo : ''}"></td>
+            <td th:text="${funcion.code}"></td>
+            <td th:text="${funcion.sala.numero}"></td>
+            <td th:text="${funcion.pelicula.titulo}"></td>
             <td th:text="${funcion.horario}"></td>
             <td>
-            // Pendiente
-            <td>
-                <span th:if="${#lists.isEmpty(sala.funciones)}">Sin funciones</span>
+                <span th:if="${#lists.isEmpty(funcion.boletos)}">Sin boletos</span>
 
-                <ul th:if="${!#lists.isEmpty(sala.funciones)}" class="mb-0">
-                    <li th:each="funcion : ${sala.funciones}">
-                        <span th:text="${funcion.code}"></span> -
-                        <span th:text="${funcion.pelicula.titulo}"></span> -
-                        <span th:text="${funcion.horario}"></span>
+                <ul th:if="${!#lists.isEmpty(funcion.boletos)}">
+                    <li th:each="boleto : ${funcion.boletos}">
+                        <span th:text="${boleto.id}"></span>
                     </li>
                 </ul>
             </td>
-                <a th:href="@{/funciones/edit(id=${funcion.id_funcion})}" class="btn btn-primary btn-sm">Editar</a>
+            <td>
+                <a th:href="@{/funciones/edit(id=${funcion.id})}"
+                   class="btn btn-primary btn-sm">Editar</a>
+
                 <form th:action="@{/funciones/delete}" method="post" class="d-inline">
-                    <input type="hidden" name="id" th:value="${funcion.id_funcion}"/>
-                    <button type="submit" class="btn btn-danger btn-sm"
+                    <input type="hidden" name="id" th:value="${funcion.id}"/>
+                    <button type="submit"
+                            class="btn btn-danger btn-sm"
                             th:onclick="|return confirm('¿Seguro que quieres borrar esta función?');|">
                         Borrar
                     </button>
                 </form>
             </td>
         </tr>
+
         </tbody>
     </table>
 
@@ -60,3 +65,4 @@
 <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
+

@@ -16,5 +16,8 @@ public interface FuncionRepository extends JpaRepository<Funcion, Long>{
 
     long countByCodeContainingIgnoreCase(String code);
 
+    Optional<Funcion> findByCode(String code);
+    Optional<Funcion> findByCodeAndIdNot(String code, Long id);
+
 
 }
