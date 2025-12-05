@@ -2,6 +2,7 @@ package org.iesalixar.daw2.cine.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,14 +38,15 @@ public class Funcion {
     private LocalTime horario;
 
     @OneToMany(mappedBy = "funcion")
-    private List<Boleto> boletos;
+    private List<Boleto> boletos = new ArrayList<>();
 
     public Funcion() {
     }
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalTime horario) {
+    public Funcion(Sala sala, Pelicula pelicula, LocalTime horario, Boleto boletos) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horario = horario;
+        this.boletos = new ArrayList<>();
     }
 }
