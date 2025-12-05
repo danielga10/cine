@@ -67,14 +67,17 @@ public class SalaController {
     @GetMapping("/new")
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("sala", new Sala());
+
+        // 💡 SOLUCIÓN: Cargar y añadir la lista de funciones
         try {
-            List<Sala> listSalas = salaRepository.findAllWithFunciones();
-            model.addAttribute("salas", listSalas);
+            List<Funcion> funciones = funcionRepository.findAll();
+            model.addAttribute("funciones", funciones);
         } catch (Exception e) {
-            e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar salas.");
+            logger.error("Error al cargar la lista de funciones:", e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos necesarios.");
             return "redirect:/salas";
         }
+
         return "salas-form";
     }
     @GetMapping("/edit")

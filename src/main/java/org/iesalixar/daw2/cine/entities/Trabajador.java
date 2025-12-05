@@ -39,7 +39,7 @@ public class Trabajador {
     private String correo;
 
     @OneToOne
-    @JoinColumn(name = "id_sala", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "id_sala", referencedColumnName = "id")
     private Sala sala;
 
     public Trabajador(String nombre, String telefono, String correo, Sala sala) {

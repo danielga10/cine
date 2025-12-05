@@ -43,7 +43,7 @@ public class Funcion {
     public Funcion() {
     }
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalTime horario, Boleto boletos) {
+    public Funcion(Sala sala, Pelicula pelicula, LocalTime horario) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horario = horario;
