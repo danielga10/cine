@@ -1,6 +1,8 @@
 package org.iesalixar.daw2.cine.controllers;
 
+import org.iesalixar.daw2.cine.entities.Sala;
 import org.iesalixar.daw2.cine.entities.Trabajador;
+import org.iesalixar.daw2.cine.repositories.SalaRepository;
 import org.iesalixar.daw2.cine.repositories.TrabajadorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,9 @@ public class TrabajadorController {
 
     @Autowired
     private TrabajadorRepository trabajadorRepository;
+
+    @Autowired
+    private SalaRepository salaRepository;
 
     /** Lista todas las trabajadores */
     @GetMapping()
@@ -56,11 +61,17 @@ public class TrabajadorController {
     public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("trabajador", new Trabajador());
         try {
+            // Cargar lista de trabajadores con salas
             List<Trabajador> listTrabajadores = trabajadorRepository.findAllWithSalas();
             model.addAttribute("trabajadores", listTrabajadores);
+
+            // Cargar lista de salas para el select
+            List<Sala> listaSalas = salaRepository.findAll();
+            model.addAttribute("listaSalas", listaSalas);
+
         } catch (Exception e) {
             e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar trabajadores.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar trabajadores o salas.");
             return "redirect:/trabajadores";
         }
         return "trabajador-form";
@@ -70,17 +81,21 @@ public class TrabajadorController {
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
-            if (trabajadorRepository == null) {
-                throw new IllegalStateException("trabajadorDAO no inyectado");
-            }
-            Optional<Trabajador> trabajador = trabajadorRepository.findById(id);
-            if (trabajador == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Trabajador no encontrada.");
+            Optional<Trabajador> trabajadorOpt = trabajadorRepository.findById(id);
+            if (trabajadorOpt.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Trabajador no encontrado.");
                 return "redirect:/trabajadores";
             }
-            model.addAttribute("trabajador", trabajador);
+
+            // Pasa el objeto Trabajador, no el Optional
+            model.addAttribute("trabajador", trabajadorOpt.get());
+
+            // Cargar lista de salas para el select
+            List<Sala> listaSalas = salaRepository.findAll();
+            model.addAttribute("listaSalas", listaSalas);
+
         } catch (Exception e) {
-            logger.error("Error inesperado: {}", e.getMessage(), e);
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/trabajadores";
         }
@@ -107,6 +122,37 @@ public class TrabajadorController {
         }
         return "redirect:/trabajadores";
     }
+
+    @PostMapping("/save")
+    public String saveTrabajador(@ModelAttribute("trabajador") Trabajador trabajador,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            if (trabajador.getId() != null) {
+                // Actualizar trabajador existente
+                Trabajador existingTrabajador = trabajadorRepository.findById(trabajador.getId())
+                        .orElseThrow(() -> new RuntimeException("Trabajador no encontrado"));
+
+                existingTrabajador.setNombre(trabajador.getNombre());
+                existingTrabajador.setTelefono(trabajador.getTelefono());
+                existingTrabajador.setCorreo(trabajador.getCorreo());
+                existingTrabajador.setSala(trabajador.getSala());
+
+                trabajadorRepository.save(existingTrabajador);
+                redirectAttributes.addFlashAttribute("successMessage", "Trabajador actualizado correctamente.");
+            } else {
+                // Crear nuevo trabajador
+                trabajadorRepository.save(trabajador);
+                redirectAttributes.addFlashAttribute("successMessage", "Trabajador creado correctamente.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar el trabajador.");
+        }
+
+        return "redirect:/trabajadores";
+    }
+
+
     private Sort getSort(String sort) {
         if (sort == null) {
             return Sort.by("id").ascending();
