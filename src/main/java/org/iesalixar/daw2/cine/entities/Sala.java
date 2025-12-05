@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,11 +40,12 @@ public class Sala {
 
     // Relación 1:N con Funciones
     @OneToMany(mappedBy = "sala")
-    private List<Funcion> funciones;
+    private List<Funcion> funciones = new ArrayList<>();
 
     // Constructor sin ID
     public Sala(String numero, Integer capacidad) {
         this.numero = numero;
         this.capacidad = capacidad;
+        this.funciones = new ArrayList<>();
     }
 }

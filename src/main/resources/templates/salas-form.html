@@ -24,12 +24,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="funcion" class="form-label">Funciones:</label>
+            <label for="funcion" class="form-label">Función:</label>
             <select th:field="*{funciones}" id="funcion" class="form-select" required>
-                <option value="" disabled selected>-- Selecciona una función --</option>
-                <option th:each="funcion : ${funciones}"
-                        th:value="${funcion.id}"
-                        th:text="${funcion.pelicula.titulo + ' - ' + #temporals.format(funcion.horario, 'HH:mm')}">
+                <option value="" disabled selected>-- Selecciona una Funcion --</option>
+                <option th:each="f : ${funciones}"
+                        th:value="${f.id}"
+                        th:text="${f.code + ' - ' + f.pelicula.titulo + ' - ' + f.horario}">
                 </option>
             </select>
         </div>
