@@ -56,16 +56,11 @@ public class DirectorController {
         return "directores"; // Nombre de la plantilla Thymeleaf a renderizar
     }
     @GetMapping("/new")
-    public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
+    public String showNewForm(Model model) {
         model.addAttribute("director", new Director());
-        try {
-            List<Director> listDirectores = directorRepository.findAllWithPeliculas();
-            model.addAttribute("directores", listDirectores);
-        } catch (Exception e) {
-            e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar directores.");
-            return "redirect:/directores";
-        }
+        List<Pelicula> peliculas = peliculaRepository.findAll();
+        model.addAttribute("peliculas", peliculas);
+
         return "directores-form";
     }
     /** Formulario para editar un director existente */
