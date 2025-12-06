@@ -23,6 +23,7 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
        LEFT JOIN FETCH t.sala
        """)
     List<Trabajador> findAllWithSalas();
+    Trabajador findBySalaId(Long id_sala);
 
 
 }

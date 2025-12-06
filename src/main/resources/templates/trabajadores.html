@@ -38,7 +38,7 @@
             <td th:text="${trabajador.telefono}"></td>
             <td th:text="${trabajador.correo}"></td>
             <td>
-                <span th:if="${#lists.isEmpty(trabajador.sala)}">Sin salas</span>
+                <span th:if="${#lists.isEmpty(trabajador.sala)}">Sin sala</span>
 
                 <ul th:if="${!#lists.isEmpty(trabajador.sala)}" class="mb-0">
                     <li th:each="sala : ${trabajador.sala}">

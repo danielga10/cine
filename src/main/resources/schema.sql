@@ -24,9 +24,7 @@ CREATE TABLE IF NOT EXISTS pelicula(
 CREATE TABLE IF NOT EXISTS sala(
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero VARCHAR(2) NOT NULL,
-    capacidad INT NOT NULL,
-    id_pelicula INT NOT NULL,
-    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
+    capacidad INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trabajador(
@@ -34,7 +32,7 @@ CREATE TABLE IF NOT EXISTS trabajador(
     nombre VARCHAR(20) NOT NULL,
     telefono VARCHAR(9) NOT NULL,
     correo VARCHAR(35) NOT NULL,
-    id_sala INT NOT NULL UNIQUE,
+    id_sala INT UNIQUE,
     FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

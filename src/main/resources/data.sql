@@ -29,16 +29,16 @@ INSERT INTO pelicula (titulo, duracion, id_director) VALUES
 -- ===============================
 -- 3️⃣ INSERTS EN SALA
 -- ===============================
-INSERT INTO sala (numero, capacidad, id_pelicula) VALUES
-('1', 120, 1);
-INSERT INTO sala (numero, capacidad, id_pelicula) VALUES
-('2', 150, 2);
-INSERT INTO sala (numero, capacidad, id_pelicula) VALUES
-('3', 100, 3);
-INSERT INTO sala (numero, capacidad, id_pelicula) VALUES
-('4', 140, 4);
-INSERT INTO sala (numero, capacidad, id_pelicula) VALUES
-('5', 160, 5);
+INSERT INTO sala (numero, capacidad) VALUES
+('1', 120);
+INSERT INTO sala (numero, capacidad) VALUES
+('2', 150);
+INSERT INTO sala (numero, capacidad) VALUES
+('3', 100);
+INSERT INTO sala (numero, capacidad) VALUES
+('4', 140);
+INSERT INTO sala (numero, capacidad) VALUES
+('5', 160);
 
 -- ===============================
 -- 4️⃣ INSERTS EN TRABAJADOR

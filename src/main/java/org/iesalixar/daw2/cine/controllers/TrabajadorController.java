@@ -127,14 +127,48 @@ public class TrabajadorController {
     public String saveTrabajador(@ModelAttribute("trabajador") Trabajador trabajador,
                                  RedirectAttributes redirectAttributes) {
         try {
+            // ----------------------------------------------------
+            // 1. Lógica de Validación 1:1
+            // ----------------------------------------------------
+            if (trabajador.getSala() != null) {
+                Long salaId = trabajador.getSala().getId();
+
+                // Busca si existe otro trabajador con esta misma sala
+                // NOTA: Debes implementar este método en tu TrabajadorRepository
+                Trabajador trabajadorConMismaSala = trabajadorRepository.findBySalaId(salaId);
+
+                // Si existe un trabajador con esa sala...
+                if (trabajadorConMismaSala != null) {
+
+                    // ... y NO es el trabajador que estamos editando actualmente:
+                    boolean isDifferentTrabajador = (trabajador.getId() == null) ||
+                            (!trabajadorConMismaSala.getId().equals(trabajador.getId()));
+
+                    if (isDifferentTrabajador) {
+                        redirectAttributes.addFlashAttribute("errorMessage",
+                                "Error: La sala " + trabajador.getSala().getNumero() + " ya está asignada al trabajador: " +
+                                        trabajadorConMismaSala.getNombre());
+
+                        // Retorna al formulario con el objeto 'trabajador' para mantener los datos
+                        redirectAttributes.addFlashAttribute("trabajador", trabajador);
+                        return "redirect:/trabajadores/new"; // Redirige a /new o /edit, dependiendo del contexto
+                    }
+                    // Si es el mismo trabajador, la validación pasa (se le permite guardar sus datos)
+                }
+            }
+            // ----------------------------------------------------
+            // 2. Lógica de Guardado (Insert o Update)
+            // ----------------------------------------------------
             if (trabajador.getId() != null) {
-                // Actualizar trabajador existente
+                // Actualizar trabajador existente (la lógica original se mantiene)
                 Trabajador existingTrabajador = trabajadorRepository.findById(trabajador.getId())
                         .orElseThrow(() -> new RuntimeException("Trabajador no encontrado"));
 
                 existingTrabajador.setNombre(trabajador.getNombre());
                 existingTrabajador.setTelefono(trabajador.getTelefono());
                 existingTrabajador.setCorreo(trabajador.getCorreo());
+
+                // Si la validación pasó, actualizamos la sala
                 existingTrabajador.setSala(trabajador.getSala());
 
                 trabajadorRepository.save(existingTrabajador);
@@ -146,7 +180,7 @@ public class TrabajadorController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar el trabajador.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar el trabajador: " + e.getMessage());
         }
 
         return "redirect:/trabajadores";
