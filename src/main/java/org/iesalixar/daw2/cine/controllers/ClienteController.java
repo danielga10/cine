@@ -48,7 +48,7 @@ public class ClienteController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "clientes"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "Cliente/clientes.html"; // Nombre de la plantilla Thymeleaf a renderizar
     }
     @GetMapping("/new")
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
@@ -62,7 +62,7 @@ public class ClienteController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos necesarios.");
             return "redirect:/clientes";
         }
-        return "cliente-form";
+        return "Cliente/cliente-form.html";
     }
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
@@ -85,7 +85,7 @@ public class ClienteController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/clientes";
         }
-        return "cliente-form";
+        return "Cliente/cliente-form.html";
     }
     @PostMapping("/insert")
     public String insertCliente(@ModelAttribute("cliente") Cliente cliente,

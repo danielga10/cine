@@ -53,7 +53,7 @@ public class PeliculaController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "pelicula"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "Pelicula/pelicula.html"; // Nombre de la plantilla Thymeleaf a renderizar
     }
 
 
@@ -65,7 +65,7 @@ public class PeliculaController {
         List<Director> directores = directorRepository.findAll();
         model.addAttribute("directores", directores);
 
-        return "pelicula-form";
+        return "Pelicula/pelicula-form.html";
     }
 
     /** Formulario para editar una pelicula existente */
@@ -76,7 +76,7 @@ public class PeliculaController {
 
         model.addAttribute("pelicula", pelicula);
         model.addAttribute("directores", directores);
-        return "pelicula-form";
+        return "Pelicula/pelicula-form.html";
     }
 
     /** Elimina una pelicula */

@@ -52,7 +52,7 @@ public class FuncionController {
 
         logger.info("Funciones cargadas: {}", funcionesPage.getContent().size());
 
-        return "funciones";
+        return "Funcion/funciones.html";
     }
 
     @GetMapping("/new")
@@ -60,7 +60,7 @@ public class FuncionController {
         model.addAttribute("funcion", new Funcion());
         model.addAttribute("salas", salaRepository.findAll());
         model.addAttribute("peliculas", peliculaRepository.findAll());
-        return "funcion-form";
+        return "Funcion/funcion-form.html";
     }
 
     // ... (MÉTODOS showEditForm, insert, update, delete permanecen sin cambios) ...
@@ -82,7 +82,7 @@ public class FuncionController {
         model.addAttribute("salas", salaRepository.findAll());
         model.addAttribute("peliculas", peliculaRepository.findAll());
 
-        return "funcion-form";
+        return "Funcion/funcion-form.html";
     }
 
     @PostMapping("/insert")
@@ -160,7 +160,7 @@ public class FuncionController {
             model.addAttribute("salas", salaRepository.findAll());
             model.addAttribute("peliculas", peliculaRepository.findAll());
 
-            return "funcion-form";
+            return "Funcion/funcion-form.html";
         }
     }
 

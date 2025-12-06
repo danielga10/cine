@@ -53,7 +53,7 @@ public class DirectorController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "directores"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "Director/directores.html"; // Nombre de la plantilla Thymeleaf a renderizar
     }
     @GetMapping("/new")
     public String showNewForm(Model model) {
@@ -61,7 +61,7 @@ public class DirectorController {
         List<Pelicula> peliculas = peliculaRepository.findAll();
         model.addAttribute("peliculas", peliculas);
 
-        return "directores-form";
+        return "Director/directores-form.html";
     }
     /** Formulario para editar un director existente */
     @GetMapping("/edit")
@@ -71,7 +71,7 @@ public class DirectorController {
 
         model.addAttribute("director", director);
         model.addAttribute("peliculas", peliculas);
-        return "directores-form";
+        return "Director/directores-form.html";
     }
 
     @PostMapping("/insert")

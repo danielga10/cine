@@ -52,7 +52,7 @@ public class TrabajadorController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "trabajadores"; // Nombre de la plantilla Thymeleaf a renderizar
+        return "Trabajador/trabajadores.html"; // Nombre de la plantilla Thymeleaf a renderizar
     }
 
 
@@ -74,7 +74,7 @@ public class TrabajadorController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar trabajadores o salas.");
             return "redirect:/trabajadores";
         }
-        return "trabajador-form";
+        return "Trabajador/trabajador-form.html";
     }
 
     /** Formulario para editar un trabajador existente */
@@ -99,7 +99,7 @@ public class TrabajadorController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/trabajadores";
         }
-        return "trabajador-form";
+        return "Trabajador/trabajador-form.html";
     }
 
     /** Elimina un trabajador */

@@ -60,7 +60,7 @@ public class SalaController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "salas";
+        return "Sala/salas.html";
     }
 
     @GetMapping("/new")
@@ -77,7 +77,7 @@ public class SalaController {
             return "redirect:/salas";
         }
 
-        return "salas-form";
+        return "Sala/salas-form.html";
     }
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
@@ -93,7 +93,7 @@ public class SalaController {
         List<Funcion> funciones = funcionRepository.findAll();
         model.addAttribute("funciones", funciones);
 
-        return "salas-form";
+        return "Sala/salas-form.html";
     }
     @PostMapping("/delete")
     public String deleteSala(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {

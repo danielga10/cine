@@ -53,7 +53,7 @@ public class BoletoController {
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
-        return "boletos";
+        return "Boleto/boletos.html";
     }
 
     @GetMapping("/new")
@@ -72,7 +72,7 @@ public class BoletoController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos.");
             return "redirect:/boletos";
         }
-        return "boleto-form";
+        return "Boleto/boleto-form.html";
     }
 
     @GetMapping("/edit")
@@ -100,7 +100,7 @@ public class BoletoController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/boletos";
         }
-        return "boleto-form";
+        return "Boleto/boleto-form.html";
     }
 
     @PostMapping("/insert")
@@ -115,7 +115,7 @@ public class BoletoController {
             // Si hay errores de validación, recargar datos para la vista
             model.addAttribute("listaClientes", clienteRepository.findAll());
             model.addAttribute("listaFunciones", funcionRepository.findAll());
-            return "boleto-form";
+            return "Boleto/boleto-form.html";
         }
 
         try {
@@ -142,7 +142,7 @@ public class BoletoController {
             // Si hay errores de validación, recargar datos para la vista
             model.addAttribute("listaClientes", clienteRepository.findAll());
             model.addAttribute("listaFunciones", funcionRepository.findAll());
-            return "boleto-form";
+            return "Boleto/boleto-form.html";
         }
 
         try {
