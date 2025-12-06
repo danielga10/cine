@@ -11,7 +11,8 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
-    <form th:action="@{/boletos/save}" th:object="${boleto}" method="post">
+    <form th:action="${boleto.id == null} ? @{/boletos/insert} : @{/boletos/update}"
+          th:object="${boleto}" method="post">
         <input type="hidden" th:if="${boleto.id != null}" th:field="*{id}"/>
 
         <div class="mb-3">

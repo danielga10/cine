@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
@@ -36,10 +37,11 @@ public class Cliente {
 
     // Relación uno a muchos con la entidad `Boleto`. Un cliente puede tener muchos boletos.
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Boleto> boletos;
+    private List<Boleto> boletos = new ArrayList<>();
 
     public Cliente(String email, String nombre) {
         this.email = email;
         this.nombre = nombre;
+        this.boletos = new ArrayList<>();
     }
 }

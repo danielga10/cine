@@ -1,9 +1,8 @@
 package org.iesalixar.daw2.cine.controllers;
 
-
-import org.iesalixar.daw2.cine.entities.Pelicula;
+import org.iesalixar.daw2.cine.entities.Boleto;
 import org.iesalixar.daw2.cine.entities.Cliente;
-import org.iesalixar.daw2.cine.entities.Funcion;
+import org.iesalixar.daw2.cine.repositories.BoletoRepository;
 import org.iesalixar.daw2.cine.repositories.ClienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,6 +26,8 @@ public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired // <-- 2. Inyectar el BoletoRepository
+    private BoletoRepository boletoRepository;
 
     @GetMapping()
     public String listClientes(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model ) {
@@ -56,11 +54,12 @@ public class ClienteController {
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("cliente", new Cliente());
         try {
-            List<Cliente> listClientes = clienteRepository.findAll();
-            model.addAttribute("clientes", listClientes);
+            // Cargar la lista de boletos para el select
+            List<Boleto> listaBoletos = boletoRepository.findAll();
+            model.addAttribute("listaBoletos", listaBoletos); // <-- Añadido
         } catch (Exception e) {
-            e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar clientes.");
+            logger.error("Error al cargar la lista de boletos:", e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos necesarios.");
             return "redirect:/clientes";
         }
         return "cliente-form";
@@ -68,21 +67,65 @@ public class ClienteController {
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         try {
-            if (clienteRepository == null) {
-                throw new IllegalStateException("clienteDAO no inyectado");
-            }
-            Optional<Cliente> cliente = clienteRepository.findById(id);
-            if (cliente == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Cliente no encontrada.");
+            Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+
+            if (clienteOpt.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Cliente no encontrado.");
                 return "redirect:/clientes";
             }
-            model.addAttribute("cliente", cliente);
+
+            model.addAttribute("cliente", clienteOpt.get());
+
+            // Cargar la lista de boletos para el select
+            List<Boleto> listaBoletos = boletoRepository.findAll();
+            model.addAttribute("listaBoletos", listaBoletos); // <-- Añadido
+
         } catch (Exception e) {
-            logger.error("Error inesperado: {}", e.getMessage(), e);
+            logger.error("Error inesperado al cargar cliente para edición: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
             return "redirect:/clientes";
         }
         return "cliente-form";
+    }
+    @PostMapping("/insert")
+    public String insertCliente(@ModelAttribute("cliente") Cliente cliente,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            // NOTA: Se asume que la entidad Cliente tiene validación de unicidad de email/nombre
+            clienteRepository.save(cliente);
+            logger.info("Cliente con ID {} creado con éxito.", cliente.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Cliente creado correctamente.");
+        } catch (Exception e) {
+            logger.error("Error al crear el cliente: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el cliente. Verifique los datos.");
+        }
+        return "redirect:/clientes";
+    }
+
+    // ----------------------------------------------------
+    // NUEVO: Método para Actualizar Cliente
+    // ----------------------------------------------------
+    @PostMapping("/update")
+    public String updateCliente(@ModelAttribute("cliente") Cliente cliente,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            // 1. Obtener el cliente existente para asegurar que no se sobrescriban datos sensibles (si los hubiera)
+            Cliente existingCliente = clienteRepository.findById(cliente.getId())
+                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado para actualizar."));
+
+            // 2. Actualizar solo los campos modificables (nombre y email, por ejemplo)
+            existingCliente.setNombre(cliente.getNombre());
+            existingCliente.setEmail(cliente.getEmail());
+
+            // 3. Guardar la entidad actualizada
+            clienteRepository.save(existingCliente);
+            logger.info("Cliente con ID {} actualizado con éxito.", cliente.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Cliente actualizado correctamente.");
+        } catch (Exception e) {
+            logger.error("Error al actualizar el cliente con ID {}: {}", cliente.getId(), e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar el cliente. Verifique los datos.");
+        }
+        return "redirect:/clientes";
     }
     @PostMapping("/delete")
     public String deleteCliente(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
