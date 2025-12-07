@@ -39,9 +39,13 @@
             <td th:text="${boleto.precio}"></td>
             <td th:text="${boleto.cliente.nombre}"></td>
             <td>
-                <span th:text="${boleto.funcion.code}"></span> -
-                <span th:text="${boleto.funcion.pelicula.titulo}"></span> -
-                <span th:text="${boleto.funcion.horario}"></span>
+                <ul class="mb-0 list-unstyled">
+                    <li>
+                        <span th:text="${boleto.funcion.code}"></span> -
+                        <span th:text="${boleto.funcion.pelicula.titulo}"></span> -
+                        <span th:text="${boleto.funcion.horario}"></span>
+                    </li>
+                </ul>
             </td>
             <td>
                 <a th:href="@{/boletos/edit(id=${boleto.id})}" class="btn btn-primary btn-sm">Editar</a>

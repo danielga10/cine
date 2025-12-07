@@ -35,9 +35,14 @@
             <td th:text="${pelicula.titulo}"></td>
             <td th:text="${pelicula.duracion}"></td>
 
-            <!-- Director corregido -->
-            <td th:text="${pelicula.director != null ? pelicula.director.nombre : 'Sin director'}"></td>
-
+            <td>
+                <span th:if="${pelicula.director == null}">Sin director</span>
+                <ul th:if="${pelicula.director != null}" class="mb-0 list-unstyled">
+                    <li>
+                        <span th:text="${pelicula.director.nombre}"></span>
+                    </li>
+                </ul>
+            </td>
             <td>
                 <a th:href="@{/peliculas/edit(id=${pelicula.id})}"
                    class="btn btn-primary btn-sm">Editar</a>

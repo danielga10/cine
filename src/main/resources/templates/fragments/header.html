@@ -1,49 +1,50 @@
-<!-- header.html -->
 <header th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TL - Jaime Ramírez</a>
-            <button class="navbar-toggler" type="button" data-bstoggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-clapperboard me-2"></i>
+                TL - Jaime Ramírez
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#"
-                           th:href="@{/}" th:text="#{msg.header.home}"></a>
+                        <a class="nav-link" th:href="@{/}" th:text="#{msg.header.home}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/peliculas}" th:text="#{msg.header.peliculas}"></a>
+                        <a class="nav-link" th:href="@{/peliculas}" th:text="#{msg.header.peliculas}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/directores}" th:text="#{msg.header.directores}"></a>
+                        <a class="nav-link" th:href="@{/directores}" th:text="#{msg.header.directores}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/funciones}" th:text="#{msg.header.funciones}"></a>
+                        <a class="nav-link" th:href="@{/funciones}" th:text="#{msg.header.funciones}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/salas}" th:text="#{msg.header.salas}"></a>
+                        <a class="nav-link" th:href="@{/salas}" th:text="#{msg.header.salas}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/clientes}" th:text="#{msg.header.clientes}"></a>
+                        <a class="nav-link" th:href="@{/clientes}" th:text="#{msg.header.clientes}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/trabajadores}" th:text="#{msg.header.trabajadores}"></a>
+                        <a class="nav-link" th:href="@{/trabajadores}" th:text="#{msg.header.trabajadores}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           th:href="@{/boletos}" th:text="#{msg.header.boletos}"></a>
+                        <a class="nav-link" th:href="@{/boletos}" th:text="#{msg.header.boletos}"></a>
                     </li>
                 </ul>
-                <form th:action="@{/}" method="get" class="d-flex form-inline">
-                    <select name="lang" onchange="this.form.submit()" class="form-select">
+
+                <form th:action="@{/}" method="get" class="d-flex form-inline ms-auto">
+                    <select name="lang" onchange="this.form.submit()" class="form-select language-selector">
                         <option value="es" th:selected="${#locale.language == 'es'}">Español</option>
                         <option value="en" th:selected="${#locale.language == 'en'}">English</option>
                     </select>

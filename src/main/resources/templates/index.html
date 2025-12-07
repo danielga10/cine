@@ -2,16 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head (#{msg.index.title})"></head>
 <body class="d-flex flex-column h-100">
-<!-- Insertar el fragmento del header -->
 <header th:replace="fragments/header :: header"></header>
-<!-- Contenido dinámico -->
+
 <main class="flex-shrink-0">
-    <div class="container">
-        <h1 class="mt-5" th:text="#{msg.index.title}"></h1>
-        <p class="lead" th:text="#{msg.index.subtitle}"></p>
+
+    <section class="hero-section text-center py-5 mb-5">
+        <div class="container">
+            <h1 class="display-3 animate__animated animate__fadeInDown"
+                th:text="#{msg.index.title}">
+                TL - CINEMA PRO
+            </h1>
+            <p class="lead text-muted-gold animate__animated animate__fadeInUp"
+               th:text="#{msg.index.subtitle}">
+                Gestión de Proyecciones, Boletos y Personal de Cine.
+            </p>
+            <a th:href="@{/funciones}" class="btn btn-hero mt-4 animate__animated animate__zoomIn">
+                <i class="fas fa-ticket-alt me-2"></i>
+                Ver Funciones de Hoy
+            </a>
+        </div>
+    </section>
+
+    <div class="container modules-grid">
+
+        <div class="module-card animate__animated animate__fadeInLeft">
+            <h2 class="h4"><i class="fas fa-film me-2"></i> Catálogo de Películas</h2>
+            <p>Administra y cataloga todas las producciones disponibles. Asigna directores y géneros.</p>
+            <a th:href="@{/peliculas}" class="btn btn-sm btn-secondary">
+                Ir a Películas
+            </a>
+        </div>
+
+        <div class="module-card animate__animated animate__fadeInUp">
+            <h2 class="h4"><i class="fas fa-warehouse me-2"></i> Gestión de Salas</h2>
+            <p>Define las capacidades, números y estados de mantenimiento de cada sala de proyección.</p>
+            <a th:href="@{/salas}" class="btn btn-sm btn-secondary">
+                Gestionar Salas
+            </a>
+        </div>
+
+        <div class="module-card animate__animated animate__fadeInRight">
+            <h2 class="h4"><i class="fas fa-users-cog me-2"></i> Trabajadores</h2>
+            <p>Control de acceso, roles y datos de contacto de todo el personal operativo.</p>
+            <a th:href="@{/trabajadores}" class="btn btn-sm btn-secondary">
+                Ver Personal
+            </a>
+        </div>
+
     </div>
 </main>
-<!-- Insertar el fragmento del footer -->
+
 <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
