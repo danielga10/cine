@@ -14,6 +14,8 @@ public interface FuncionRepository extends JpaRepository<Funcion, Long>{
 
     Page<Funcion> findByCodeContainingIgnoreCase(String code, Pageable pageable);
 
+    Page<Funcion> findByPeliculaTituloContainingIgnoreCase(String titulo, Pageable pageable);
+
     long countByCodeContainingIgnoreCase(String code);
 
     Optional<Funcion> findByCode(String code);

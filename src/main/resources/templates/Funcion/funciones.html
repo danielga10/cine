@@ -7,6 +7,10 @@
 <main class="container mt-5">
     <h1>Funciones</h1>
 
+    <form th:action="@{/funciones}" method="get" class="mb-3">
+        <input type="text" name="search" th:value="${search}" placeholder="Buscar por Película" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
     <div th:if="${mensajeError}" class="alert alert-danger">
         <p th:text="${mensajeError}"></p>
     </div>
@@ -81,4 +85,3 @@
 <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
-

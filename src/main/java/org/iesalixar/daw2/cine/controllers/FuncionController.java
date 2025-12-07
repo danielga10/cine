@@ -32,18 +32,18 @@ public class FuncionController {
     @Autowired
     private PeliculaRepository peliculaRepository;
 
-    /* =========================
-       LISTAR Y MOSTRAR FORMULARIOS (GET)
-       ========================= */
     @GetMapping
     public String listFunciones(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model) {
         Pageable pageable = PageRequest.of(page - 1, 5, getSort(sort));
         Page<Funcion> funcionesPage;
+
         if (search != null && !search.isBlank()) {
-            funcionesPage = funcionRepository.findByCodeContainingIgnoreCase(search, pageable);
+            // Busca por el título de la película (ahora asumimos que search es el título)
+            funcionesPage = funcionRepository.findByPeliculaTituloContainingIgnoreCase(search, pageable);
         } else {
             funcionesPage = funcionRepository.findAll(pageable);
         }
+
         model.addAttribute("funciones", funcionesPage.getContent());
         model.addAttribute("totalPages", funcionesPage.getTotalPages());
         model.addAttribute("currentPage", page);
@@ -62,8 +62,6 @@ public class FuncionController {
         model.addAttribute("peliculas", peliculaRepository.findAll());
         return "Funcion/funcion-form.html";
     }
-
-    // ... (MÉTODOS showEditForm, insert, update, delete permanecen sin cambios) ...
 
     @GetMapping("/edit")
     public String showEditForm(
