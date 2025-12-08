@@ -26,7 +26,7 @@
         <div class="mb-3">
             <label for="director" class="form-label" th:text="#{msg.pelicula-form.director}">Director:</label>
             <select th:field="*{directorId}" id="director" class="form-select" required>
-                <option value="" disabled selected th:text="#{msg.common.selectDirector}">-- Selecciona un director --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectDirector}"></option>
                 <option th:each="d : ${directores}"
                         th:value="${d.id}"
                         th:text="${d.nombre}">

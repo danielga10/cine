@@ -33,7 +33,7 @@
         <div class="mb-3">
             <label for="cliente" class="form-label" th:text="#{msg.boleto-form.client}">Cliente</label>
             <select id="cliente" th:field="*{cliente}" class="form-select" required>
-                <option value="" th:text="#{msg.common.selectClient}">-- Selecciona un cliente --</option>
+                <option value="" th:text="#{msg.common.selectClient}"></option>
                 <option th:each="c : ${listaClientes}" th:value="${c.id}" th:text="${c.nombre}"></option>
             </select>
 

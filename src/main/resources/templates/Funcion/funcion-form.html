@@ -20,7 +20,7 @@
         <div class="mb-3">
             <label for="sala" class="form-label" th:text="#{msg.funcion-form.room}">Sala:</label>
             <select th:field="*{sala}" id="sala" class="form-select" required>
-                <option value="" disabled selected th:text="#{msg.common.selectRoom}">-- Selecciona una sala --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectRoom}"></option>
                 <option th:each="s : ${salas}"
                         th:value="${s.id}"
                         th:text="${s.numero}">
@@ -31,7 +31,7 @@
         <div class="mb-3">
             <label for="pelicula" class="form-label" th:text="#{msg.funcion-form.movie}">Película:</label>
             <select th:field="*{pelicula}" id="pelicula" class="form-select" required>
-                <option value="" disabled selected th:text="#{msg.common.selectMovie}">-- Selecciona una Pelicula --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectMovie}"></option>
                 <option th:each="p : ${peliculas}"
                         th:value="${p.id}"
                         th:text="${p.titulo}">

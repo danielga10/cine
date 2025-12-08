@@ -32,7 +32,7 @@
         <div class="mb-3">
             <label for="sala" class="form-label" th:text="#{msg.trabajador-form.room}">Sala</label>
             <select id="sala" th:field="*{sala}" class="form-select" required>
-                <option value="" th:text="#{msg.common.selectRoom}">-- Selecciona una sala --</option>
+                <option value="" th:text="#{msg.common.selectRoom}"></option>
                 <option th:each="s : ${listaSalas}" th:value="${s.id}" th:text="${s.numero}"></option>
             </select>
         </div>

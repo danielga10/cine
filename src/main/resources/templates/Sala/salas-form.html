@@ -26,7 +26,7 @@
         <div class="mb-3">
             <label for="funcion" class="form-label" th:text="#{msg.sala-form.function}">Función:</label>
             <select th:field="*{funciones}" id="funcion" class="form-select" required>
-                <option value="" disabled selected th:text="#{msg.common.selectFunction}">-- Selecciona una Funcion --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectFunction}"></option>
                 <option th:each="f : ${funciones}"
                         th:value="${f.id}"
                         th:text="${f.code + ' - ' + f.pelicula.titulo + ' - ' + f.horario}">
