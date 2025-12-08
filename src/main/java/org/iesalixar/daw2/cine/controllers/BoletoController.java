@@ -57,8 +57,19 @@ public class BoletoController {
     }
 
     @GetMapping("/new")
-    public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
-        model.addAttribute("boleto", new Boleto());
+    public String showNewForm(@RequestParam(required = false) Long funcionId, Model model, RedirectAttributes redirectAttributes) {
+        Boleto boleto = new Boleto();
+        
+        // Si se proporciona un funcionId, pre-seleccionar la función
+        if (funcionId != null) {
+            Optional<org.iesalixar.daw2.cine.entities.Funcion> funcion = funcionRepository.findById(funcionId);
+            if (funcion.isPresent()) {
+                boleto.setFuncion(funcion.get());
+                model.addAttribute("selectedFuncionId", funcionId);
+            }
+        }
+        
+        model.addAttribute("boleto", boleto);
         try {
             List<Boleto> listBoletos = boletoRepository.findAll();
             model.addAttribute("boletos", listBoletos);

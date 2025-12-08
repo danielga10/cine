@@ -66,6 +66,25 @@ public class FuncionController {
         return "Funcion/funcion-form.html";
     }
 
+    @GetMapping("/details")
+    public String showDetails(
+            @RequestParam("id") Long id,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        Optional<Funcion> optFuncion = funcionRepository.findById(id);
+
+        if (optFuncion.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Función no encontrada.");
+            return "redirect:/funciones";
+        }
+
+        Funcion funcion = optFuncion.get();
+        model.addAttribute("funcion", funcion);
+
+        return "Funcion/funcion-details.html";
+    }
+
     @GetMapping("/edit")
     public String showEditForm(
             @RequestParam("id") Long id,

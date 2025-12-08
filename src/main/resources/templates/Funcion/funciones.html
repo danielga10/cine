@@ -45,6 +45,8 @@
                 </ul>
             </td>
             <td>
+                <a th:href="@{/funciones/details(id=${funcion.id})}"
+                   class="btn btn-info btn-sm" th:text="#{msg.funcion.details}">Ver Detalles</a>
                 <a th:href="@{/funciones/edit(id=${funcion.id})}"
                    class="btn btn-primary btn-sm" th:text="#{msg.funcion.edit}">Editar</a>
 
