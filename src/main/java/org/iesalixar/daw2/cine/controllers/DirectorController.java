@@ -22,14 +22,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST para gestionar las operaciones CRUD de directores.
+ * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de directores.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("/directores")
 public class DirectorController {
+    /** Logger para registrar eventos y errores */
     private static final Logger logger = LoggerFactory.getLogger(DirectorController.class);
 
+    /** Repositorio para operaciones CRUD de directores */
     @Autowired
     private DirectorRepository directorRepository;
 
+    /** Repositorio para operaciones CRUD de películas */
     @Autowired
     private PeliculaRepository peliculaRepository;
 

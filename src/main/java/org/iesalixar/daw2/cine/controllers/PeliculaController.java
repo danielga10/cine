@@ -22,14 +22,25 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST para gestionar las operaciones CRUD de películas.
+ * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de películas.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("/peliculas")
 public class PeliculaController {
 
+    /** Logger para registrar eventos y errores */
     private static final Logger logger = LoggerFactory.getLogger(PeliculaController.class);
 
+    /** Repositorio para operaciones CRUD de películas */
     @Autowired
     private PeliculaRepository peliculaRepository;
+    
+    /** Repositorio para operaciones CRUD de directores */
     @Autowired
     private DirectorRepository directorRepository;
 

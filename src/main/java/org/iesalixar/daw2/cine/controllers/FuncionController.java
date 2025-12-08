@@ -21,17 +21,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
+/**
+ * Controlador REST para gestionar las operaciones CRUD de funciones.
+ * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de funciones.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("/funciones")
 public class FuncionController {
 
+    /** Logger para registrar eventos y errores */
     private static final Logger logger = LoggerFactory.getLogger(FuncionController.class);
 
+    /** Repositorio para operaciones CRUD de funciones */
     @Autowired
     private FuncionRepository funcionRepository;
+    
+    /** Repositorio para operaciones CRUD de salas */
     @Autowired
     private SalaRepository salaRepository;
 
+    /** Repositorio para operaciones CRUD de películas */
     @Autowired
     private PeliculaRepository peliculaRepository;
 

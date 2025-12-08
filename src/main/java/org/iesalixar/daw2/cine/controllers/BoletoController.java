@@ -21,19 +21,40 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST para gestionar las operaciones CRUD de boletos.
+ * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de boletos.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("/boletos")
 public class BoletoController {
+    /** Logger para registrar eventos y errores */
     private static final Logger logger = LoggerFactory.getLogger(BoletoController.class);
 
+    /** Repositorio para operaciones CRUD de boletos */
     @Autowired
     private BoletoRepository boletoRepository;
 
+    /** Repositorio para operaciones CRUD de clientes */
     @Autowired
     private ClienteRepository clienteRepository;
+    
+    /** Repositorio para operaciones CRUD de funciones */
     @Autowired
     private FuncionRepository funcionRepository;
 
+    /**
+     * Muestra la lista paginada de boletos con opciones de búsqueda y ordenamiento.
+     * 
+     * @param page Número de página (por defecto 1)
+     * @param search Término de búsqueda para filtrar por asiento
+     * @param sort Tipo de ordenamiento (nameAsc, nameDesc, idDesc)
+     * @param model Modelo para pasar datos a la vista
+     * @return Nombre de la plantilla Thymeleaf a renderizar
+     */
     @GetMapping()
     public String listBoletos(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model ) {
         logger.info("Solicitando listado de todas las boletos..." + search);
@@ -56,6 +77,15 @@ public class BoletoController {
         return "Boleto/boletos.html";
     }
 
+    /**
+     * Muestra el formulario para crear un nuevo boleto.
+     * Si se proporciona un funcionId, pre-selecciona la función en el formulario.
+     * 
+     * @param funcionId ID opcional de la función a pre-seleccionar
+     * @param model Modelo para pasar datos a la vista
+     * @param redirectAttributes Atributos para mensajes flash en caso de error
+     * @return Nombre de la plantilla del formulario
+     */
     @GetMapping("/new")
     public String showNewForm(@RequestParam(required = false) Long funcionId, Model model, RedirectAttributes redirectAttributes) {
         Boleto boleto = new Boleto();
@@ -86,6 +116,14 @@ public class BoletoController {
         return "Boleto/boleto-form.html";
     }
 
+    /**
+     * Muestra el formulario para editar un boleto existente.
+     * 
+     * @param id ID del boleto a editar
+     * @param model Modelo para pasar datos a la vista
+     * @param redirectAttributes Atributos para mensajes flash en caso de error
+     * @return Nombre de la plantilla del formulario o redirección si no se encuentra el boleto
+     */
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -114,9 +152,17 @@ public class BoletoController {
         return "Boleto/boleto-form.html";
     }
 
+    /**
+     * Inserta un nuevo boleto en la base de datos.
+     * 
+     * @param boleto Objeto boleto con los datos a insertar
+     * @param model Modelo para pasar datos a la vista en caso de error
+     * @param redirectAttributes Atributos para mensajes flash
+     * @return Redirección a la lista de boletos
+     */
     @PostMapping("/insert")
-    public String insertBoleto(@ModelAttribute("boleto") Boleto boleto, // ¡Eliminado: @Valid y BindingResult!
-                               Model model,                             // ¡Necesario solo si hay que recargar listas en caso de error de DB!
+    public String insertBoleto(@ModelAttribute("boleto") Boleto boleto,
+                               Model model,
                                RedirectAttributes redirectAttributes) {
         logger.info("Intentando insertar nuevo boleto.");
         try {
@@ -129,9 +175,17 @@ public class BoletoController {
         }
         return "redirect:/boletos";
     }
+    /**
+     * Actualiza un boleto existente en la base de datos.
+     * 
+     * @param boleto Objeto boleto con los datos actualizados
+     * @param model Modelo para pasar datos a la vista en caso de error
+     * @param redirectAttributes Atributos para mensajes flash
+     * @return Redirección a la lista de boletos
+     */
     @PostMapping("/update")
-    public String updateBoleto(@ModelAttribute("boleto") Boleto boleto, // ¡Eliminado: @Valid y BindingResult!
-                               Model model,                             // ¡Necesario solo si hay que recargar listas en caso de error de DB!
+    public String updateBoleto(@ModelAttribute("boleto") Boleto boleto,
+                               Model model,
                                RedirectAttributes redirectAttributes) {
 
         logger.info("Intentando actualizar boleto con ID: {}", boleto.getId());
@@ -156,6 +210,13 @@ public class BoletoController {
         return "redirect:/boletos";
     }
 
+    /**
+     * Elimina un boleto de la base de datos.
+     * 
+     * @param id ID del boleto a eliminar
+     * @param redirectAttributes Atributos para mensajes flash
+     * @return Redirección a la lista de boletos
+     */
     @PostMapping("/delete")
     public String deleteBoleto(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         try {
@@ -177,6 +238,12 @@ public class BoletoController {
         return "redirect:/boletos";
     }
 
+    /**
+     * Método auxiliar para obtener el objeto Sort según el parámetro de ordenamiento.
+     * 
+     * @param sort Tipo de ordenamiento (nameAsc, nameDesc, idDesc)
+     * @return Objeto Sort configurado
+     */
     private Sort getSort(String sort) {
         if (sort == null) {
             return Sort.by("id").ascending();

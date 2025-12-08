@@ -20,15 +20,25 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST para gestionar las operaciones CRUD de trabajadores.
+ * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de trabajadores.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("/trabajadores")
 public class  TrabajadorController {
 
+    /** Logger para registrar eventos y errores */
     private static final Logger logger = LoggerFactory.getLogger(TrabajadorController.class);
 
+    /** Repositorio para operaciones CRUD de trabajadores */
     @Autowired
     private TrabajadorRepository trabajadorRepository;
 
+    /** Repositorio para operaciones CRUD de salas */
     @Autowired
     private SalaRepository salaRepository;
 

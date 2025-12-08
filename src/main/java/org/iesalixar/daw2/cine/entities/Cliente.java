@@ -10,35 +10,59 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity // Marca esta clase como una entidad gestionada por JPA.
-@Table(name = "cliente") // Especifica el nombre de la tabla asociada a esta entidad.
+/**
+ * Entidad que representa un cliente del cine.
+ * Un cliente puede tener múltiples boletos comprados.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
+@Entity
+@Table(name = "cliente")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Cliente {
-    // Campo que almacena el identificador único de la región.
-    // Es una clave primaria autogenerada por la base de datos.
+    /**
+     * Identificador único del cliente.
+     * Es una clave primaria autogenerada por la base de datos.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Campo que almacena el email completo del cliente.
+    /**
+     * Correo electrónico del cliente (máximo 100 caracteres).
+     */
     @NotEmpty(message = "{msg.cliente.email.notEmpty}")
     @Size(max = 100, message = "{msg.cliente.email.size}")
-    @Column(name = "email", nullable = false, length = 100) // Define la columna correspondiente en la tabla.
+    @Column(name = "email", nullable = false, length = 100)
     private String email;
 
-    // Campo que almacena el nombre completo del cliente.
+    /**
+     * Nombre completo del cliente (máximo 100 caracteres).
+     */
     @NotEmpty(message = "{msg.cliente.nombre.notEmpty}")
     @Size(max = 100, message = "{msg.cliente.nombre.size}")
-    @Column(name = "nombre", nullable = false, length = 100) // Define la columna correspondiente en la tabla.
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    // Relación uno a muchos con la entidad `Boleto`. Un cliente puede tener muchos boletos.
+    /**
+     * Lista de boletos comprados por el cliente.
+     * Relación One-to-Many: un cliente puede tener muchos boletos.
+     * Se usa CascadeType.ALL para que las operaciones se propaguen a los boletos.
+     * Se usa FetchType.LAZY para optimizar las consultas.
+     */
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Boleto> boletos = new ArrayList<>();
 
+    /**
+     * Constructor personalizado que permite crear un cliente sin especificar el ID.
+     * Útil cuando se crea un nuevo cliente antes de persistirlo en la base de datos.
+     * 
+     * @param email Correo electrónico del cliente
+     * @param nombre Nombre completo del cliente
+     */
     public Cliente(String email, String nombre) {
         this.email = email;
         this.nombre = nombre;

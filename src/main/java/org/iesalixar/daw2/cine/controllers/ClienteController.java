@@ -19,14 +19,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST para gestionar las operaciones CRUD de clientes.
+ * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de clientes.
+ * 
+ * @author IES Alixar DAW2
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("/clientes")
 public class ClienteController {
+    /** Logger para registrar eventos y errores */
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
+    /** Repositorio para operaciones CRUD de clientes */
     @Autowired
     private ClienteRepository clienteRepository;
-    @Autowired // <-- 2. Inyectar el BoletoRepository
+    
+    /** Repositorio para operaciones CRUD de boletos */
+    @Autowired
     private BoletoRepository boletoRepository;
 
     @GetMapping()
