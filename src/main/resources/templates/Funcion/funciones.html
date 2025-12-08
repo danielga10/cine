@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Cine - Listado de Funciones')"></head>
+<head th:replace="fragments/head :: head(#{msg.funcion.title})"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 
 <main class="container mt-5">
-    <h1>Funciones</h1>
+    <h1 th:text="#{msg.funcion.title}">Funciones</h1>
 
     <form th:action="@{/funciones}" method="get" class="mb-3">
-        <input type="text" name="search" th:value="${search}" placeholder="Buscar por Película" class="form-control w-25 d-inline"/>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <input type="text" name="search" th:value="${search}" th:placeholder="#{msg.common.searchByMovie}" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.common.search}">Buscar</button>
     </form>
     <div th:if="${mensajeError}" class="alert alert-danger">
         <p th:text="${mensajeError}"></p>
@@ -18,13 +18,13 @@
     <table class="table table-bordered mt-3">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Code</th>
-            <th>Sala</th>
-            <th>Película</th>
-            <th>Horario</th>
-            <th>Boletos</th>
-            <th>Acciones</th>
+            <th th:text="#{msg.funcion.id}">ID</th>
+            <th th:text="#{msg.funcion.code}">Code</th>
+            <th th:text="#{msg.funcion.room}">Sala</th>
+            <th th:text="#{msg.funcion.movie}">Película</th>
+            <th th:text="#{msg.funcion.schedule}">Horario</th>
+            <th th:text="#{msg.common.tickets}">Boletos</th>
+            <th th:text="#{msg.funcion.actions}">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
             <td th:text="${funcion.pelicula.titulo}"></td>
             <td th:text="${funcion.horario}"></td>
             <td>
-                <span th:if="${#lists.isEmpty(funcion.boletos)}">Sin boletos</span>
+                <span th:if="${#lists.isEmpty(funcion.boletos)}" th:text="#{msg.common.noTickets}">Sin boletos</span>
 
                 <ul th:if="${!#lists.isEmpty(funcion.boletos)}">
                     <li th:each="boleto : ${funcion.boletos}">
@@ -46,13 +46,14 @@
             </td>
             <td>
                 <a th:href="@{/funciones/edit(id=${funcion.id})}"
-                   class="btn btn-primary btn-sm">Editar</a>
+                   class="btn btn-primary btn-sm" th:text="#{msg.funcion.edit}">Editar</a>
 
                 <form th:action="@{/funciones/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${funcion.id}"/>
                     <button type="submit"
                             class="btn btn-danger btn-sm"
-                            th:onclick="|return confirm('¿Seguro que quieres borrar esta función?');|">
+                            th:onclick="|return confirm('#{msg.funcion.confirmDelete}');|"
+                            th:text="#{msg.funcion.delete}">
                         Borrar
                     </button>
                 </form>
@@ -65,21 +66,20 @@
     <nav th:if="${totalPages > 1}" aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/funciones(page=${currentPage - 1}, search=${search}, sort=${sort})}">Anterior</a>
+                <a class="page-link" th:href="@{/funciones(page=${currentPage - 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.previous}">Anterior</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link"
-                   th:href="@{/funciones(page=${i}, search=${search}, sort=${sort})}"
-                   th:text="${i}"></a>
+                <a class="page-link" th:href="@{/funciones(page=${i}, search=${search}, sort=${sort})}" th:text="${i}">1</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/funciones(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
+                <a class="page-link" th:href="@{/funciones(page=${currentPage + 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.next}">Siguiente</a>
             </li>
         </ul>
     </nav>
-    <a th:href="@{/funciones/new}" class="btn btn-success mt-3">Añadir nueva Función</a>
-    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+
+    <a th:href="@{/funciones/new}" class="btn btn-success mt-3" th:text="#{msg.funcion.add}">Añadir nueva Función</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.funcion.backhome}">Volver a inicio</a>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>

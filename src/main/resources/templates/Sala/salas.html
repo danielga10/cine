@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head ('Cine - Listado de Salas')}"></head>
+<head th:replace="~{fragments/head :: head (#{msg.sala.title})}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
-    <h1>Salas</h1>
+    <h1 th:text="#{msg.sala.title}">Salas</h1>
 
     <div th:if="${mensajeError}" class="alert alert-danger">
         <p th:text="${mensajeError}"></p>
@@ -15,18 +15,18 @@
     </div>
 
     <form th:action="@{/salas}" method="get" class="mb-3">
-        <input type="text" name="search" th:value="${search}" placeholder="Buscar por Número" class="form-control w-25 d-inline"/>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <input type="text" name="search" th:value="${search}" th:placeholder="#{msg.common.searchByNumber}" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.common.search}">Buscar</button>
     </form>
 
     <table class="table table-bordered mt-3">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Numero</th>
-            <th>Capacidad</th>
-            <th>Funciones</th>
-            <th>Acciones</th>
+            <th th:text="#{msg.sala.id}">ID</th>
+            <th th:text="#{msg.sala.number}">Numero</th>
+            <th th:text="#{msg.sala.capacity}">Capacidad</th>
+            <th th:text="#{msg.common.functions}">Funciones</th>
+            <th th:text="#{msg.sala.actions}">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
             <td th:text="${sala.numero}"></td>
             <td th:text="${sala.capacidad}"></td>
             <td>
-                <span th:if="${#lists.isEmpty(sala.funciones)}">Sin funciones</span>
+                <span th:if="${#lists.isEmpty(sala.funciones)}" th:text="#{msg.common.noFunctions}">Sin funciones</span>
 
                 <ul th:if="${!#lists.isEmpty(sala.funciones)}" class="mb-0">
                     <li th:each="funcion : ${sala.funciones}">
@@ -47,11 +47,12 @@
                 </ul>
             </td>
             <td>
-                <a th:href="@{/salas/edit(id=${sala.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <a th:href="@{/salas/edit(id=${sala.id})}" class="btn btn-primary btn-sm" th:text="#{msg.sala.edit}">Editar</a>
                 <form th:action="@{/salas/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${sala.id}"/>
                     <button type="submit" class="btn btn-danger btn-sm"
-                            th:onclick="|return confirm('¿Seguro que quieres borrar esta sala?');|">
+                            th:onclick="|return confirm('#{msg.sala.confirmDelete}');|"
+                            th:text="#{msg.sala.delete}">
                         Borrar
                     </button>
                 </form>
@@ -63,20 +64,20 @@
     <nav th:if="${totalPages > 1}" aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/salas(page=${currentPage - 1}, search=${search}, sort=${sort})}">Anterior</a>
+                <a class="page-link" th:href="@{/salas(page=${currentPage - 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.previous}">Anterior</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
                 <a class="page-link" th:href="@{/salas(page=${i}, search=${search}, sort=${sort})}" th:text="${i}">1</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/salas(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
+                <a class="page-link" th:href="@{/salas(page=${currentPage + 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.next}">Siguiente</a>
             </li>
         </ul>
     </nav>
 
-    <a th:href="@{/salas/new}" class="btn btn-success mt-3">Añadir nuevo Sala</a>
-    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+    <a th:href="@{/salas/new}" class="btn btn-success mt-3" th:text="#{msg.sala.add}">Añadir nuevo Sala</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.sala.backhome}">Volver a inicio</a>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head ('Cine - Listado de Boletos')}"></head>
+<head th:replace="~{fragments/head :: head (#{msg.boleto.title})}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
-    <h1>Boletos</h1>
+    <h1 th:text="#{msg.boleto.title}">Boletos</h1>
 
     <div th:if="${errorMessage}" class="alert alert-danger">
         <p th:text="${errorMessage}"></p>
@@ -15,20 +15,20 @@
     </div>
 
     <form th:action="@{/boletos}" method="get" class="mb-3">
-        <input type="text" name="search" th:value="${search}" placeholder="Buscar por Asiento" class="form-control w-25 d-inline"/>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <input type="text" name="search" th:value="${search}" th:placeholder="#{msg.common.searchBySeat}" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.common.search}">Buscar</button>
     </form>
 
     <table class="table table-bordered mt-3">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Asiento</th>
-            <th>Precio</th>
-            <th>Cliente</th>
-            <th>Función</th>
-            <th>Acciones</th>
+            <th th:text="#{msg.boleto.id}">ID</th>
+            <th th:text="#{msg.boleto.code}">Código</th>
+            <th th:text="#{msg.boleto.seat}">Asiento</th>
+            <th th:text="#{msg.boleto.price}">Precio</th>
+            <th th:text="#{msg.boleto.client}">Cliente</th>
+            <th th:text="#{msg.boleto.function}">Función</th>
+            <th th:text="#{msg.boleto.actions}">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -48,11 +48,12 @@
                 </ul>
             </td>
             <td>
-                <a th:href="@{/boletos/edit(id=${boleto.id})}" class="btn btn-primary btn-sm">Editar</a>
+                <a th:href="@{/boletos/edit(id=${boleto.id})}" class="btn btn-primary btn-sm" th:text="#{msg.boleto.edit}">Editar</a>
                 <form th:action="@{/boletos/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${boleto.id}"/>
                     <button type="submit" class="btn btn-danger btn-sm"
-                            th:onclick="|return confirm('¿Seguro que quieres borrar este boleto?');|">
+                            th:onclick="|return confirm('#{msg.boleto.confirmDelete}');|"
+                            th:text="#{msg.boleto.delete}">
                         Borrar
                     </button>
                 </form>
@@ -64,20 +65,20 @@
     <nav th:if="${totalPages > 1}" aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/boletos(page=${currentPage - 1}, search=${search}, sort=${sort})}">Anterior</a>
+                <a class="page-link" th:href="@{/boletos(page=${currentPage - 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.previous}">Anterior</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
                 <a class="page-link" th:href="@{/boletos(page=${i}, search=${search}, sort=${sort})}" th:text="${i}">1</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/boletos(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
+                <a class="page-link" th:href="@{/boletos(page=${currentPage + 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.next}">Siguiente</a>
             </li>
         </ul>
     </nav>
 
-    <a th:href="@{/boletos/new}" class="btn btn-success mt-3">Añadir nuevo Boleto</a>
-    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+    <a th:href="@{/boletos/new}" class="btn btn-success mt-3" th:text="#{msg.boleto.add}">Añadir nuevo Boleto</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.boleto.backhome}">Volver a inicio</a>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>

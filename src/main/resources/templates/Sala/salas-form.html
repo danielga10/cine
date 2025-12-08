@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Cine - Insertar/Actualizar Sala')"></head>
+<head th:replace="fragments/head :: head(#{msg.sala-form.edit})"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 <main class="container mt-5">
-    <h1 th:text="${sala.id == null ? 'Add New Sala' : 'Edit Sala'}"></h1>
+    <h1 th:text="${sala.id == null} ? #{msg.sala-form.add} : #{msg.sala-form.edit}"></h1>
 
     <!-- Mensaje de error -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
@@ -14,29 +14,29 @@
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
-            <label for="numero" class="form-label">Número:</label>
+            <label for="numero" class="form-label" th:text="#{msg.sala-form.number}">Número:</label>
             <input type="text" th:field="*{numero}" id="numero" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label for="capacidad" class="form-label">Capacidad:</label>
+            <label for="capacidad" class="form-label" th:text="#{msg.sala-form.capacity}">Capacidad:</label>
             <input type="text" th:field="*{capacidad}" id="capacidad" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label for="funcion" class="form-label">Función:</label>
+            <label for="funcion" class="form-label" th:text="#{msg.sala-form.function}">Función:</label>
             <select th:field="*{funciones}" id="funcion" class="form-select" required>
-                <option value="" disabled selected>-- Selecciona una Funcion --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectFunction}">-- Selecciona una Funcion --</option>
                 <option th:each="f : ${funciones}"
                         th:value="${f.id}"
                         th:text="${f.code + ' - ' + f.pelicula.titulo + ' - ' + f.horario}">
                 </option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" th:text="${sala.id == null ? 'Create' : 'Update'}"></button>
+        <button type="submit" class="btn btn-primary" th:text="${sala.id == null} ? #{msg.sala-form.create} : #{msg.sala-form.update}"></button>
     </form>
 
-    <a th:href="@{/salas}" class="btn btn-secondary mt-3">Back to List</a>
+    <a th:href="@{/salas}" class="btn btn-secondary mt-3" th:text="#{msg.common.backtolist}">Back to List</a>
 </main>
 </body>
 </html>

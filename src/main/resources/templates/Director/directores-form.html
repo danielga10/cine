@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Cine - Insertar/Actualizar Directores')"></head>
+<head th:replace="fragments/head :: head(#{msg.director-form.edit})"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 <main class="container mt-5">
-    <h1 th:text="${director.id == null ? 'Add New Director' : 'Edit Director'}"></h1>
+    <h1 th:text="${director.id == null} ? #{msg.director-form.add} : #{msg.director-form.edit}"></h1>
 
     <!-- Mensaje de error -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
@@ -14,34 +14,34 @@
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre:</label>
+            <label for="nombre" class="form-label" th:text="#{msg.director-form.name}">Nombre:</label>
             <input type="text" th:field="*{nombre}" id="nombre" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label for="nacionalidad" class="form-label">Nacionalidad:</label>
+            <label for="nacionalidad" class="form-label" th:text="#{msg.director-form.nationality}">Nacionalidad:</label>
             <input type="text" th:field="*{nacionalidad}" id="nacionalidad" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
+            <label for="fecha_nacimiento" class="form-label" th:text="#{msg.director-form.birth}">Fecha de nacimiento:</label>
             <input type="date" th:field="*{fecha_nacimiento}" id="fecha_nacimiento" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label for="pelicula" class="form-label">Peliculas:</label>
+            <label for="pelicula" class="form-label" th:text="#{msg.common.movies}">Peliculas:</label>
             <select th:field="*{peliculas}" id="pelicula" multiple class="form-select" required>
-                <option value="" disabled selected>-- Selecciona un director --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectDirector}">-- Selecciona un director --</option>
                 <option th:each="p : ${peliculas}"
                         th:value="${p.id}"
                         th:text="${p.titulo}">
                 </option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" th:text="${director.id == null ? 'Create' : 'Update'}"></button>
+        <button type="submit" class="btn btn-primary" th:text="${director.id == null} ? #{msg.director-form.create} : #{msg.director-form.update}"></button>
     </form>
 
-    <a th:href="@{/directores}" class="btn btn-secondary mt-3">Back to List</a>
+    <a th:href="@{/directores}" class="btn btn-secondary mt-3" th:text="#{msg.common.backtolist}">Back to List</a>
 </main>
 </body>
 </html>

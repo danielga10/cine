@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head ('Cine - Formulario de Cliente')}"></head>
+<head th:replace="~{fragments/head :: head (#{msg.cliente-form.edit})}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
-    <h1 th:text="${cliente.id != null} ? 'Editar Cliente' : 'Nuevo Cliente'"></h1>
+    <h1 th:text="${cliente.id != null} ? #{msg.cliente-form.edit} : #{msg.cliente-form.add}"></h1>
 
     <div th:if="${errorMessage}" class="alert alert-danger">
         <p th:text="${errorMessage}"></p>
@@ -16,19 +16,19 @@
         <input type="hidden" th:if="${cliente.id != null}" th:field="*{id}"/>
 
         <div class="mb-3">
-            <label for="email" class="form-label">Email:</label>
+            <label for="email" class="form-label" th:text="#{msg.cliente-form.email}">Email:</label>
             <input type="text" id="email" th:field="*{email}" class="form-control" maxlength="20"/>
             <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre:</label>
+            <label for="nombre" class="form-label" th:text="#{msg.cliente-form.name}">Nombre:</label>
             <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="9"/>
             <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a th:href="@{/clientes}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-success" th:text="#{msg.common.save}">Guardar</button>
+        <a th:href="@{/clientes}" class="btn btn-secondary" th:text="#{msg.common.cancel}">Cancelar</a>
     </form>
 </main>
 

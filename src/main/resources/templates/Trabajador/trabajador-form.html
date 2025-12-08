@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head ('Cine - Formulario de Trabajador')}"></head>
+<head th:replace="~{fragments/head :: head (#{msg.trabajador-form.edit})}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
-    <h1 th:text="${trabajador.id != null} ? 'Editar Trabajador' : 'Nuevo Trabajador'"></h1>
+    <h1 th:text="${trabajador.id != null} ? #{msg.trabajador-form.edit} : #{msg.trabajador-form.add}"></h1>
 
     <div th:if="${errorMessage}" class="alert alert-danger">
         <p th:text="${errorMessage}"></p>
@@ -15,33 +15,34 @@
         <input type="hidden" th:if="${trabajador.id != null}" th:field="*{id}"/>
 
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre</label>
+            <label for="nombre" class="form-label" th:text="#{msg.trabajador-form.name}">Nombre</label>
             <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="20"/>
             <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="telefono" class="form-label">Teléfono</label>
+            <label for="telefono" class="form-label" th:text="#{msg.trabajador-form.phone}">Teléfono</label>
             <input type="text" id="telefono" th:field="*{telefono}" class="form-control" maxlength="9"/>
             <div class="text-danger" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="correo" class="form-label">Correo</label>
+            <label for="correo" class="form-label" th:text="#{msg.trabajador-form.email}">Correo</label>
             <input type="text" id="correo" th:field="*{correo}" class="form-control" maxlength="35"/>
             <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="sala" class="form-label">Sala</label>
+            <label for="sala" class="form-label" th:text="#{msg.trabajador-form.room}">Sala</label>
             <select id="sala" th:field="*{sala}" class="form-select">
+                <option value="" th:text="#{msg.common.selectRoom}">-- Selecciona una sala --</option>
                 <option th:each="s : ${listaSalas}" th:value="${s.id}" th:text="${s.numero}"></option>
             </select>
             <div class="text-danger" th:if="${#fields.hasErrors('sala')}" th:errors="*{sala}"></div>
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a th:href="@{/boletos}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-success" th:text="#{msg.common.save}">Guardar</button>
+        <a th:href="@{/trabajadores}" class="btn btn-secondary" th:text="#{msg.common.cancel}">Cancelar</a>
     </form>
 </main>
 

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head ('Cine - Listado de Películas')}"></head>
+<head th:replace="~{fragments/head :: head (#{msg.pelicula.title})}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
-    <h1>Películas</h1>
+    <h1 th:text="#{msg.pelicula.title}">Películas</h1>
 
     <div th:if="${mensajeError}" class="alert alert-danger">
         <p th:text="${mensajeError}"></p>
@@ -15,18 +15,18 @@
     </div>
 
     <form th:action="@{/peliculas}" method="get" class="mb-3">
-        <input type="text" name="search" th:value="${search}" placeholder="Buscar por título" class="form-control w-25 d-inline"/>
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <input type="text" name="search" th:value="${search}" th:placeholder="#{msg.common.searchByTitle}" class="form-control w-25 d-inline"/>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.common.search}">Buscar</button>
     </form>
 
     <table class="table table-bordered mt-3">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Duración</th>
-            <th>Director</th>
-            <th>Acciones</th>
+            <th th:text="#{msg.pelicula.id}">ID</th>
+            <th th:text="#{msg.pelicula.name}">Título</th>
+            <th th:text="#{msg.pelicula.duration}">Duración</th>
+            <th th:text="#{msg.pelicula.director}">Director</th>
+            <th th:text="#{msg.pelicula.actions}">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
             <td th:text="${pelicula.duracion}"></td>
 
             <td>
-                <span th:if="${pelicula.director == null}">Sin director</span>
+                <span th:if="${pelicula.director == null}" th:text="#{msg.common.noDirector}">Sin director</span>
                 <ul th:if="${pelicula.director != null}" class="mb-0 list-unstyled">
                     <li>
                         <span th:text="${pelicula.director.nombre}"></span>
@@ -45,12 +45,13 @@
             </td>
             <td>
                 <a th:href="@{/peliculas/edit(id=${pelicula.id})}"
-                   class="btn btn-primary btn-sm">Editar</a>
+                   class="btn btn-primary btn-sm" th:text="#{msg.pelicula.edit}">Editar</a>
 
                 <form th:action="@{/peliculas/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${pelicula.id}"/>
                     <button type="submit" class="btn btn-danger btn-sm"
-                            th:onclick="|return confirm('¿Seguro que quieres borrar esta película?');|">
+                            th:onclick="|return confirm('#{msg.pelicula.confirmDelete}');|"
+                            th:text="#{msg.pelicula.delete}">
                         Borrar
                     </button>
                 </form>
@@ -62,7 +63,7 @@
     <nav th:if="${totalPages > 1}" aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/peliculas(page=${currentPage - 1}, search=${search}, sort=${sort})}">Anterior</a>
+                <a class="page-link" th:href="@{/peliculas(page=${currentPage - 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.previous}">Anterior</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
@@ -71,13 +72,13 @@
                    th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/peliculas(page=${currentPage + 1}, search=${search}, sort=${sort})}">Siguiente</a>
+                <a class="page-link" th:href="@{/peliculas(page=${currentPage + 1}, search=${search}, sort=${sort})}" th:text="#{msg.common.next}">Siguiente</a>
             </li>
         </ul>
     </nav>
 
-    <a th:href="@{/peliculas/new}" class="btn btn-success mt-3">Añadir nueva Película</a>
-    <a th:href="@{/}" class="btn btn-secondary mt-3">Volver a inicio</a>
+    <a th:href="@{/peliculas/new}" class="btn btn-success mt-3" th:text="#{msg.pelicula.add}">Añadir nueva Película</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3" th:text="#{msg.pelicula.backhome}">Volver a inicio</a>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Cine - Insertar/Actualizar Funcion')"></head>
+<head th:replace="fragments/head :: head(#{msg.funcion-form.edit})"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 <main class="container mt-5">
-    <h1 th:text="${funcion.id == null ? 'Add New Funcion' : 'Edit Funcion'}"></h1>
+    <h1 th:text="${funcion.id == null} ? #{msg.funcion-form.add} : #{msg.funcion-form.edit}"></h1>
 
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
@@ -13,14 +13,14 @@
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
-            <label for="code" class="form-label">Código:</label>
+            <label for="code" class="form-label" th:text="#{msg.funcion-form.code}">Código:</label>
             <input type="text" th:field="*{code}" id="code" class="form-control" required />
         </div>
 
         <div class="mb-3">
-            <label for="sala" class="form-label">Sala:</label>
+            <label for="sala" class="form-label" th:text="#{msg.funcion-form.room}">Sala:</label>
             <select th:field="*{sala}" id="sala" class="form-select" required>
-                <option value="" disabled selected>-- Selecciona una sala --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectRoom}">-- Selecciona una sala --</option>
                 <option th:each="s : ${salas}"
                         th:value="${s.id}"
                         th:text="${s.numero}">
@@ -29,9 +29,9 @@
         </div>
 
         <div class="mb-3">
-            <label for="pelicula" class="form-label">Película:</label>
+            <label for="pelicula" class="form-label" th:text="#{msg.funcion-form.movie}">Película:</label>
             <select th:field="*{pelicula}" id="pelicula" class="form-select" required>
-                <option value="" disabled selected>-- Selecciona una Pelicula --</option>
+                <option value="" disabled selected th:text="#{msg.common.selectMovie}">-- Selecciona una Pelicula --</option>
                 <option th:each="p : ${peliculas}"
                         th:value="${p.id}"
                         th:text="${p.titulo}">
@@ -40,14 +40,14 @@
         </div>
 
         <div class="mb-3">
-            <label for="horario" class="form-label">Horario:</label>
+            <label for="horario" class="form-label" th:text="#{msg.funcion-form.schedule}">Horario:</label>
             <input type="time" th:field="*{horario}" id="horario" class="form-control" required />
         </div>
 
-        <button type="submit" class="btn btn-primary" th:text="${funcion.id == null ? 'Create' : 'Update'}"></button>
+        <button type="submit" class="btn btn-primary" th:text="${funcion.id == null} ? #{msg.funcion-form.create} : #{msg.funcion-form.update}"></button>
     </form>
 
-    <a th:href="@{/funciones}" class="btn btn-secondary mt-3">Back to List</a>
+    <a th:href="@{/funciones}" class="btn btn-secondary mt-3" th:text="#{msg.common.backtolist}">Back to List</a>
 </main>
 </body>
 </html>
