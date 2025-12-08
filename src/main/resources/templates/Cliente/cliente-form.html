@@ -25,9 +25,10 @@
             <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="30" required/>
         </div>
 
-        <button type="submit" class="btn btn-success" th:text="#{msg.common.save}">Guardar</button>
-        <a th:href="@{/clientes}" class="btn btn-secondary" th:text="#{msg.common.cancel}">Cancelar</a>
+        <button type="submit" class="btn btn-primary" th:text="${cliente.id == null} ? #{msg.cliente-form.create} : #{msg.cliente-form.update}"></button>
     </form>
+
+    <a th:href="@{/clientes}" class="btn btn-secondary mt-3" th:text="#{msg.common.backtolist}">Back to List</a>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
