@@ -115,49 +115,27 @@ public class BoletoController {
     }
 
     @PostMapping("/insert")
-    public String insertBoleto(@Valid @ModelAttribute("boleto") Boleto boleto,
-                               BindingResult bindingResult,
-                               Model model,
+    public String insertBoleto(@ModelAttribute("boleto") Boleto boleto, // ¡Eliminado: @Valid y BindingResult!
+                               Model model,                             // ¡Necesario solo si hay que recargar listas en caso de error de DB!
                                RedirectAttributes redirectAttributes) {
-
         logger.info("Intentando insertar nuevo boleto.");
-
-        if (bindingResult.hasErrors()) {
-            // Si hay errores de validación, recargar datos para la vista
-            model.addAttribute("listaClientes", clienteRepository.findAll());
-            model.addAttribute("listaFunciones", funcionRepository.findAll());
-            return "Boleto/boleto-form.html";
-        }
-
         try {
             boletoRepository.save(boleto);
-            // MENSAJE DE ÉXITO ELIMINADO
 
         } catch (Exception e) {
+            // Este catch capturará fallos de la base de datos (ej. NOT NULL) si la validación HTML falla.
             logger.error("Error al crear el boleto: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el boleto. Verifique que no haya duplicados (código, etc).");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el boleto. Verifique los datos (campos vacíos, código duplicado, etc).");
         }
         return "redirect:/boletos";
     }
-
-    // Método para Actualizar un Boleto existente
     @PostMapping("/update")
-    public String updateBoleto(@Valid @ModelAttribute("boleto") Boleto boleto,
-                               BindingResult bindingResult,
-                               Model model,
+    public String updateBoleto(@ModelAttribute("boleto") Boleto boleto, // ¡Eliminado: @Valid y BindingResult!
+                               Model model,                             // ¡Necesario solo si hay que recargar listas en caso de error de DB!
                                RedirectAttributes redirectAttributes) {
 
         logger.info("Intentando actualizar boleto con ID: {}", boleto.getId());
-
-        if (bindingResult.hasErrors()) {
-            // Si hay errores de validación, recargar datos para la vista
-            model.addAttribute("listaClientes", clienteRepository.findAll());
-            model.addAttribute("listaFunciones", funcionRepository.findAll());
-            return "Boleto/boleto-form.html";
-        }
-
         try {
-            // 1. Recuperar el boleto existente
             Boleto existingBoleto = boletoRepository.findById(boleto.getId())
                     .orElseThrow(() -> new RuntimeException("Boleto no encontrado para actualizar."));
 
@@ -169,11 +147,11 @@ public class BoletoController {
             existingBoleto.setFuncion(boleto.getFuncion());
 
             boletoRepository.save(existingBoleto);
-            // MENSAJE DE ÉXITO ELIMINADO
 
         } catch (Exception e) {
+            // Este catch capturará fallos de la base de datos (ej. NOT NULL o ID inválido).
             logger.error("Error al actualizar el boleto con ID {}: {}", boleto.getId(), e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar el boleto. El ID podría ser inválido.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar el boleto. El ID podría ser inválido o faltan datos.");
         }
         return "redirect:/boletos";
     }
