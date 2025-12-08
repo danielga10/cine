@@ -70,7 +70,6 @@ public class SalaController {
     public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("sala", new Sala());
 
-        // 💡 SOLUCIÓN: Cargar y añadir la lista de funciones
         try {
             List<Funcion> funciones = funcionRepository.findAll();
             model.addAttribute("funciones", funciones);
