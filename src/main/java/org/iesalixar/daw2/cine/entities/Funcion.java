@@ -31,7 +31,6 @@ public class Funcion {
      */
     @Column(name="code", nullable=false)
     private String code;
-
     /**
      * Sala donde se proyecta la función.
      * Relación Many-to-One: muchas funciones pueden realizarse en una sala.
@@ -39,7 +38,6 @@ public class Funcion {
     @ManyToOne
     @JoinColumn(name = "id_sala", nullable = false)
     private Sala sala;
-
     /**
      * Película que se proyecta en la función.
      * Relación Many-to-One: muchas funciones pueden proyectar la misma película.

@@ -6,7 +6,6 @@
 <main class="container mt-5">
     <h1 th:text="${pelicula.id == null} ? #{msg.pelicula-form.add} : #{msg.pelicula-form.edit}"></h1>
 
-    <!-- Mensaje de error -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
     <form th:action="${pelicula.id == null} ? @{/peliculas/insert} : @{/peliculas/update}"
@@ -25,7 +24,7 @@
 
         <div class="mb-3">
             <label for="director" class="form-label" th:text="#{msg.pelicula-form.director}">Director:</label>
-            <select th:field="*{directorId}" id="director" class="form-select" required>
+            <select th:field="*{director}" id="director" class="form-select" required>
                 <option value="" disabled selected th:text="#{msg.common.selectDirector}"></option>
                 <option th:each="d : ${directores}"
                         th:value="${d.id}"
@@ -33,8 +32,6 @@
                 </option>
             </select>
         </div>
-
-
 
         <button type="submit" class="btn btn-primary" th:text="${pelicula.id == null} ? #{msg.pelicula-form.create} : #{msg.pelicula-form.update}"></button>
     </form>
