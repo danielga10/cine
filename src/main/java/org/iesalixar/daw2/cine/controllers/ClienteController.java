@@ -106,9 +106,6 @@ public class ClienteController {
         return "redirect:/clientes";
     }
 
-    // ----------------------------------------------------
-    // NUEVO: Método para Actualizar Cliente
-    // ----------------------------------------------------
     @PostMapping("/update")
     public String updateCliente(@ModelAttribute("cliente") Cliente cliente,
                                 RedirectAttributes redirectAttributes) {
