@@ -17,14 +17,12 @@
 
         <div class="mb-3">
             <label for="email" class="form-label" th:text="#{msg.cliente-form.email}">Email:</label>
-            <input type="text" id="email" th:field="*{email}" class="form-control" maxlength="20"/>
-            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            <input type="text" id="email" th:field="*{email}" class="form-control" maxlength="20" required/>
         </div>
 
         <div class="mb-3">
             <label for="nombre" class="form-label" th:text="#{msg.cliente-form.name}">Nombre:</label>
-            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="9"/>
-            <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="9" required/>
         </div>
 
         <button type="submit" class="btn btn-success" th:text="#{msg.common.save}">Guardar</button>
