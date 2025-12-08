@@ -284,6 +284,7 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 
+/* --- Botón Cian (Primary) --- */
 .btn-primary {
     background: var(--accent-secondary);
     color: #FFF;
@@ -293,20 +294,26 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
     background: #038da3;
 }
 
+/* --- Botón Dorado (Success) - CORREGIDO Y UNIFICADO --- */
 .btn-success {
-    background: var(--accent-primary);
-    color: var(--bg);
+    /* Forzamos el Dorado para que gane la batalla */
+    background: var(--accent-primary) !important;
+    /* Forzamos el texto oscuro por defecto */
+    color: var(--bg) !important;
 }
 
 .btn-success:hover {
-    background: #D9A006;
+    background: #D9A006 !important; /* Dorado ligeramente más oscuro */
+    color: #FFF !important; /* Texto blanco en hover (el efecto deseado) */
 }
 
+/* --- Botón Rojo (Danger) --- */
 .btn-danger {
     background: var(--danger);
     color: #FFF;
 }
 
+/* --- Botón Secundario (Gris) --- */
 .btn-secondary {
     background: var(--card);
     border: var(--border-subtle);
