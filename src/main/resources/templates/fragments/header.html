@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" th:href="@{/}">
                 <i class="fas fa-clapperboard me-2"></i>
-                TL - Jaime Ramírez
+                Cine 404
             </a>
 
             <button class="navbar-toggler" type="button"
@@ -15,8 +15,9 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+
+                <ul class="navbar-nav mb-2 mb-lg-0 flex-grow-1 justify-content-evenly">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/}" th:text="#{msg.header.home}"></a>
                     </li>
@@ -43,7 +44,7 @@
                     </li>
                 </ul>
 
-                <form th:action="@{/}" method="get" class="d-flex form-inline ms-auto">
+                <form th:action="@{/}" method="get" class="d-flex form-inline">
                     <select name="lang" onchange="this.form.submit()" class="form-select language-selector">
                         <option value="es" th:selected="${#locale.language == 'es'}">Español</option>
                         <option value="en" th:selected="${#locale.language == 'en'}">English</option>
