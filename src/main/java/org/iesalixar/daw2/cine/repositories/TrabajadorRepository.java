@@ -63,6 +63,4 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
      * @return Trabajador asignado a esa sala o null si no existe
      */
     Trabajador findBySalaId(Long id_sala);
-
-
 }

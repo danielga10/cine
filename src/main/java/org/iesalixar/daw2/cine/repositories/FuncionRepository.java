@@ -68,6 +68,4 @@ public interface FuncionRepository extends JpaRepository<Funcion, Long>{
      * @return Optional con la función encontrada o vacío si no existe
      */
     Optional<Funcion> findByCodeAndIdNot(String code, Long id);
-
-
 }

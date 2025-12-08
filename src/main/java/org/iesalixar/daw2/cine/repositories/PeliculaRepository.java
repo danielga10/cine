@@ -1,14 +1,12 @@
 package org.iesalixar.daw2.cine.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.iesalixar.daw2.cine.entities.Pelicula;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
  * Repositorio para la entidad Pelicula.
@@ -41,7 +39,7 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
      * @param name Texto a buscar en el campo título
      * @return Número total de películas que coinciden con la búsqueda
      */
-    long countByTituloContainingIgnoreCase(String name);
+    long countByTituloContainingIgnoreCase(String titulo);
 
     /**
      * Obtiene todas las películas con su director cargado (usando JOIN FETCH para evitar N+1 queries).
