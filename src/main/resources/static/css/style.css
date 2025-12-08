@@ -548,3 +548,115 @@ textarea:focus {
     }
 }
 
+¡Claro! Aquí tienes la Sección 12 completa y actualizada de tu CSS, incluyendo la corrección de los encabezados de las tarjetas (eliminando los fondos de colores brillantes de Bootstrap) y la solución de legibilidad de texto para los detalles (etiquetas <strong> y valores <span>).
+
+Reemplaza la sección /* ================================= 12. DETALLES DE FUNCIÓN ... completa en tu archivo style.css con este bloque:
+
+CSS
+
+/* =================================
+        12. DETALLES DE FUNCIÓN (FINAL CORREGIDO)
+================================= */
+
+/* --- Estilo General de las Tarjetas --- */
+
+.card-header {
+    background: var(--bg-surface) !important;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+}
+
+.card-header h3 {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0;
+}
+
+/* Colores de los encabezados (Bordes y Títulos) - SOBRESCRITURA DE BOOTSTRAP */
+/* Función (Primary/Dorado) */
+.card-header.bg-primary { border-left: 4px solid var(--accent-primary) !important; background-color: var(--bg-surface) !important; color: var(--accent-primary) !important; }
+.card-header.bg-primary h3 { color: var(--accent-primary) !important; }
+
+/* Sala (Info/Cian) */
+.card-header.bg-info { border-left: 4px solid var(--accent-secondary) !important; background-color: var(--bg-surface) !important; color: var(--accent-secondary) !important; }
+.card-header.bg-info h3 { color: var(--accent-secondary) !important; }
+
+/* Película (Success/Verde) */
+.card-header.bg-success { border-left: 4px solid var(--success) !important; background-color: var(--bg-surface) !important; color: var(--success) !important; }
+.card-header.bg-success h3 { color: var(--success) !important; }
+
+/* Boletos (Secondary/Gris) */
+.card-header.bg-secondary { border-left: 4px solid var(--text-muted) !important; background-color: var(--bg-surface) !important; color: var(--text-muted) !important; }
+.card-header.bg-secondary h3 { color: var(--text-muted) !important; }
+
+
+/* --- 🎯 CORRECCIÓN DE LEGIBILIDAD DE LOS DATOS (Etiquetas y Valores) --- */
+
+.card-body {
+    padding: 2rem;
+    background-color: var(--card) !important; /* Asegura fondo oscuro */
+    color: var(--text-primary) !important;    /* Asegura texto base claro */
+}
+
+/* Reglas para las nuevas clases HTML que garantizan la legibilidad */
+/* 1. ETIQUETAS (strong con clase .text-label-details) */
+.text-label-details {
+    color: var(--accent-secondary) !important; /* Color Cian para las etiquetas */
+    font-weight: 700 !important;
+    margin-right: 5px;
+}
+
+/* 2. VALORES (span con clase .text-value-details) */
+.text-value-details {
+    color: #FFFFFF !important; /* Blanco puro para los valores */
+    font-weight: 500 !important;
+    font-size: 1.05rem !important;
+}
+
+/* 3. CASO ESPECIAL: Horario (Dorado) */
+/* Selector ultra-específico para que el Horario mantenga su color Dorado (asume que está en la 3ra línea) */
+.card-body .row:first-child .col-md-6 p:nth-child(3) .text-value-details {
+    color: var(--accent-primary) !important;
+    font-weight: 800 !important;
+    font-size: 1.2rem !important;
+}
+
+
+/* --- Corrección de la Tabla de Boletos dentro de la Tarjeta --- */
+
+.card-body .table {
+    color: var(--text-primary) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.card-body .table thead,
+.card-body .table thead.table-light {
+    background-color: #1F2937 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.card-body .table thead th {
+    background-color: #1F2937 !important;
+    color: var(--accent-secondary) !important;
+    border-bottom: 2px solid var(--accent-secondary) !important;
+}
+
+.card-body .table tbody td {
+    background-color: var(--card) !important;
+    color: #FFFFFF !important; /* Texto blanco en la tabla */
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Botones al final */
+.mt-4 .btn-outline-secondary {
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+}
+.mt-4 .btn-outline-secondary:hover {
+    background: var(--card);
+    color: var(--text-primary);
+    border-color: var(--text-primary);
+}

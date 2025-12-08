@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/trabajadores")
-public class TrabajadorController {
+public class  TrabajadorController {
 
     private static final Logger logger = LoggerFactory.getLogger(TrabajadorController.class);
 
