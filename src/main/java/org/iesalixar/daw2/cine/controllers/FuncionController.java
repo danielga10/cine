@@ -118,7 +118,43 @@ public class FuncionController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        return saveOrUpdateFuncion(funcion, salaId, peliculaId, model, redirectAttributes, true);
+        String action = "crear";
+
+        try {
+            // aqui validamos el código para la inserción
+            Optional<Funcion> existingCode = funcionRepository.findByCode(funcion.getCode());
+
+            if (existingCode.isPresent()) {
+                throw new RuntimeException("El código de función '" + funcion.getCode() + "' ya está siendo usado por otra función.");
+            }
+
+            // obtener y asignar entidades
+            Sala sala = salaRepository.findById(salaId).orElseThrow(
+                    () -> new RuntimeException("Sala no encontrada."));
+            Pelicula pelicula = peliculaRepository.findById(peliculaId).orElseThrow(
+                    () -> new RuntimeException("Película no encontrada."));
+
+            funcion.setSala(sala);
+            funcion.setPelicula(pelicula);
+
+            // guardar la nueva función
+            funcionRepository.save(funcion);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Función creada correctamente.");
+            return "redirect:/funciones";
+
+        } catch (Exception e) {
+            logger.error("Error al {} la función:", action, e);
+
+            model.addAttribute("errorMessage", "Error al " + action + " la función: " + e.getMessage());
+
+            // recargar datos para el formulario
+            model.addAttribute("funcion", funcion);
+            model.addAttribute("salas", salaRepository.findAll());
+            model.addAttribute("peliculas", peliculaRepository.findAll());
+
+            return "Funcion/funcion-form.html";
+        }
     }
 
     @PostMapping("/update")
@@ -129,40 +165,26 @@ public class FuncionController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        if (funcion.getId() == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error: Intento de actualizar una función sin ID válido.");
-            return "redirect:/funciones";
-        }
-
-        return saveOrUpdateFuncion(funcion, salaId, peliculaId, model, redirectAttributes, false);
-    }
-
-    private String saveOrUpdateFuncion(
-            Funcion funcion,
-            Long salaId,
-            Long peliculaId,
-            Model model,
-            RedirectAttributes redirectAttributes,
-            boolean isInsert) {
-
-        String action = isInsert ? "crear" : "actualizar";
+        String action = "actualizar";
 
         try {
-            if (!isInsert && !funcionRepository.existsById(funcion.getId())) {
+            // validación de ID y de su existencia
+            if (funcion.getId() == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error: Intento de actualizar una función sin ID válido.");
+                return "redirect:/funciones";
+            }
+            if (!funcionRepository.existsById(funcion.getId())) {
                 throw new RuntimeException("Función no encontrada para actualizar.");
             }
 
-            Optional<Funcion> existingCode;
-            if (isInsert) {
-                existingCode = funcionRepository.findByCode(funcion.getCode());
-            } else {
-                existingCode = funcionRepository.findByCodeAndIdNot(funcion.getCode(), funcion.getId());
-            }
+            // validación de código para actualización, tiene que ser único
+            Optional<Funcion> existingCode = funcionRepository.findByCodeAndIdNot(funcion.getCode(), funcion.getId());
 
             if (existingCode.isPresent()) {
                 throw new RuntimeException("El código de función '" + funcion.getCode() + "' ya está siendo usado por otra función.");
             }
 
+            // obtener y asignar entidades
             Sala sala = salaRepository.findById(salaId).orElseThrow(
                     () -> new RuntimeException("Sala no encontrada."));
             Pelicula pelicula = peliculaRepository.findById(peliculaId).orElseThrow(
@@ -171,9 +193,10 @@ public class FuncionController {
             funcion.setSala(sala);
             funcion.setPelicula(pelicula);
 
+            // actualizar la función
             funcionRepository.save(funcion);
 
-            redirectAttributes.addFlashAttribute("successMessage", "Función " + action + " correctamente.");
+            redirectAttributes.addFlashAttribute("successMessage", "Función actualizada correctamente.");
             return "redirect:/funciones";
 
         } catch (Exception e) {
@@ -181,6 +204,7 @@ public class FuncionController {
 
             model.addAttribute("errorMessage", "Error al " + action + " la función: " + e.getMessage());
 
+            // recargar datos para el formulario
             model.addAttribute("funcion", funcion);
             model.addAttribute("salas", salaRepository.findAll());
             model.addAttribute("peliculas", peliculaRepository.findAll());
