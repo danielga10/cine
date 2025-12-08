@@ -16,7 +16,7 @@
 
         <div class="mb-3">
             <label for="nombre" class="form-label" th:text="#{msg.trabajador-form.name}">Nombre</label>
-            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="20"/>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="50"/>
             <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
         </div>
 
@@ -28,7 +28,7 @@
 
         <div class="mb-3">
             <label for="correo" class="form-label" th:text="#{msg.trabajador-form.email}">Correo</label>
-            <input type="text" id="correo" th:field="*{correo}" class="form-control" maxlength="35"/>
+            <input type="text" id="correo" th:field="*{correo}" class="form-control" maxlength="50"/>
             <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
         </div>
 
