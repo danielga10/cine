@@ -48,9 +48,10 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success" th:text="#{msg.common.save}">Guardar</button>
-        <a th:href="@{/boletos}" class="btn btn-secondary" th:text="#{msg.common.cancel}">Cancelar</a>
+        <button type="submit" class="btn btn-primary" th:text="${boleto.id == null} ? #{msg.boleto-form.create} : #{msg.boleto-form.update}"></button>
     </form>
+
+    <a th:href="@{/boletos}" class="btn btn-secondary mt-3" th:text="#{msg.common.backtolist}">Back to List</a>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
