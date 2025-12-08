@@ -3,32 +3,26 @@
 <head th:replace="~{fragments/head :: head (#{msg.trabajador-form.edit})}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
-
 <main class="container mt-5">
     <h1 th:text="${trabajador.id != null} ? #{msg.trabajador-form.edit} : #{msg.trabajador-form.add}"></h1>
 
     <div th:if="${errorMessage}" class="alert alert-danger">
         <p th:text="${errorMessage}"></p>
     </div>
-
     <form th:action="${trabajador.id == null} ? @{/trabajadores/insert} : @{/trabajadores/update}" th:object="${trabajador}" method="post">
         <input type="hidden" th:if="${trabajador.id != null}" th:field="*{id}"/>
-
         <div class="mb-3">
             <label for="nombre" class="form-label" th:text="#{msg.trabajador-form.name}">Nombre</label>
             <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="20" required/>
         </div>
-
         <div class="mb-3">
             <label for="telefono" class="form-label" th:text="#{msg.trabajador-form.phone}">Teléfono</label>
             <input type="text" id="telefono" th:field="*{telefono}" class="form-control" maxlength="9" required/>
         </div>
-
         <div class="mb-3">
             <label for="correo" class="form-label" th:text="#{msg.trabajador-form.email}">Correo</label>
             <input type="text" id="correo" th:field="*{correo}" class="form-control" maxlength="35" required/>
         </div>
-
         <div class="mb-3">
             <label for="sala" class="form-label" th:text="#{msg.trabajador-form.room}">Sala</label>
             <select id="sala" th:field="*{sala}" class="form-select" required>
