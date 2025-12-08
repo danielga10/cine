@@ -121,38 +121,18 @@ public class  TrabajadorController {
     @PostMapping("/insert")
     public String insertTrabajador(@ModelAttribute("trabajador") Trabajador trabajador,
                                    RedirectAttributes redirectAttributes) {
-
-        // Asumimos que la validación de campos vacíos (@Valid, BindingResult) se maneja
-        // mediante 'required' en HTML o se ignora por requisito.
-
-        // ----------------------------------------------------
-        // 1. Lógica de Validación 1:1 (Sala Ocupada)
-        // ----------------------------------------------------
         if (trabajador.getSala() != null) {
             Long salaId = trabajador.getSala().getId();
-
-            // Busca si existe otro trabajador con esta misma sala
             Trabajador trabajadorConMismaSala = trabajadorRepository.findBySalaId(salaId);
-
-            // Si existe un trabajador con esa sala (y el trabajador.getId() es null al insertar)...
             if (trabajadorConMismaSala != null) {
 
-                // Preparamos el mensaje de error de negocio
                 redirectAttributes.addFlashAttribute("errorMessage",
                         "Error: La sala " + trabajador.getSala().getNumero() +
                                 " ya está asignada al trabajador: " + trabajadorConMismaSala.getNombre());
-
-                // Devolvemos el objeto 'trabajador' al formulario para mantener los datos ingresados
-                // Esto es crucial para que el formulario no se borre al redireccionar.
                 redirectAttributes.addFlashAttribute("trabajador", trabajador);
-
-                // 🚨 CORRECCIÓN CLAVE: Redirigimos al método GET que muestra el formulario de creación.
                 return "redirect:/trabajadores/new";
             }
         }
-        // ----------------------------------------------------
-        // 2. Lógica de Guardado (Insertar)
-        // ----------------------------------------------------
         try {
             trabajadorRepository.save(trabajador);
             redirectAttributes.addFlashAttribute("successMessage", "Trabajador creado correctamente.");
