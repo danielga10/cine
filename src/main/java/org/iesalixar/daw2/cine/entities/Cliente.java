@@ -10,13 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entidad que representa un cliente del cine.
- * Un cliente puede tener múltiples boletos comprados.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Entity
 @Table(name = "cliente")
 @Data

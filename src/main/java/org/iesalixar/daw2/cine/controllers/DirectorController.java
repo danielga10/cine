@@ -1,11 +1,8 @@
 package org.iesalixar.daw2.cine.controllers;
 
 import org.iesalixar.daw2.cine.entities.Director;
-import org.iesalixar.daw2.cine.entities.Funcion;
 import org.iesalixar.daw2.cine.entities.Pelicula;
-import org.iesalixar.daw2.cine.entities.Sala;
 import org.iesalixar.daw2.cine.repositories.DirectorRepository;
-import org.iesalixar.daw2.cine.repositories.FuncionRepository;
 import org.iesalixar.daw2.cine.repositories.PeliculaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controlador REST para gestionar las operaciones CRUD de directores.
- * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de directores.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Controller
 @RequestMapping("/directores")
 public class DirectorController {

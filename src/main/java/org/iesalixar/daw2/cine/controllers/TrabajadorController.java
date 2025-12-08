@@ -16,17 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controlador REST para gestionar las operaciones CRUD de trabajadores.
- * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de trabajadores.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Controller
 @RequestMapping("/trabajadores")
 public class  TrabajadorController {

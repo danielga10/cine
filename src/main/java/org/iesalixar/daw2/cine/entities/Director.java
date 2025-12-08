@@ -11,16 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.List;
 
-/**
- * Entidad que representa un director de cine.
- * Un director puede tener múltiples películas dirigidas.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Entity
 @Table(name = "director")
 @Data
@@ -40,7 +32,7 @@ public class Director {
      */
     @NotEmpty(message = "{msg.director.nombre.notEmpty}")
     @Size(max = 20, message = "{msg.director.nombre.size}")
-    @Column(name = "nombre", nullable = false, length = 20)
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
     /**

@@ -6,13 +6,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-/**
- * Entidad que representa un boleto de cine.
- * Un boleto está asociado a un cliente y a una función específica.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Entity
 @Table(name = "boleto")
 @Data

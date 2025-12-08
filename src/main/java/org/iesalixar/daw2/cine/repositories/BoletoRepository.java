@@ -5,13 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Repositorio para la entidad Boleto.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre boletos.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface BoletoRepository extends JpaRepository<Boleto, Long> {
     /**
      * Busca boletos cuyo asiento contenga el texto especificado (búsqueda case-insensitive).

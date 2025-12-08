@@ -19,13 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controlador REST para gestionar las operaciones CRUD de salas.
- * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de salas.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Controller
 @RequestMapping("/salas")
 public class SalaController {

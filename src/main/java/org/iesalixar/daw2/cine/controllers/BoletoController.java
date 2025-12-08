@@ -1,6 +1,5 @@
 package org.iesalixar.daw2.cine.controllers;
 
-import jakarta.validation.Valid; // Necesario para validar los @NotNull de la entidad
 import org.iesalixar.daw2.cine.entities.Boleto;
 import org.iesalixar.daw2.cine.repositories.BoletoRepository;
 import org.iesalixar.daw2.cine.repositories.ClienteRepository;
@@ -14,20 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controlador REST para gestionar las operaciones CRUD de boletos.
- * Maneja las peticiones HTTP relacionadas con la creación, lectura, actualización y eliminación de boletos.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Controller
 @RequestMapping("/boletos")
 public class BoletoController {

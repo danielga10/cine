@@ -8,13 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-/**
- * Repositorio para la entidad Director.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre directores.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface DirectorRepository extends JpaRepository<Director, Long> {
     /**
      * Obtiene todos los directores paginados.

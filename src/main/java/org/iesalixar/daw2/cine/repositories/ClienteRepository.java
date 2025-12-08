@@ -5,13 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Repositorio para la entidad Cliente.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre clientes.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     /**
      * Busca clientes cuyo email contenga el texto especificado (búsqueda case-insensitive).

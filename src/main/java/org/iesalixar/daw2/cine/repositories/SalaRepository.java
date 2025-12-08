@@ -1,7 +1,6 @@
 package org.iesalixar.daw2.cine.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.iesalixar.daw2.cine.entities.Sala;
 import org.springframework.data.domain.Page;
@@ -10,13 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-/**
- * Repositorio para la entidad Sala.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre salas.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface SalaRepository extends JpaRepository<Sala, Long> {
     /**
      * Obtiene todas las salas paginadas.

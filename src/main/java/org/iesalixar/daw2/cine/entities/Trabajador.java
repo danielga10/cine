@@ -6,16 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.List;
 
-/**
- * Entidad que representa un trabajador del cine.
- * Un trabajador puede estar asignado a una sala específica.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Entity
 @Table(name = "trabajador")
 @Data
@@ -35,7 +26,7 @@ public class Trabajador {
      */
     @NotEmpty(message = "{msg.trabajador.nombre.notEmpty}")
     @Size(max = 20, message = "{msg.trabajador.nombre.size}")
-    @Column(name = "nombre", nullable = false, length = 20)
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
     /**
@@ -51,7 +42,7 @@ public class Trabajador {
      */
     @NotEmpty(message = "{msg.trabajador.correo.notEmpty}")
     @Size(max = 35, message = "{msg.trabajador.correo.size}")
-    @Column(name = "correo", nullable = false, length = 35)
+    @Column(name = "correo", nullable = false, length = 50)
     private String correo;
 
     /**

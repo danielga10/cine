@@ -9,13 +9,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entidad que representa una sala de proyección del cine.
- * Una sala puede tener un trabajador asignado y múltiples funciones programadas.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @Entity
 @Table(name = "sala")
 @Getter

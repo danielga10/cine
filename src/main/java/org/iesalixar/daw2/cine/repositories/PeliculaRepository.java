@@ -8,13 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-/**
- * Repositorio para la entidad Pelicula.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre películas.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     /**
      * Obtiene todas las películas paginadas.
@@ -39,7 +32,7 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
      * @param name Texto a buscar en el campo título
      * @return Número total de películas que coinciden con la búsqueda
      */
-    long countByTituloContainingIgnoreCase(String titulo);
+    long countByTituloContainingIgnoreCase(String name);
 
     /**
      * Obtiene todas las películas con su director cargado (usando JOIN FETCH para evitar N+1 queries).

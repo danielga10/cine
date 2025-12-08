@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
 import java.time.LocalTime;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
@@ -38,10 +37,6 @@ public class Pelicula {
     @ManyToOne
     @JoinColumn(name = "id_director", nullable = false)
     private Director director; // relación con Director
-    // Para binding en Thymeleaf
-    public Long getDirectorId() {
-        return director != null ? director.getId() : null;
-    }
 
     public void setDirectorId(Long directorId) {
         if (director == null) {

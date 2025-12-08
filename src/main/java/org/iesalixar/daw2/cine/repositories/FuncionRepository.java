@@ -1,21 +1,12 @@
 package org.iesalixar.daw2.cine.repositories;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.iesalixar.daw2.cine.entities.Funcion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 
-/**
- * Repositorio para la entidad Funcion.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre funciones.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface FuncionRepository extends JpaRepository<Funcion, Long>{
     /**
      * Obtiene todas las funciones paginadas.

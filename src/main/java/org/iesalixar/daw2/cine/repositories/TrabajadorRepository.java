@@ -1,23 +1,13 @@
 package org.iesalixar.daw2.cine.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.iesalixar.daw2.cine.entities.Sala;
 import org.iesalixar.daw2.cine.entities.Trabajador;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-/**
- * Repositorio para la entidad Trabajador.
- * Proporciona métodos para realizar operaciones CRUD y consultas personalizadas sobre trabajadores.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     /**
      * Obtiene todos los trabajadores paginados.

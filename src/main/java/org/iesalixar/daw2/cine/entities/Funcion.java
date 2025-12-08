@@ -9,13 +9,6 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-/**
- * Entidad que representa una función de cine.
- * Una función es una proyección de una película en una sala específica a una hora determinada.
- * 
- * @author IES Alixar DAW2
- * @version 1.0
- */
 @AllArgsConstructor
 @Getter
 @Setter
