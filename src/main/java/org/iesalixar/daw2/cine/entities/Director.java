@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity // Marca esta clase como una entidad gestionada por JPA.
 @Table(name = "director") // Especifica el nombre de la tabla asociada a esta entidad.
-@Data
+@Data //
 @NoArgsConstructor
 @AllArgsConstructor
 public class Director {
@@ -48,18 +48,6 @@ public class Director {
     @JsonIgnore
     @ToString.Exclude
     private List<Pelicula> peliculas;
-
-    /**
-     * Este es un constructor personalizado que no incluye el campo `id`.
-     * Se utiliza para crear instancias de `Película` cuando no es necesario o no
-     se conoce el `id` de la director
-     * (por ejemplo, antes de insertar la director en la base de datos, donde el
-     `id` es autogenerado).
-     * @param nombre Nombre de la director.
-     * @param nacionalidad Nacionalidad de la director.
-     * @param fecha_nacimiento Fecha de nacimiento del director.
-     */
-
 
     public Director(String nombre, String nacionalidad, Date fecha_nacimiento) {
         this.nombre = nombre;
