@@ -102,34 +102,50 @@ public class PeliculaController {
     }
     @PostMapping("/insert")
     public String insertPelicula(@ModelAttribute Pelicula pelicula,
-                                 @RequestParam("directorId") Long directorId,
                                  RedirectAttributes redirectAttrs) {
         try {
-            Director director = directorRepository.findById(directorId).orElseThrow(() -> new RuntimeException("Director no encontrado"));
+            Long directorId = pelicula.getDirector() != null ? pelicula.getDirector().getId() : null;
+            if (directorId == null) {
+                throw new IllegalArgumentException("Debe seleccionar un Director.");
+            }
+            Director director = directorRepository.findById(directorId)
+                    .orElseThrow(() -> new RuntimeException("Director no encontrado con ID: " + directorId));
 
             pelicula.setDirector(director);
             peliculaRepository.save(pelicula);
-
             redirectAttrs.addFlashAttribute("successMessage", "Película creada correctamente.");
+
         } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttrs.addFlashAttribute("errorMessage", "Error al crear la película.");
+            logger.error("Error al crear la película: {}", e.getMessage(), e);
+            // Devolver el objeto Pelicula al formulario para preservar los datos ingresados
+            redirectAttrs.addFlashAttribute("pelicula", pelicula);
+            redirectAttrs.addFlashAttribute("errorMessage", "Error al crear la película: " + e.getMessage());
+            return "redirect:/peliculas/new"; // Redirigir de nuevo al formulario de creación
         }
         return "redirect:/peliculas";
     }
 
-    // Actualizar película existente
     @PostMapping("/update")
-    public String updatePelicula(@ModelAttribute Pelicula pelicula) {
-        // Cargar director real desde la BD
-        if (pelicula.getDirector() != null && pelicula.getDirector().getId() != null) {
-            Director director = directorRepository.findById(pelicula.getDirector().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Director no válido"));
+    public String updatePelicula(@ModelAttribute Pelicula pelicula, RedirectAttributes redirectAttrs) {
+        try {
+            Long directorId = pelicula.getDirector() != null ? pelicula.getDirector().getId() : null;
+            if (directorId == null) {
+                throw new IllegalArgumentException("Debe seleccionar un Director.");
+            }
+            Director director = directorRepository.findById(directorId)
+                    .orElseThrow(() -> new IllegalArgumentException("Director no válido."));
+
             pelicula.setDirector(director);
+            peliculaRepository.save(pelicula);
+
+            redirectAttrs.addFlashAttribute("successMessage", "Película actualizada correctamente.");
+
+        } catch (Exception e) {
+            logger.error("Error al actualizar la película con ID {}: {}", pelicula.getId(), e.getMessage(), e);
+            redirectAttrs.addFlashAttribute("errorMessage", "Error al actualizar la película: " + e.getMessage());
+            redirectAttrs.addFlashAttribute("pelicula", pelicula);
+            return "redirect:/peliculas/edit?id=" + pelicula.getId();
         }
-
-        peliculaRepository.save(pelicula);
-
         return "redirect:/peliculas";
     }
     private Sort getSort(String sort) {
