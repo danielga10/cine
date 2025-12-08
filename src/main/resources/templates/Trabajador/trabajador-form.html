@@ -11,34 +11,31 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
-    <form th:action="@{/trabajadores/save}" th:object="${trabajador}" method="post">
+    <form th:action="${trabajador.id == null} ? @{/trabajadores/insert} : @{/trabajadores/update}" th:object="${trabajador}" method="post">
         <input type="hidden" th:if="${trabajador.id != null}" th:field="*{id}"/>
 
         <div class="mb-3">
             <label for="nombre" class="form-label" th:text="#{msg.trabajador-form.name}">Nombre</label>
-            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="20"/>
-            <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" maxlength="20" required/>
         </div>
 
         <div class="mb-3">
             <label for="telefono" class="form-label" th:text="#{msg.trabajador-form.phone}">Teléfono</label>
-            <input type="text" id="telefono" th:field="*{telefono}" class="form-control" maxlength="9"/>
-            <div class="text-danger" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+            <input type="text" id="telefono" th:field="*{telefono}" class="form-control" maxlength="9" required/>
         </div>
 
         <div class="mb-3">
             <label for="correo" class="form-label" th:text="#{msg.trabajador-form.email}">Correo</label>
-            <input type="text" id="correo" th:field="*{correo}" class="form-control" maxlength="35"/>
-            <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+            <input type="text" id="correo" th:field="*{correo}" class="form-control" maxlength="35" required/>
         </div>
 
         <div class="mb-3">
             <label for="sala" class="form-label" th:text="#{msg.trabajador-form.room}">Sala</label>
-            <select id="sala" th:field="*{sala}" class="form-select">
+            <select id="sala" th:field="*{sala}" class="form-select" required>
                 <option value="" th:text="#{msg.common.selectRoom}">-- Selecciona una sala --</option>
                 <option th:each="s : ${listaSalas}" th:value="${s.id}" th:text="${s.numero}"></option>
             </select>
-            <div class="text-danger" th:if="${#fields.hasErrors('sala')}" th:errors="*{sala}"></div>
+
         </div>
 
         <button type="submit" class="btn btn-success" th:text="#{msg.common.save}">Guardar</button>

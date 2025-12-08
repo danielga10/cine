@@ -59,19 +59,17 @@ public class TrabajadorController {
     /** Formulario para crear un nuevo trabajador */
     @GetMapping("/new")
     public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
-        model.addAttribute("trabajador", new Trabajador());
         try {
-            // Cargar lista de trabajadores con salas
-            List<Trabajador> listTrabajadores = trabajadorRepository.findAllWithSalas();
-            model.addAttribute("trabajadores", listTrabajadores);
-
-            // Cargar lista de salas para el select
+            if (!model.containsAttribute("trabajador")) {
+                model.addAttribute("trabajador", new Trabajador());
+            }
             List<Sala> listaSalas = salaRepository.findAll();
             model.addAttribute("listaSalas", listaSalas);
-
+            List<Trabajador> listTrabajadores = trabajadorRepository.findAll();
+            model.addAttribute("trabajadores", listTrabajadores);
         } catch (Exception e) {
-            e.printStackTrace(); // imprime la causa exacta del error 500
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar trabajadores o salas.");
+            logger.error("Error al cargar salas para el formulario de trabajador: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos necesarios (salas).");
             return "redirect:/trabajadores";
         }
         return "Trabajador/trabajador-form.html";
@@ -86,14 +84,11 @@ public class TrabajadorController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Trabajador no encontrado.");
                 return "redirect:/trabajadores";
             }
-
             // Pasa el objeto Trabajador, no el Optional
             model.addAttribute("trabajador", trabajadorOpt.get());
-
             // Cargar lista de salas para el select
             List<Sala> listaSalas = salaRepository.findAll();
             model.addAttribute("listaSalas", listaSalas);
-
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
@@ -123,70 +118,88 @@ public class TrabajadorController {
         return "redirect:/trabajadores";
     }
 
-    @PostMapping("/save")
-    public String saveTrabajador(@ModelAttribute("trabajador") Trabajador trabajador,
-                                 RedirectAttributes redirectAttributes) {
+    @PostMapping("/insert")
+    public String insertTrabajador(@ModelAttribute("trabajador") Trabajador trabajador,
+                                   RedirectAttributes redirectAttributes) {
+
+        // Asumimos que la validación de campos vacíos (@Valid, BindingResult) se maneja
+        // mediante 'required' en HTML o se ignora por requisito.
+
+        // ----------------------------------------------------
+        // 1. Lógica de Validación 1:1 (Sala Ocupada)
+        // ----------------------------------------------------
+        if (trabajador.getSala() != null) {
+            Long salaId = trabajador.getSala().getId();
+
+            // Busca si existe otro trabajador con esta misma sala
+            Trabajador trabajadorConMismaSala = trabajadorRepository.findBySalaId(salaId);
+
+            // Si existe un trabajador con esa sala (y el trabajador.getId() es null al insertar)...
+            if (trabajadorConMismaSala != null) {
+
+                // Preparamos el mensaje de error de negocio
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "Error: La sala " + trabajador.getSala().getNumero() +
+                                " ya está asignada al trabajador: " + trabajadorConMismaSala.getNombre());
+
+                // Devolvemos el objeto 'trabajador' al formulario para mantener los datos ingresados
+                // Esto es crucial para que el formulario no se borre al redireccionar.
+                redirectAttributes.addFlashAttribute("trabajador", trabajador);
+
+                // 🚨 CORRECCIÓN CLAVE: Redirigimos al método GET que muestra el formulario de creación.
+                return "redirect:/trabajadores/new";
+            }
+        }
+        // ----------------------------------------------------
+        // 2. Lógica de Guardado (Insertar)
+        // ----------------------------------------------------
         try {
-            // ----------------------------------------------------
-            // 1. Lógica de Validación 1:1
-            // ----------------------------------------------------
-            if (trabajador.getSala() != null) {
-                Long salaId = trabajador.getSala().getId();
-
-                // Busca si existe otro trabajador con esta misma sala
-                // NOTA: Debes implementar este método en tu TrabajadorRepository
-                Trabajador trabajadorConMismaSala = trabajadorRepository.findBySalaId(salaId);
-
-                // Si existe un trabajador con esa sala...
-                if (trabajadorConMismaSala != null) {
-
-                    // ... y NO es el trabajador que estamos editando actualmente:
-                    boolean isDifferentTrabajador = (trabajador.getId() == null) ||
-                            (!trabajadorConMismaSala.getId().equals(trabajador.getId()));
-
-                    if (isDifferentTrabajador) {
-                        redirectAttributes.addFlashAttribute("errorMessage",
-                                "Error: La sala " + trabajador.getSala().getNumero() + " ya está asignada al trabajador: " +
-                                        trabajadorConMismaSala.getNombre());
-
-                        // Retorna al formulario con el objeto 'trabajador' para mantener los datos
-                        redirectAttributes.addFlashAttribute("trabajador", trabajador);
-                        return "redirect:/trabajadores/new"; // Redirige a /new o /edit, dependiendo del contexto
-                    }
-                    // Si es el mismo trabajador, la validación pasa (se le permite guardar sus datos)
-                }
-            }
-            // ----------------------------------------------------
-            // 2. Lógica de Guardado (Insert o Update)
-            // ----------------------------------------------------
-            if (trabajador.getId() != null) {
-                // Actualizar trabajador existente (la lógica original se mantiene)
-                Trabajador existingTrabajador = trabajadorRepository.findById(trabajador.getId())
-                        .orElseThrow(() -> new RuntimeException("Trabajador no encontrado"));
-
-                existingTrabajador.setNombre(trabajador.getNombre());
-                existingTrabajador.setTelefono(trabajador.getTelefono());
-                existingTrabajador.setCorreo(trabajador.getCorreo());
-
-                // Si la validación pasó, actualizamos la sala
-                existingTrabajador.setSala(trabajador.getSala());
-
-                trabajadorRepository.save(existingTrabajador);
-                redirectAttributes.addFlashAttribute("successMessage", "Trabajador actualizado correctamente.");
-            } else {
-                // Crear nuevo trabajador
-                trabajadorRepository.save(trabajador);
-                redirectAttributes.addFlashAttribute("successMessage", "Trabajador creado correctamente.");
-            }
+            trabajadorRepository.save(trabajador);
+            redirectAttributes.addFlashAttribute("successMessage", "Trabajador creado correctamente.");
         } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar el trabajador: " + e.getMessage());
+            // Capturará errores de DB como NOT NULL (si el HTML falla)
+            logger.error("Error al crear el trabajador: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el trabajador: " + e.getMessage());
         }
 
         return "redirect:/trabajadores";
     }
+    @PostMapping("/update")
+    public String updateTrabajador(@ModelAttribute("trabajador") Trabajador trabajador,
+                                   RedirectAttributes redirectAttributes) {
+        if (trabajador.getSala() != null) {
+            Trabajador trabajadorConMismaSala = trabajadorRepository.findBySalaId(trabajador.getSala().getId());
 
+            if (trabajadorConMismaSala != null) {
+                // Comprobamos si el trabajador encontrado es diferente al que estamos editando.
+                if (!trabajadorConMismaSala.getId().equals(trabajador.getId())) {
+                    redirectAttributes.addFlashAttribute("errorMessage",
+                            "Error: La sala " + trabajador.getSala().getNumero() + " ya está asignada al trabajador: " +
+                                    trabajadorConMismaSala.getNombre());
 
+                    // Redirige al formulario con el objeto y el error de negocio
+                    redirectAttributes.addFlashAttribute("trabajador", trabajador);
+                    return "redirect:/trabajadores/edit?id=" + trabajador.getId();
+                }
+            }
+        }
+        try {
+            Trabajador existingTrabajador = trabajadorRepository.findById(trabajador.getId())
+                    .orElseThrow(() -> new RuntimeException("Trabajador no encontrado para actualizar"));
+            existingTrabajador.setNombre(trabajador.getNombre());
+            existingTrabajador.setTelefono(trabajador.getTelefono());
+            existingTrabajador.setCorreo(trabajador.getCorreo());
+            existingTrabajador.setSala(trabajador.getSala());
+
+            trabajadorRepository.save(existingTrabajador);
+            redirectAttributes.addFlashAttribute("successMessage", "Trabajador actualizado correctamente.");
+        } catch (Exception e) {
+            // Esta excepción ahora atrapará ERRORES DE BASE DE DATOS (como NOT NULL)
+            logger.error("Error al actualizar el trabajador: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar el trabajador: " + e.getMessage());
+        }
+        return "redirect:/trabajadores";
+    }
     private Sort getSort(String sort) {
         if (sort == null) {
             return Sort.by("id").ascending();
