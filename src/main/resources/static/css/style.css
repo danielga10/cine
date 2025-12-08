@@ -97,12 +97,19 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
     box-shadow: var(--shadow-outer);
     border-bottom: 3px solid var(--accent-primary);
     z-index: 1030;
-    width: 100%;
+    /* Aseguramos que la barra base ocupe el 100% */
+    width: 100% !important;
+    max-width: none !important; /* Prevenimos cualquier límite */
 }
 
+/* 🎯 CORRECCIÓN CLAVE: Sobrescribimos la limitación de ancho de los contenedores internos */
+.navbar .container,
 .navbar .container-fluid {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    width: 100% !important;
+    max-width: none !important;
+    /* Ajustamos el padding para que no se pegue totalmente a los bordes */
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
 }
 
 .navbar-brand {
