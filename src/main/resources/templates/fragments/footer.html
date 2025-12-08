@@ -1,16 +1,16 @@
 <footer th:fragment="footer" class="footer mt-auto py-4"
         xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="container text-center text-lg-start">
+    <div class="container-fluid">
         <div class="row">
 
-            <div class="col-lg-6 col-md-12 mb-3 mb-lg-0">
+            <div class="col-lg-6 col-md-6 col-12 mb-3 mb-lg-0 text-start">
                 <h5 class="text-uppercase text-light-gold" th:text="#{msg.footer.title}">TL - Cine Pro</h5>
                 <p class="text-muted-footer">
                     © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> Ticket Logger - Jaime Ramírez. <span th:text="#{msg.footer.rightsReserved}">Todos los derechos reservados.</span>
                 </p>
             </div>
 
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-6 col-md-6 col-12 text-end">
                 <h5 class="text-uppercase text-light-gold" th:text="#{msg.footer.quickContact}">Contacto Rápido</h5>
                 <ul class="list-unstyled mb-0">
                     <li><i class="fas fa-envelope me-2"></i> <span class="text-muted-footer">support@cinepro.com</span></li>

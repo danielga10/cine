@@ -97,6 +97,12 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
     box-shadow: var(--shadow-outer);
     border-bottom: 3px solid var(--accent-primary);
     z-index: 1030;
+    width: 100%;
+}
+
+.navbar .container-fluid {
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 .navbar-brand {
@@ -145,6 +151,25 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
     margin-top: auto;
     padding-top: 1.5rem !important;
     padding-bottom: 1.5rem !important;
+    width: 100%;
+}
+
+.footer .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer .row {
+    width: 100%;
+    max-width: 100%;
+}
+
+.footer .col-lg-8,
+.footer .col-md-10,
+.footer .col-12 {
+    text-align: center !important;
 }
 
 .text-light-gold {
