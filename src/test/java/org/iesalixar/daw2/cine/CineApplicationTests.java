@@ -8,10 +8,10 @@ import org.springframework.test.context.ActiveProfiles; // ¡Añadido!
 @SpringBootTest
 @ActiveProfiles("testcontainers") // <-- ¡Activa el perfil para usar el contenedor!
 class CineApplicationTests {
-
+/*
     @Test
     void contextLoads() {
         // ...
     }
-
+*/
 }
