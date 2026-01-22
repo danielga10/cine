@@ -44,12 +44,30 @@
                     </li>
                 </ul>
 
-                <form th:action="@{/}" method="get" class="d-flex form-inline">
-                    <select name="lang" onchange="this.form.submit()" class="form-select language-selector">
-                        <option value="es" th:selected="${#locale.language == 'es'}">Español</option>
-                        <option value="en" th:selected="${#locale.language == 'en'}">English</option>
-                    </select>
-                </form>
+                <div class="d-flex align-items-center ms-auto">
+
+                    <th:block th:if="${session.usuarioLogueado == null}">
+                        <a th:href="@{/login/discord}" class="btn btn-outline-info btn-sm">
+                            Discord Login
+                        </a>
+                    </th:block>
+
+                    <th:block th:if="${session.usuarioLogueado != null}">
+                        <span class="text-white me-3">
+                            Bienvenido, <strong th:text="${session.usuarioLogueado.username}">Usuario</strong>
+                        </span>
+                        <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">
+                            Salir
+                        </a>
+                    </th:block>
+
+                    <form th:action="@{/}" method="get" class="ms-3">
+                        <select name="lang" onchange="this.form.submit()" class="form-select form-select-sm bg-secondary text-white border-0">
+                            <option value="es" th:selected="${#locale.language == 'es'}">ES</option>
+                            <option value="en" th:selected="${#locale.language == 'en'}">EN</option>
+                        </select>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
