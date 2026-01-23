@@ -3,25 +3,34 @@ package org.iesalixar.daw2.cine.controllers;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.iesalixar.daw2.cine.dtos.DiscordUserDTO;
 import org.iesalixar.daw2.cine.entities.User;
 import org.iesalixar.daw2.cine.repositories.RoleRepository;
 import org.iesalixar.daw2.cine.repositories.UserRepository;
 import org.iesalixar.daw2.cine.services.DiscordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Controller; // Importante añadir esto
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 
-@Controller // Necesario para que Spring detecte los @GetMapping
+@Controller
 public class AuthDiscordController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthDiscordController.class);
 
     @Autowired
     private DiscordService discordService;
@@ -35,42 +44,46 @@ public class AuthDiscordController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    /**
-     * Redirige al usuario a la página de autorización de Discord.
-     */
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+
     @GetMapping("/login/discord")
     public String redirectToDiscord() {
+        logger.info("Redirigiendo a Discord OAuth");
         return "redirect:" + discordService.getAuthorizationUrl();
     }
 
-    /**
-     * Callback que recibe el código de Discord y gestiona la autenticación.
-     */
     @GetMapping("/login/discord/callback")
-    public String callback(@RequestParam("code") String code, HttpSession session) {
+    public String callback(@RequestParam("code") String code,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
+                          HttpSession session) {
         try {
-            // 1. Obtener Token
+            logger.info("=== INICIO Discord Callback ===");
+            logger.info("Code recibido: {}", code);
+
             OAuth2AccessToken token = discordService.getAccessToken(code);
+            logger.info("Token obtenido");
 
-            // 2. Obtener Perfil
             String jsonPerfil = discordService.getUserData(token);
+            logger.info("Perfil obtenido: {}", jsonPerfil);
 
-            // 3. Mapear a DTO
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             DiscordUserDTO discordDTO = mapper.readValue(jsonPerfil, DiscordUserDTO.class);
+            logger.info("Discord User: id={}, username={}", discordDTO.getId(), discordDTO.getUsername());
 
-            // 4. Lógica de Base de Datos (Sin Email)
             User user = userRepository.findByDiscordId(discordDTO.getId())
                     .orElseGet(() -> {
+                        logger.info("Creando nuevo usuario Discord");
                         User newUser = new User();
                         newUser.setDiscordId(discordDTO.getId());
                         newUser.setUsername(discordDTO.getUsername());
+                        newUser.setPassword("");
+                        newUser.setProvider("discord");
                         newUser.setFirstName(discordDTO.getUsername());
-                        newUser.setLastName("DiscordUser");
+                        newUser.setLastName("Discord");
                         newUser.setEnabled(true);
 
-                        // Asignar rol por defecto
                         roleRepository.findByName("ROLE_USER").ifPresent(role -> {
                             newUser.setRoles(Collections.singleton(role));
                         });
@@ -78,12 +91,15 @@ public class AuthDiscordController {
                         return newUser;
                     });
 
-            // Actualizamos solo el username (ya que no hay email en la entidad)
             user.setUsername(discordDTO.getUsername());
+            if (user.getProvider() == null || user.getProvider().isEmpty()) {
+                user.setProvider("discord");
+            }
             userRepository.save(user);
+            logger.info("Usuario guardado: {}", user.getUsername());
 
-            // 5. Autenticación en Spring Security
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            logger.info("UserDetails cargado con authorities: {}", userDetails.getAuthorities());
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -91,16 +107,23 @@ public class AuthDiscordController {
                     userDetails.getAuthorities()
             );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authentication);
+            SecurityContextHolder.setContext(securityContext);
 
-            // 6. Sesión para Thymeleaf
+            securityContextRepository.saveContext(securityContext, request, response);
+
             session.setAttribute("usuarioLogueado", user);
+
+            logger.info("Autenticación Discord completada, redirigiendo a /");
+            logger.info("=== FIN Discord Callback ===");
 
             return "redirect:/";
 
         } catch (Exception e) {
+            logger.error("Error en Discord callback", e);
             e.printStackTrace();
-            return "redirect:/login?error=auth_failed";
+            return "redirect:/login?error=discord_auth_failed";
         }
     }
 
