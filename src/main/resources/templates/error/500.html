@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Error del Servidor')"></head>
+<body class="d-flex flex-column h-100">
+<header th:replace="fragments/header :: header"></header>
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 th:text="${errorCode}">500</h1>
+        <p class="lead" th:text="${errorMessage}">Ha ocurrido un error interno
+            en el servidor.</p>
+        <a href="/" class="btn btn-primary">Volver al inicio</a>
+    </div>
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
