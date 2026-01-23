@@ -55,6 +55,7 @@ public class SecurityConfig {
                     auth
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/favicon.ico", "/assets/**").permitAll()
+                            .requestMatchers("/login/discord", "/login/discord/callback").permitAll()
 // Acceso anónimo
                             .requestMatchers("/admin").hasRole("ADMIN")
 // Solo ADMIN

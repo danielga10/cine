@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * Handler OAuth2 que simplemente confía en la autenticación ya construida y redirige al home.
+ * Handler OAuth2 que simplemente confï¿½a en la autenticaciï¿½n ya construida y redirige al home.
  */
 @Component
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
@@ -30,7 +30,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         logger.info("Usuario OAuth2 autenticado: {}", oAuth2User.getAttributes());
 
-        logger.info("Autenticación establecida, redirigiendo a /");
+        logger.info("Autenticaciï¿½n establecida, redirigiendo a /");
         logger.info("=== FIN CustomOAuth2SuccessHandler ===");
         response.sendRedirect("/");
     }
