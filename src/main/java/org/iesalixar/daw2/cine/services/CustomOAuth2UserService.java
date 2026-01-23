@@ -76,6 +76,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = new User();
             user.setUsername(username);
             user.setEnabled(true);
+            user.setProvider(provider);
             
             // Asignar rol USER por defecto
             Role userRole = roleRepository.findByName("ROLE_USER")
@@ -85,6 +86,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setRoles(roles);
         } else {
             logger.info("Actualizando usuario OAuth2 existente: {}", username);
+            if (user.getProvider() == null || user.getProvider().isEmpty()) {
+                user.setProvider(provider);
+            }
         }
         
         // Actualizar información del perfil
@@ -126,16 +130,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      */
     private void updateUserProfile(User user, OAuth2User oauth2User, String provider) {
         String name = oauth2User.getAttribute("name");
-        String picture = oauth2User.getAttribute("picture"); // Google
-        String avatarUrl = oauth2User.getAttribute("avatar_url"); // GitLab
         
         // Dividir el nombre en firstName y lastName
         if (name != null && !name.isEmpty()) {
             String[] nameParts = name.split(" ", 2);
             user.setFirstName(nameParts[0]);
-            user.setLastName(nameParts.length > 1 ? nameParts[1] : "");
+            user.setLastName(nameParts.length > 1 ? nameParts[1] : provider);
+        } else {
+            user.setFirstName(user.getUsername());
+            user.setLastName(provider);
         }
-
         
         // No establecer password para usuarios OAuth2 (usarán siempre OAuth2 para login)
         // La validación @NotEmpty en User.password debe hacerse solo en formularios, no en OAuth2

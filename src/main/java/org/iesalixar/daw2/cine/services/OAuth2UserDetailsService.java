@@ -94,6 +94,7 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
             user.setUsername(username);
             user.setPassword(""); // Password vacío para usuarios OAuth2
             user.setEnabled(true);
+            user.setProvider(provider);
             
             // Asignar rol USER por defecto
             Role userRole = roleRepository.findByName("ROLE_USER")
@@ -103,6 +104,10 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
             user.setRoles(roles);
         } else {
             logger.info("Actualizando usuario OAuth2 existente: {}", username);
+            // Actualizamos el proveedor si no estaba informado
+            if (user.getProvider() == null || user.getProvider().isEmpty()) {
+                user.setProvider(provider);
+            }
         }
         
         // Actualizar información del perfil
@@ -140,19 +145,16 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
 
     private void updateUserProfile(User user, OAuth2User oauth2User, String provider) {
         String name = oauth2User.getAttribute("name");
-        String picture = oauth2User.getAttribute("picture"); // Google
-        String avatarUrl = oauth2User.getAttribute("avatar_url"); // GitLab
         
         // Dividir el nombre en firstName y lastName
         if (name != null && !name.isEmpty()) {
             String[] nameParts = name.split(" ", 2);
             user.setFirstName(nameParts[0]);
-            user.setLastName(nameParts.length > 1 ? nameParts[1] : "");
+            user.setLastName(nameParts.length > 1 ? nameParts[1] : provider);
         } else {
             // Si no hay nombre, usar username
             user.setFirstName(user.getUsername());
-            user.setLastName("");
+            user.setLastName(provider);
         }
-
     }
 }
