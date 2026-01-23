@@ -55,13 +55,12 @@ public class SecurityConfig {
                     auth
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/favicon.ico", "/assets/**").permitAll()
-                            .requestMatchers("/login/discord", "/login/discord/callback").permitAll()
+                            .requestMatchers("/login", "/login/discord", "/login/discord/callback").permitAll()
 // Acceso anónimo
                             .requestMatchers("/admin").hasRole("ADMIN")
 // Solo ADMIN
-                            .requestMatchers("/aeropuertos", "/aviones",
-                                    "/directores", "/pasajeros", "/rutas", "/tickets", "/trabajadores").hasRole("MANAGER") // Solo MANAGER
-                            .requestMatchers("/rutas").hasRole("USER")
+                            .requestMatchers("/peliculas", "/directores", "/funciones", 
+                                    "/salas", "/clientes", "/trabajadores", "/boletos").hasRole("MANAGER") // Solo MANAGER
 // Solo USER
                             .anyRequest().authenticated(); //Cualquier otra solicitud requiere autenticación
                 })

@@ -72,7 +72,8 @@ VALUES
 (1, NULL, 'admin', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMpJ.z6yQMC6', true, 'Admin', 'User', 'local', NOW(), NOW(), NOW()),
 (2, NULL, 'manager', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMpJ.z6yQMC6', true, 'Manager', 'User', 'local', NOW(), NOW(), NOW()),
 (3, NULL, 'normal', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMpJ.z6yQMC6', true, 'Regular', 'User', 'local', NOW(), NOW(), NOW()),
-(4, '1463618960003039330', 'ElDiavloLoKoTV', '', true, 'ElDiavloLoKoTV', 'Discord', 'discord', NOW(), NOW(), NULL);
+(4, '1463618960003039330', 'ElDiavloLoKoTV', '', true, 'ElDiavloLoKoTV', 'Discord', 'discord', NOW(), NOW(), NULL),
+(5, '212', 'jaimeramirezmuela@gmail.com', null, true, 'GOOGLE', 'Jaime', 'Ramirez', NOW(), NOW(), NOW());
 
 INSERT INTO user_roles (user_id, role_id) VALUES
 (1, 1),
