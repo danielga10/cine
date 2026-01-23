@@ -27,10 +27,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
+        // Si el password es null o vacío, el usuario solo puede usar OAuth2
+        String password = user.getPassword() != null ? user.getPassword() : "";
+        
         // Convierte los roles de usuario en GrantedAuthority
         // Para llamar al User original de Spring y no confundirlo con el nuestro se suele poner el paquete completo
         return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
-                .password(user.getPassword())
+                .password(password)
                 .authorities(user.getRoles().stream()
                         .map(Role::getName)
                         .toList()

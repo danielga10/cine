@@ -1,5 +1,6 @@
 package org.iesalixar.daw2.cine.config;
 
+import org.iesalixar.daw2.cine.services.OAuth2UserDetailsService;
 import org.iesalixar.daw2.cine.services.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,10 @@ public class SecurityConfig {
      */
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    
+    @Autowired
+    private OAuth2UserDetailsService oauth2UserDetailsService;
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
             Exception {
@@ -71,6 +76,7 @@ public class SecurityConfig {
                     oauth2
                             .loginPage("/login") // Reutiliza la página de inicio de sesión personalizada
                             .defaultSuccessUrl("/", true) // Redirige al inicio después del login exitoso con OAuth2
+                            .userInfoEndpoint(userInfo -> userInfo.userService(oauth2UserDetailsService)) // Servicio personalizado
                             .permitAll();
                 });
         logger.info("Saliendo del método securityFilterChain");

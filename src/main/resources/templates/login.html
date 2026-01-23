@@ -8,6 +8,17 @@
 
     <div class="container">
         <h1 class="mt-5" th:text="#{spring.security.ui.login.title}"></h1>
+        
+        <!-- Mostrar error si lo hay -->
+        <div class="row justify-content-center" th:if="${error}">
+            <div class="col-md-6">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <form th:action="@{/login}" method="post" class="form-signin">
@@ -31,8 +42,15 @@
             </div>
             <div class="row justify-content-center mt-3">
                 <div class="col-md-6">
-                    <a href="/oauth2/authorization/google" class="btn btn-danger btn-lg w-100">
+                    <a href="/oauth2/authorization/google" class="btn btn-danger btn-lg w-100 mb-2">
                         <i class="bi bi-google"></i> Iniciar sesión con Google
+                    </a>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-2">
+                <div class="col-md-6">
+                    <a href="/oauth2/authorization/gitlab" class="btn btn-warning btn-lg w-100">
+                        <i class="bi bi-gitlab"></i> Iniciar sesión con GitLab
                     </a>
                 </div>
             </div>

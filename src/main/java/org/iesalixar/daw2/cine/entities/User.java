@@ -35,6 +35,9 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "roles") // Excluye roles para evitar recursión en equals y hashCode.
 @EntityListeners(AuditingEntityListener.class) // Habilita las anotaciones de auditoría.
         public class User {
+            
+            // Grupo de validación para campos que requieren password
+            public interface PasswordRequired {}
             // Campo que almacena el identificador único del usuario. Es autogenerado y clave primaria.
             @Id
             @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,9 +48,9 @@ import java.util.Set;
             @Column(name = "username", nullable = false, unique = true, length = 50)
             private String username;
             // Campo que almacena la contraseña encriptada del usuario.
-            @NotEmpty(message = "{msg.user.password.notEmpty}")
-            @Size(min = 8, message = "{msg.user.password.size}")
-            @Column(name = "password", nullable = false)
+            // Puede ser vacío para usuarios OAuth2 que no usan contraseña
+            @Size(min = 8, message = "{msg.user.password.size}", groups = {PasswordRequired.class})
+            @Column(name = "password")
             private String password;
             // Campo que indica si el usuario está habilitado.
             @NotNull(message = "{msg.user.enabled.notNull}")

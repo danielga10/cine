@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS boleto(
 CREATE TABLE IF NOT EXISTS users (
  id BIGINT PRIMARY KEY AUTO_INCREMENT,
  username VARCHAR(50) UNIQUE NOT NULL,
- password VARCHAR(100) NOT NULL,
+ password VARCHAR(100), -- NULL permitido para usuarios OAuth2
  enabled BOOLEAN NOT NULL,
  first_name VARCHAR(50) NOT NULL,
  last_name VARCHAR(50) NOT NULL,
