@@ -188,14 +188,15 @@ INSERT IGNORE INTO roles (id, name) VALUES
 (3, 'ROLE_USER');
 -- Insertar datos de ejemplo para 'users'. La contraseña de cada usuario es password
 INSERT IGNORE INTO users (id, username, password, enabled, first_name,
-last_name, image, created_date, last_modified_date, last_password_change_date)
+last_name, created_date, last_modified_date, last_password_change_date)
 VALUES
 (1, 'admin', '$2b$12$FVRijCavVZ7Qt15.CQssHe9m/6eLAdjAv0PiOKFIjMU161wApxzye',
 true, 'Admin', 'User', NOW(), NOW(), NOW()),
 (2, 'manager', '$2b$12$FVRijCavVZ7Qt15.CQssHe9m/6eLAdjAv0PiOKFIjMU161wApxzye',
 true, 'Manager', 'User', NOW(), NOW(), NOW()),
 (3, 'normal', '$2b$12$FVRijCavVZ7Qt15.CQssHe9m/6eLAdjAv0PiOKFIjMU161wApxzye',
-true, 'Regular', 'User', NOW(), NOW(), NOW());
+true, 'Regular', 'User', NOW(), NOW(), NOW()),
+(4, 'jaimeramirezmuela@gmail.com', null, true, 'google', 'ramirez', NOW(), NOW(), NOW());
 -- Asignar el rol de administrador al usuario con id 1
 INSERT IGNORE INTO user_roles (user_id, role_id) VALUES
 (1, 1);

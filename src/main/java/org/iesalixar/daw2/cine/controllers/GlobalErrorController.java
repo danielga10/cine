@@ -67,6 +67,6 @@ public class GlobalErrorController implements ErrorController {
         logger.error("Error desconocido: Redirigiendo a la página de error genérica.");
         model.addAttribute("errorCode", "Error");
         model.addAttribute("errorMessage", "Ha ocurrido un error inesperado.");
-        return "error/generic";
+        return "error/generic.html";
     }
 }
