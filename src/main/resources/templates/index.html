@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head (#{msg.index.title})"></head>
+<head th:replace="~{fragments/head :: head(title=#{msg.index.title})}"></head>
 <body class="d-flex flex-column h-100">
-<header th:replace="fragments/header :: header"></header>
+<header th:replace="~{fragments/header :: header}"></header>
 
 <main class="flex-shrink-0">
 
@@ -55,6 +55,6 @@
     </div>
 </main>
 
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

@@ -10,13 +10,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.iesalixar.daw2.cine.services.CustomUserDetailsService;
+import org.iesalixar.daw2.cine.services.OAuth2UserDetailsService;
 /**
  * Configura la seguridad de la aplicación, definiendo autenticación y
  autorización
@@ -31,6 +29,10 @@ public class SecurityConfig {
     private CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     @Autowired
     private CustomOAuth2FailureHandler customOAuth2FailureHandler;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private OAuth2UserDetailsService oAuth2UserDetailsService;
     /**
      * Configura el filtro de seguridad para las solicitudes HTTP, especificando
      las
@@ -52,6 +54,7 @@ public class SecurityConfig {
                     logger.debug("Configurando autorización de solicitudes HTTP");
                     auth
                             .requestMatchers("/").permitAll()
+                            .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/favicon.ico", "/assets/**").permitAll()
 // Acceso anónimo
                             .requestMatchers("/admin").hasRole("ADMIN")
 // Solo ADMIN
@@ -65,7 +68,7 @@ public class SecurityConfig {
                     logger.debug("Configurando formulario de inicio de sesión");
                     form
                             .loginPage("/login") // Página personalizada de login
-                            .successHandler(customOAuth2SuccessHandler) // Usa el Success Handler personalizado
+                            .defaultSuccessUrl("/", true)
                             .failureHandler(customOAuth2FailureHandler) // Handler para fallo en autenticación
                             .permitAll(); // Permite acceso a la página de login a todos los usuarios
                 })
@@ -74,6 +77,7 @@ public class SecurityConfig {
                             .loginPage("/login")
                             .successHandler(customOAuth2SuccessHandler)
                             .failureHandler(customOAuth2FailureHandler)
+                            .userInfoEndpoint(info -> info.userService(oAuth2UserDetailsService))
                             .permitAll();
                 })
                 .logout(form -> {
@@ -92,38 +96,6 @@ public class SecurityConfig {
                 });
         logger.info("Saliendo del método securityFilterChain");
         return http.build();
-    }
-    /**
-     * Configura los detalles de usuario en memoria para pruebas y desarrollo,
-     asignando
-     * roles específicos a cada usuario.
-     *
-     * @return una instancia de {@link UserDetailsService} que proporciona
-    autenticación en memoria.
-     */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        logger.info("Entrando en el método userDetailsService");
-        logger.debug("Creando usuario con rol USER");
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build();
-        logger.debug("Creando usuario con rol ADMIN");
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("password"))
-                .roles("ADMIN")
-                .build();
-        logger.debug("Creando usuario con rol MANAGER");
-        UserDetails manager = User.builder()
-                .username("manager")
-                .password(passwordEncoder().encode("password"))
-                .roles("MANAGER")
-                .build();
-        logger.info("Saliendo del método userDetailsService");
-        return new InMemoryUserDetailsManager(user, admin, manager);
     }
     /**
      * Configura el codificador de contraseñas para cifrar las contraseñas de
