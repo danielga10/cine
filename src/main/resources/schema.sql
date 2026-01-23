@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS boleto;
 DROP TABLE IF EXISTS funcion;
 DROP TABLE IF EXISTS cliente;
@@ -6,34 +9,35 @@ DROP TABLE IF EXISTS sala;
 DROP TABLE IF EXISTS pelicula;
 DROP TABLE IF EXISTS director;
 
+-- Estructura de Cine
 CREATE TABLE IF NOT EXISTS director(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(20) NOT NULL,
-    nacionalidad VARCHAR(30) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    nacionalidad VARCHAR(50) NOT NULL,
     nacimiento DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pelicula(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(30) NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
     duracion TIME NOT NULL,
     id_director INT NOT NULL,
-    FOREIGN KEY (id_director) REFERENCES director(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_pelicula_director FOREIGN KEY (id_director) REFERENCES director(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS sala(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    numero VARCHAR(2) NOT NULL,
+    numero VARCHAR(5) NOT NULL,
     capacidad INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trabajador(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(20) NOT NULL,
-    telefono VARCHAR(9) NOT NULL,
-    correo VARCHAR(35) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
     id_sala INT UNIQUE,
-    FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_trabajador_sala FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS cliente(
@@ -44,49 +48,48 @@ CREATE TABLE IF NOT EXISTS cliente(
 
 CREATE TABLE IF NOT EXISTS funcion(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(4) NOT NULL,
+    code VARCHAR(10) NOT NULL,
     id_sala INT NOT NULL,
     id_pelicula INT NOT NULL,
     horario TIME NOT NULL,
-    FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_funcion_sala FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_funcion_pelicula FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS boleto(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(4) NOT NULL,
-    asiento VARCHAR(5) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    asiento VARCHAR(10) NOT NULL,
     precio DECIMAL(6,2) NOT NULL,
     id_cliente INT NOT NULL,
     id_funcion INT NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_funcion) REFERENCES funcion(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_boleto_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_boleto_funcion FOREIGN KEY (id_funcion) REFERENCES funcion(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Crear la tabla 'users'
+-- Estructura de Seguridad y Usuarios
 CREATE TABLE IF NOT EXISTS users (
- id BIGINT PRIMARY KEY AUTO_INCREMENT,
- username VARCHAR(50) UNIQUE NOT NULL,
- password VARCHAR(100), -- NULL permitido para usuarios OAuth2
- enabled BOOLEAN NOT NULL,
- first_name VARCHAR(50) NOT NULL,
- last_name VARCHAR(50) NOT NULL,
- created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
- last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- last_password_change_date TIMESTAMP
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    discord_id VARCHAR(50) UNIQUE NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NULL,
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    first_name VARCHAR(50) NULL,
+    last_name VARCHAR(50) NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_password_change_date TIMESTAMP NULL
 );
 
--- Crear la tabla 'roles'
 CREATE TABLE IF NOT EXISTS roles (
- id BIGINT PRIMARY KEY AUTO_INCREMENT,
- name VARCHAR(50) UNIQUE NOT NULL
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
--- Crear la tabla 'user_roles'
 CREATE TABLE IF NOT EXISTS user_roles (
- user_id BIGINT NOT NULL,
- role_id BIGINT NOT NULL,
- PRIMARY KEY (user_id, role_id),
- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
- FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_user_roles_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
