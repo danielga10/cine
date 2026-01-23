@@ -74,6 +74,9 @@ import java.util.Set;
             @CreatedDate
             @Column(name = "created_date", updatable = false)
             private LocalDateTime createdDate;
+            @NotNull(message = "El proveedor no puede ser nulo")
+            @Column(name = "provider", nullable = false, length = 20)
+            private String provider;
             // Fecha de última modificación del registro.
             @LastModifiedDate
             @Column(name = "last_modified_date")

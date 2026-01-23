@@ -70,13 +70,11 @@ public class SecurityConfig {
                             .permitAll(); // Permite acceso a la página de login a todos los usuarios
                 })
                 .oauth2Login(oauth2 -> {
-                    logger.debug("Configurando login con OAuth2");
                     oauth2
-                            .loginPage("/login")// Reutiliza la página de inicio de sesión personalizada
-                            .successHandler(customOAuth2SuccessHandler) // Handler de éxito
-                            .failureHandler(customOAuth2FailureHandler) // Handler de error
-                            .permitAll(); // Permite acceso a la página de login a todos los usuarios
-
+                            .loginPage("/login")
+                            .successHandler(customOAuth2SuccessHandler)
+                            .failureHandler(customOAuth2FailureHandler)
+                            .permitAll();
                 })
                 .logout(form -> {
                     logger.debug("Configurando fin de sesión");
