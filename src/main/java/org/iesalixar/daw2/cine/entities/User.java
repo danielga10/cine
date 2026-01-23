@@ -42,6 +42,8 @@ import java.util.Set;
             @Id
             @GeneratedValue(strategy = GenerationType.IDENTITY)
             private Long id;
+            @Column(name = "discord_id", unique = true, length = 50)
+            private String discordId;
             // Campo que almacena el nombre de usuario. Actúa como la clave primaria.
             @NotEmpty(message = "{msg.user.username.notEmpty}")
             @Size(max = 50, message = "{msg.user.username.size}")
@@ -66,10 +68,6 @@ import java.util.Set;
             @Size(max = 50, message = "{msg.user.lastName.size}")
             @Column(name = "last_name", nullable = false, length = 50)
             private String lastName;
-            // Campo que almacena la ruta de la imagen del perfil del usuario en disco.
-            @Size(max = 255, message = "{msg.user.image.size}")
-            @Column(name = "image", length = 255)
-            private String image;
             // Fecha de creación del registro.
             @CreatedDate
             @Column(name = "created_date", updatable = false)
