@@ -135,13 +135,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setFirstName(nameParts[0]);
             user.setLastName(nameParts.length > 1 ? nameParts[1] : "");
         }
-        
-        // Actualizar imagen de perfil
-        if (picture != null) {
-            user.setImage(picture); // Google
-        } else if (avatarUrl != null) {
-            user.setImage(avatarUrl); // GitLab
-        }
+
         
         // No establecer password para usuarios OAuth2 (usarán siempre OAuth2 para login)
         // La validación @NotEmpty en User.password debe hacerse solo en formularios, no en OAuth2

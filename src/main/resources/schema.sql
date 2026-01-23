@@ -67,18 +67,22 @@ CREATE TABLE IF NOT EXISTS boleto(
     CONSTRAINT fk_boleto_funcion FOREIGN KEY (id_funcion) REFERENCES funcion(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Estructura de Seguridad y Usuarios
 CREATE TABLE IF NOT EXISTS users (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    discord_id VARCHAR(50) UNIQUE NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255),          -- Puede ser NULL si entra por OAuth2
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
-    first_name VARCHAR(50) NULL,
-    last_name VARCHAR(50) NULL,
+
+    -- COLUMNAS CLAVE PARA OAUTH2 --
+    provider VARCHAR(20) NOT NULL DEFAULT 'LOCAL', -- LOCAL, GOOGLE, DISCORD
+    discord_id VARCHAR(100),        -- ID específico de Discord (opcional)
+
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    last_password_change_date TIMESTAMP NULL
+    last_password_change_date TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS roles (

@@ -153,12 +153,6 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
             user.setFirstName(user.getUsername());
             user.setLastName("");
         }
-        
-        // Actualizar imagen de perfil
-        if (picture != null) {
-            user.setImage(picture);
-        } else if (avatarUrl != null) {
-            user.setImage(avatarUrl);
-        }
+
     }
 }
