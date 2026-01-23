@@ -7,7 +7,7 @@ services:
      - MARIADB_USER=${DB_USER} 
      - MARIADB_PASSWORD=${DB_PASSWORD} 
    ports: 
-     - "3306:3306" 
+     - "3306:3306"
    volumes: 
      - db_data:/var/lib/mysql
 volumes: 

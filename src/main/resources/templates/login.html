@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head (#{msg.index.title})"></head>
+<body class="d-flex flex-column h-100">
+<header th:replace="fragments/header :: header"></header>
+
+<main class="flex-shrink-0">
+
+    <div class="container">
+        <h1 class="mt-5" th:text="#{spring.security.ui.login.title}"></h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form th:action="@{/login}" method="post" class="form-signin">
+                    <div class="form-group mb-3">
+                        <label th:for="username"
+                               th:text="#{spring.security.ui.login.username}"></label>
+                        <input type="text" id="username" name="username"
+                               class="form-control" th:placeholder="#{spring.security.ui.login.username}"
+                               required autofocus>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label th:for="password"
+                               th:text="#{spring.security.ui.login.password}"></label>
+                        <input type="password" id="password" name="password"
+                               class="form-control" th:placeholder="#{spring.security.ui.login.password}"
+                               required>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit"
+                            th:text="#{spring.security.ui.login.submit}"></button>
+                </form>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-6">
+                    <a href="/oauth2/authorization/google" class="btn btn-danger btn-lg w-100">
+                        <i class="bi bi-google"></i> Iniciar sesión con Google
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
