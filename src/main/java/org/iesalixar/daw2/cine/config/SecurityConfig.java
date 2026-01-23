@@ -49,6 +49,7 @@ public class SecurityConfig {
                     logger.debug("Configurando autorización de solicitudes HTTP");
                     auth
                             .requestMatchers("/", "/hello").permitAll() // Acceso anónimo
+                            .requestMatchers("/css/**", "/js/**", "/img/**", "/uploads/**").permitAll() // Recursos estáticos
                             .requestMatchers("/admin", "/provincias", "/regions").hasRole("ADMIN") // Solo ADMIN
                             .requestMatchers("/regions", "/provincias", "/supermarkets", "/locations", "/categories").hasRole("MANAGER") // Solo MANAGER
                             .requestMatchers("/tickets").hasRole("USER") // Solo USER
