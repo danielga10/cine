@@ -1,5 +1,7 @@
 package org.iesalixar.daw2.cine.config;
 
+import org.iesalixar.daw2.cine.handlers.CustomOAuth2FailureHandler;
+import org.iesalixar.daw2.cine.handlers.CustomOAuth2SuccessHandler;
 import org.iesalixar.daw2.cine.services.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+    @Autowired
+    private CustomOAuth2FailureHandler customOAuth2FailureHandler;
     private static final Logger logger =
             LoggerFactory.getLogger(SecurityConfig.class);
     /**
@@ -67,6 +73,13 @@ public class SecurityConfig {
                 .formLogin(form -> {
                     logger.debug("Configurando formulario de inicio de sesión");
                     form.defaultSuccessUrl("/", true);
+                })
+                .oauth2Login(oauth2 -> {
+                    logger.debug("Configurando login con OAuth2");
+                    oauth2
+                            .loginPage("/login") //reutiliza la página de inicio de sesión personalizada
+                            .successHandler(customOAuth2SuccessHandler)
+                            .failureHandler(customOAuth2FailureHandler);
                 })
                 .sessionManagement(session -> {
                     logger.debug("Configurando política de gestión de sesiones");
