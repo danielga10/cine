@@ -59,6 +59,11 @@ public class SecurityConfig {
                                     .requestMatchers("/tickets").hasRole("USER")// Solo USER
                                     .anyRequest().authenticated(); // Cualquier otra solicitud requiere autenticación
                 })
+                .oauth2Login(oauth2 -> {
+                    logger.debug("Configurando login con OAuth2"); oauth2
+                            .loginPage("/login")        // Reutiliza la página de inicio de sesión personalizada
+                            .defaultSuccessUrl("/", true) // Redirige al inicio después del login exitoso con OAuth2
+                            .permitAll(); })
                 .formLogin(form -> {
                     logger.debug("Configurando formulario de inicio de sesión");
                     form.defaultSuccessUrl("/", true);
