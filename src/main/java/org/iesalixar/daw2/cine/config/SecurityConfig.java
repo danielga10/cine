@@ -1,20 +1,19 @@
 package org.iesalixar.daw2.cine.config;
 
-import org.iesalixar.daw2.cine.handlers.CustomOAuth2FailureHandler;
-import org.iesalixar.daw2.cine.handlers.CustomOAuth2SuccessHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.iesalixar.daw2.cine.services.CustomUserDetailsService;
-import org.iesalixar.daw2.cine.services.OAuth2UserDetailsService;
 /**
  * Configura la seguridad de la aplicación, definiendo autenticación y
  autorización
@@ -23,16 +22,8 @@ import org.iesalixar.daw2.cine.services.OAuth2UserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-
-    @Autowired
-    private CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
-    @Autowired
-    private CustomOAuth2FailureHandler customOAuth2FailureHandler;
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-    @Autowired
-    private OAuth2UserDetailsService oAuth2UserDetailsService;
+    private static final Logger logger =
+            LoggerFactory.getLogger(SecurityConfig.class);
     /**
      * Configura el filtro de seguridad para las solicitudes HTTP, especificando
      las
@@ -50,52 +41,59 @@ public class SecurityConfig {
             Exception {
         logger.info("Entrando en el método securityFilterChain");
         // Configuración de seguridad
-        http.authorizeHttpRequests(auth -> {
+        http
+                .authorizeHttpRequests(auth -> {
                     logger.debug("Configurando autorización de solicitudes HTTP");
-                    auth
-                            .requestMatchers("/").permitAll()
-                            .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/favicon.ico", "/assets/**").permitAll()
-                            .requestMatchers("/login", "/login/discord", "/login/discord/callback").permitAll()
-// Acceso anónimo
-                            .requestMatchers("/admin").hasRole("ADMIN")
-// Solo ADMIN
-                            .requestMatchers("/peliculas", "/directores", "/funciones", 
-                                    "/salas", "/clientes", "/trabajadores", "/boletos").hasRole("MANAGER") // Solo MANAGER
-// Solo USER
-                            .anyRequest().authenticated(); //Cualquier otra solicitud requiere autenticación
+                            auth.requestMatchers("/", "/hello").permitAll()// Acceso anónimo
+                                    .requestMatchers("/admin").hasRole("ADMIN")// Solo ADMIN
+                                    .requestMatchers("/regions", "/provinces",
+                                            "/supermarkets", "/locations", "/categories").hasRole("MANAGER") // Solo MANAGER
+                                    .requestMatchers("/tickets").hasRole("USER")// Solo USER
+                                    .anyRequest().authenticated(); //Cualquier otra solicitud requiere autenticación
                 })
                 .formLogin(form -> {
                     logger.debug("Configurando formulario de inicio de sesión");
-                    form
-                            .loginPage("/login") // Página personalizada de login
-                            .defaultSuccessUrl("/", true)
-                            .failureHandler(customOAuth2FailureHandler) // Handler para fallo en autenticación
-                            .permitAll(); // Permite acceso a la página de login a todos los usuarios
-                })
-                .oauth2Login(oauth2 -> {
-                    oauth2
-                            .loginPage("/login")
-                            .successHandler(customOAuth2SuccessHandler)
-                            .failureHandler(customOAuth2FailureHandler)
-                            .userInfoEndpoint(info -> info.userService(oAuth2UserDetailsService))
-                            .permitAll();
-                })
-                .logout(form -> {
-                    logger.debug("Configurando fin de sesión");
-                    form
-                            .logoutUrl("/logout") // Página personalizada de logout
-                            .logoutSuccessUrl("/login?logout")
-                            .invalidateHttpSession(true)
-                            .deleteCookies("JSESSIONID")
-                            .permitAll();
+                    form.defaultSuccessUrl("/", true);
                 })
                 .sessionManagement(session -> {
                     logger.debug("Configurando política de gestión de sesiones");
 
-                    session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED); // Usa sesiones cuando sea necesario
+                            session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED); // Usa sesiones cuando sea necesario
                 });
         logger.info("Saliendo del método securityFilterChain");
         return http.build();
+    }
+    /**
+     * Configura los detalles de usuario en memoria para pruebas y desarrollo,
+     asignando
+     * roles específicos a cada usuario.
+     *
+     * @return una instancia de {@link UserDetailsService} que proporciona
+    autenticación en memoria.
+     */
+    @Bean
+    public UserDetailsService userDetailsService() {
+        logger.info("Entrando en el método userDetailsService");
+        logger.debug("Creando usuario con rol USER");
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("password"))
+                .roles("USER")
+                .build();
+        logger.debug("Creando usuario con rol ADMIN");
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("password"))
+                .roles("ADMIN")
+                .build();
+        logger.debug("Creando usuario con rol MANAGER");
+        UserDetails manager = User.builder()
+                .username("manager")
+                .password(passwordEncoder().encode("password"))
+                .roles("MANAGER")
+                .build();
+        logger.info("Saliendo del método userDetailsService");
+        return new InMemoryUserDetailsManager(user, admin, manager);
     }
     /**
      * Configura el codificador de contraseñas para cifrar las contraseñas de
