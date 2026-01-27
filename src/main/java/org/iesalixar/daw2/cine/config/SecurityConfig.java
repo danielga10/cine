@@ -53,7 +53,10 @@ public class SecurityConfig {
                 })
                 .formLogin(form -> {
                     logger.debug("Configurando formulario de inicio de sesión");
-                    form.defaultSuccessUrl("/", true);
+                    form
+                            .loginPage("/login")
+                            .defaultSuccessUrl("/")
+                            .permitAll();
                 })
                 .sessionManagement(session -> {
                     logger.debug("Configurando política de gestión de sesiones");

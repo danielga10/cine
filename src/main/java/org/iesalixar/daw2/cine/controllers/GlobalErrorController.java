@@ -59,14 +59,14 @@ public class GlobalErrorController implements ErrorController {
             if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 logger.error("Error 500: Error interno del servidor.");
                 model.addAttribute("errorCode", "500");
-                model.addAttribute("errorMessage", "Ha ocurrido un error interno  en el servidor.");
+                model.addAttribute("errorMessage", "Ha ocurrido un error interno en el servidor.");
                 return "error/500"; //Redirige al template de error interno del servidor
             }
         }
         // Redirigir a una página de error genérica si no se reconoce el código de estado
         logger.error("Error desconocido: Redirigiendo a la página de error genérica.");
-        model.addAttribute("errorCode", "Error");
+                model.addAttribute("errorCode", "Error");
         model.addAttribute("errorMessage", "Ha ocurrido un error inesperado.");
-        return "error/generic.html";
+        return "error/generic";
     }
 }
