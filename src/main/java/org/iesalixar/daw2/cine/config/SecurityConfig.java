@@ -1,9 +1,13 @@
 package org.iesalixar.daw2.cine.config;
 
+import org.iesalixar.daw2.cine.services.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,7 +25,10 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
     private static final Logger logger =
             LoggerFactory.getLogger(SecurityConfig.class);
     /**
@@ -65,37 +72,21 @@ public class SecurityConfig {
         return http.build();
     }
     /**
-     * Configura los detalles de usuario en memoria para pruebas y desarrollo,
-     asignando
-     * roles específicos a cada usuario.
+     * Configura el proveedor de autenticación para usar el servicio de detalles de
+     usuario
+     * personalizado y el codificador de contraseñas.
      *
-     * @return una instancia de {@link UserDetailsService} que proporciona
-    autenticación en memoria.
+     * @return una instancia de {@link DaoAuthenticationProvider} para la
+    autenticación.
      */
     @Bean
-    public UserDetailsService userDetailsService() {
-        logger.info("Entrando en el método userDetailsService");
-        logger.debug("Creando usuario con rol USER");
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build();
-        logger.debug("Creando usuario con rol ADMIN");
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("password"))
-                .roles("ADMIN")
-                .build();
-        logger.debug("Creando usuario con rol MANAGER");
-        UserDetails manager = User.builder()
-                .username("manager")
-                .password(passwordEncoder().encode("password"))
-                .roles("MANAGER")
-                .build();
-        logger.info("Saliendo del método userDetailsService");
-        return new InMemoryUserDetailsManager(user, admin, manager);
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
+
     /**
      * Configura el codificador de contraseñas para cifrar las contraseñas de
      los usuarios
