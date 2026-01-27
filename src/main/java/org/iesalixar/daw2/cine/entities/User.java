@@ -42,8 +42,6 @@ import java.util.Set;
             @Id
             @GeneratedValue(strategy = GenerationType.IDENTITY)
             private Long id;
-            @Column(name = "discord_id", unique = true, length = 50)
-            private String discordId;
             // Campo que almacena el nombre de usuario. Actúa como la clave primaria.
             @NotEmpty(message = "{msg.user.username.notEmpty}")
             @Size(max = 50, message = "{msg.user.username.size}")
@@ -72,9 +70,6 @@ import java.util.Set;
             @CreatedDate
             @Column(name = "created_date", updatable = false)
             private LocalDateTime createdDate;
-            @NotNull(message = "El proveedor no puede ser nulo")
-            @Column(name = "provider", nullable = false, length = 20)
-            private String provider;
             // Fecha de última modificación del registro.
             @LastModifiedDate
             @Column(name = "last_modified_date")

@@ -70,13 +70,11 @@ CREATE TABLE IF NOT EXISTS boleto(
 -- Estructura de Seguridad y Usuarios
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    discord_id VARCHAR(50) UNIQUE NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NULL,
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    provider VARCHAR(50) NOT NULL DEFAULT 'local',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     last_password_change_date TIMESTAMP NULL
