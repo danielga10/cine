@@ -8,6 +8,9 @@
 
     <div class="container">
         <h1 class="mt-5" th:text="#{spring.security.ui.login.title}"></h1>
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
         
         <!-- Mostrar error si lo hay -->
         <div class="row justify-content-center" th:if="${error}">
