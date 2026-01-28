@@ -50,42 +50,46 @@ public class SecurityConfig {
      * @throws Exception si ocurre un error en la configuración de seguridad.
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-            Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Entrando en el método securityFilterChain");
-        // Configuración de seguridad
+
         http
-                .authorizeHttpRequests(auth -> {
+                .authorizeHttpRequests((auth) -> {
                     logger.debug("Configurando autorización de solicitudes HTTP");
-                            auth
-                                    .requestMatchers("/", "/hello").permitAll()// Acceso anónimo
-                                    .requestMatchers("/admin").hasRole("ADMIN")// Solo ADMIN
-                                    .requestMatchers("/regions", "/provinces",
-                                            "/supermarkets", "/locations", "/categories").hasRole("MANAGER") // Solo MANAGER
-                                    .requestMatchers("/tickets").hasRole("USER")// Solo USER
-                                    .anyRequest().authenticated(); // Cualquier otra solicitud requiere autenticación
+                    auth
+                            // 1. Recursos estáticos (SIEMPRE PRIMERO)
+                            .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+
+                            // 2. Rutas públicas
+                            .requestMatchers("/", "/hello", "/login").permitAll()
+
+                            // 3. Rutas por roles
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/regions/**", "/provinces/**", "/supermarkets/**",
+                                    "/locations/**", "/categories/**").hasRole("MANAGER")
+                            .requestMatchers("/tickets/**").hasRole("USER")
+
+                            // 4. Cualquier otra cosa requiere estar logueado
+                            .anyRequest().authenticated();
                 })
-                .oauth2Login(oauth2 -> {
-                    logger.debug("Configurando login con OAuth2"); oauth2
-                            .loginPage("/login")        // Reutiliza la página de inicio de sesión personalizada
-                            .defaultSuccessUrl("/", true) // Redirige al inicio después del login exitoso con OAuth2
-                            .permitAll(); })
                 .formLogin(form -> {
                     logger.debug("Configurando formulario de inicio de sesión");
-                    form.defaultSuccessUrl("/", true);
+                    form.loginPage("/login") // Asegúrate de tener un controller para esto
+                            .defaultSuccessUrl("/", true)
+                            .permitAll();
                 })
                 .oauth2Login(oauth2 -> {
                     logger.debug("Configurando login con OAuth2");
                     oauth2
-                            .loginPage("/login") //reutiliza la página de inicio de sesión personalizada
+                            .loginPage("/login")
                             .successHandler(customOAuth2SuccessHandler)
                             .failureHandler(customOAuth2FailureHandler);
                 })
                 .sessionManagement(session -> {
                     logger.debug("Configurando política de gestión de sesiones");
-
-                            session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED); // Usasesiones cuando sea necesario
+                    session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
                 });
+
         logger.info("Saliendo del método securityFilterChain");
         return http.build();
     }
