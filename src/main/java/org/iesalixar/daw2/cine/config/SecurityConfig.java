@@ -61,7 +61,7 @@ public class SecurityConfig {
                             .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
 
                             // 2. Rutas públicas
-                            .requestMatchers("/", "/hello", "/login").permitAll()
+                            .requestMatchers("/", "/hello", "/oauth/**", "/login").permitAll()
 
                             // 3. Rutas por roles
                             .requestMatchers("/admin/**").hasRole("ADMIN")
