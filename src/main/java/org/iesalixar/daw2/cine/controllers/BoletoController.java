@@ -209,7 +209,6 @@ public class BoletoController {
      * @param redirectAttributes Atributos para mensajes flash
      * @return Redirección a la lista de boletos
      */
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete")
     public String deleteBoleto(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         try {

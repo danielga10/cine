@@ -125,8 +125,6 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
 
-        // ASIGNAR ROL POR DEFECTO
-        // IMPORTANTE: Asegúrate de que este rol existe en tu tabla 'roles'
         Optional<Role> defaultRole = roleRepository.findByName("ROLE_USER");
 
         if (defaultRole.isPresent()) {
