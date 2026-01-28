@@ -62,6 +62,14 @@ INSERT INTO funcion (code, id_sala, id_pelicula, horario) VALUES
 ('F002', 1, 2, '19:00:00'),
 ('F003', 2, 3, '17:00:00');
 
+INSERT INTO boleto (code, asiento, precio, id_cliente, id_funcion) VALUES
+('TKT-001', 'A1', 8.50, 1, 1), -- Juan Pérez va a ver Insidious (F001)
+('TKT-002', 'A2', 8.50, 2, 1), -- María López va a ver Insidious (F001)
+('TKT-003', 'B5', 9.00, 3, 2), -- Carlos Ruiz va a ver Inception (F002)
+('TKT-004', 'C10', 9.00, 4, 2), -- Laura Gómez va a ver Inception (F002)
+('TKT-005', 'A1', 7.50, 5, 3), -- Jorge Sánchez va a ver Wonder Woman (F003)
+('TKT-006', 'A2', 7.50, 1, 3); -- Juan Pérez también va a ver Wonder Woman (F003)
+
 INSERT INTO roles (id, name) VALUES
 (1, 'ROLE_ADMIN'),
 (2, 'ROLE_MANAGER'),
