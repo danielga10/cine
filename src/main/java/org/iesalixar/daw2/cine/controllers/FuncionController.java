@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,7 @@ public class FuncionController {
     private PeliculaRepository peliculaRepository;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
     public String listFunciones(@RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String search, @RequestParam(required = false) String sort, Model model) {
         Pageable pageable = PageRequest.of(page - 1, 5, getSort(sort));
         Page<Funcion> funcionesPage;
@@ -64,6 +66,7 @@ public class FuncionController {
     }
 
     @GetMapping("/new")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String showNewForm(Model model) {
         model.addAttribute("funcion", new Funcion());
         model.addAttribute("salas", salaRepository.findAll());
@@ -72,6 +75,7 @@ public class FuncionController {
     }
 
     @GetMapping("/details")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String showDetails(
             @RequestParam("id") Long id,
             Model model,
@@ -91,6 +95,7 @@ public class FuncionController {
     }
 
     @GetMapping("/edit")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String showEditForm(
             @RequestParam("id") Long id,
             Model model,
@@ -111,6 +116,7 @@ public class FuncionController {
     }
 
     @PostMapping("/insert")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String insertFuncion(
             @ModelAttribute Funcion funcion,
             @RequestParam("sala") Long salaId,
@@ -158,6 +164,7 @@ public class FuncionController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String updateFuncion(
             @ModelAttribute Funcion funcion,
             @RequestParam("sala") Long salaId,
@@ -214,6 +221,7 @@ public class FuncionController {
     }
 
     @PostMapping("/delete")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String deleteFuncion(
             @RequestParam("id") Long id,
             RedirectAttributes redirectAttributes) {

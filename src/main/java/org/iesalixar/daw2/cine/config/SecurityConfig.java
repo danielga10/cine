@@ -55,21 +55,20 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> {
-                    logger.debug("Configurando autorización de solicitudes HTTP");
                     auth
-                            // 1. Recursos estáticos (SIEMPRE PRIMERO)
                             .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+                            .requestMatchers("/", "/hello", "/oauth2/**", "/login").permitAll()
 
-                            // 2. Rutas públicas
-                            .requestMatchers("/", "/hello", "/oauth/**", "/login").permitAll()
+                            // 1. Rutas exclusivas de GESTIÓN (Solo MANAGER y ADMIN)
+                            .requestMatchers("/clientes/**", "/trabajadores/**", "/boletos/**").hasAnyRole("MANAGER", "ADMIN")
 
-                            // 3. Rutas por roles
+                            // 2. Rutas de CONSULTA y CINE (USER puede entrar a ver, pero limitaremos sus acciones en el Controller)
+                            .requestMatchers("/peliculas/**", "/directores/**", "/funciones/**", "/salas/**")
+                            .hasAnyRole("USER", "MANAGER", "ADMIN")
+
+                            // 3. Administración total
                             .requestMatchers("/admin/**").hasRole("ADMIN")
-                            .requestMatchers("/regions/**", "/provinces/**", "/supermarkets/**",
-                                    "/locations/**", "/categories/**").hasRole("MANAGER")
-                            .requestMatchers("/tickets/**").hasRole("USER")
 
-                            // 4. Cualquier otra cosa requiere estar logueado
                             .anyRequest().authenticated();
                 })
                 .formLogin(form -> {

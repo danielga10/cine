@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -22,161 +23,162 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/salas")
 public class SalaController {
-    /** Logger para registrar eventos y errores */
+
     private static final Logger logger = LoggerFactory.getLogger(SalaController.class);
 
-    /** Repositorio para operaciones CRUD de salas */
     @Autowired
     private SalaRepository salaRepository;
 
-    /** Repositorio para operaciones CRUD de funciones */
     @Autowired
     private FuncionRepository funcionRepository;
 
+    /**
+     * LISTAR SALAS
+     * Permitido para: USER, MANAGER, ADMIN
+     */
     @GetMapping()
+    @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
     public String listSalas(@RequestParam(defaultValue = "1") int page,
                             @RequestParam(required = false) String search,
                             @RequestParam(required = false) String sort,
                             Model model) {
-        logger.info("Solicitando listado de todas las salas..." + search);
+        logger.info("Solicitando listado de salas. Búsqueda: {}", search);
         Pageable pageable = PageRequest.of(page - 1, 5, getSort(sort));
         Page<Sala> salas;
-        int totalPages = 0;
 
         if (search != null && !search.isBlank()) {
-            try {
-                salas = salaRepository.findByNumeroContainingIgnoreCase(search, pageable);
-                totalPages = (int) Math.ceil((double) salaRepository.countByNumeroContainingIgnoreCase(search) / 5);
-            } catch (NumberFormatException e) {
-                // Si el usuario ingresa texto en lugar de un número, mostrar lista vacía
-                salas = Page.empty(pageable);
-                totalPages = 0;
-            }
+            // Asumiendo que el repositorio maneja la búsqueda por número de sala
+            salas = salaRepository.findByNumeroContainingIgnoreCase(search, pageable);
         } else {
             salas = salaRepository.findAll(pageable);
-            totalPages = (int) Math.ceil((double) salaRepository.count() / 5);
         }
 
-        logger.info("Se han cargado {} salas.", salas.toList().size());
-        model.addAttribute("listSalas", salas.toList());
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("listSalas", salas.getContent());
+        model.addAttribute("totalPages", salas.getTotalPages());
         model.addAttribute("currentPage", page);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
         return "Sala/salas.html";
     }
 
+    /**
+     * FORMULARIO NUEVA SALA
+     * Permitido para: MANAGER, ADMIN
+     */
     @GetMapping("/new")
-    public String showNewForm(org.springframework.ui.Model model, RedirectAttributes redirectAttributes) {
-        model.addAttribute("sala", new Sala());
-
-        try {
-            List<Funcion> funciones = funcionRepository.findAll();
-            model.addAttribute("funciones", funciones);
-        } catch (Exception e) {
-            logger.error("Error al cargar la lista de funciones:", e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al cargar datos necesarios.");
-            return "redirect:/salas";
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public String showNewForm(Model model, RedirectAttributes redirectAttributes) {
+        if (!model.containsAttribute("sala")) {
+            model.addAttribute("sala", new Sala());
         }
-
+        model.addAttribute("funciones", funcionRepository.findAll());
         return "Sala/salas-form.html";
     }
+
+    /**
+     * INSERTAR SALA
+     * Permitido para: MANAGER, ADMIN
+     */
+    @PostMapping("/insert")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public String insertSala(@ModelAttribute("sala") Sala sala,
+                             @RequestParam(value = "funciones", required = false) List<Long> funcionesIds,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            if (funcionesIds != null) {
+                List<Funcion> funcionesSeleccionadas = funcionRepository.findAllById(funcionesIds);
+                for (Funcion f : funcionesSeleccionadas) {
+                    f.setSala(sala);
+                }
+                sala.setFunciones(funcionesSeleccionadas);
+            }
+            salaRepository.save(sala);
+            redirectAttributes.addFlashAttribute("successMessage", "Sala creada correctamente.");
+        } catch (Exception e) {
+            logger.error("Error al crear sala: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear la sala.");
+            redirectAttributes.addFlashAttribute("sala", sala);
+            return "redirect:/salas/new";
+        }
+        return "redirect:/salas";
+    }
+
+    /**
+     * FORMULARIO EDITAR
+     * Permitido para: MANAGER, ADMIN
+     */
     @GetMapping("/edit")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String showEditForm(@RequestParam("id") Long id, Model model, RedirectAttributes redirectAttributes) {
-        Optional<Sala> salaOpt = salaRepository.findById(id);
-        if (salaOpt.isEmpty()) {
+        Sala sala = salaRepository.findById(id).orElse(null);
+        if (sala == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Sala no encontrada.");
             return "redirect:/salas";
         }
 
-        // Pasa el objeto Sala, no el Optional
-        model.addAttribute("sala", salaOpt.get());
-
-        List<Funcion> funciones = funcionRepository.findAll();
-        model.addAttribute("funciones", funciones);
-
+        model.addAttribute("sala", sala);
+        model.addAttribute("funciones", funcionRepository.findAll());
         return "Sala/salas-form.html";
     }
-    @PostMapping("/delete")
-    public String deleteSala(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            if (salaRepository == null) {
-                throw new IllegalStateException("salaDAO no inyectado");
-            }
-            Optional<Sala> sala = salaRepository.findById(id);
-            if (sala == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Sala no encontrada.");
-                return "redirect:/salas";
-            }
-            salaRepository.deleteById(id);
-            logger.info("Sala con ID {} eliminada con éxito.", id);
-        } catch (Exception e) {
-            logger.error("Error inesperado al eliminar la sala: {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error interno del servidor.");
-        }
-        return "redirect:/salas";
-    }
-    @PostMapping("/insert")
-    public String insertSala(@ModelAttribute("sala") Sala sala,
-                             @RequestParam("funciones") List<Long> funcionesIds,
-                             RedirectAttributes redirectAttributes) {
-        try {
-            List<Funcion> funcionesSeleccionadas = funcionRepository.findAllById(funcionesIds);
 
-            // Asignar la sala a cada funcion antes de guardar
-            for (Funcion f : funcionesSeleccionadas) {
-                f.setSala(sala);
-            }
-
-            sala.setFunciones(funcionesSeleccionadas);
-            salaRepository.save(sala);
-
-            redirectAttributes.addFlashAttribute("successMessage", "Sala creada correctamente.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear la sala.");
-        }
-
-        return "redirect:/salas";
-    }
-
+    /**
+     * ACTUALIZAR SALA
+     * Permitido para: MANAGER, ADMIN
+     */
     @PostMapping("/update")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public String updateSala(@ModelAttribute("sala") Sala sala,
-                             @RequestParam("funciones") List<Long> funcionesIds,
+                             @RequestParam(value = "funciones", required = false) List<Long> funcionesIds,
                              RedirectAttributes redirectAttributes) {
         try {
-            Sala existingSala = salaRepository.findById(sala.getId()).orElseThrow(() -> new RuntimeException("Sala no encontrada"));
+            Sala existingSala = salaRepository.findById(sala.getId())
+                    .orElseThrow(() -> new RuntimeException("Sala no encontrada"));
 
             existingSala.setNumero(sala.getNumero());
             existingSala.setCapacidad(sala.getCapacidad());
 
-            // Actualizar funciones seleccionadas
-            List<Funcion> funcionesSeleccionadas = funcionRepository.findAllById(funcionesIds);
-
-            // Asignar la sala a cada funcion
-            for (Funcion f : funcionesSeleccionadas) {
-                f.setSala(existingSala);
+            if (funcionesIds != null) {
+                List<Funcion> funcionesSeleccionadas = funcionRepository.findAllById(funcionesIds);
+                for (Funcion f : funcionesSeleccionadas) {
+                    f.setSala(existingSala);
+                }
+                existingSala.setFunciones(funcionesSeleccionadas);
             }
 
-            existingSala.setFunciones(funcionesSeleccionadas);
             salaRepository.save(existingSala);
-
             redirectAttributes.addFlashAttribute("successMessage", "Sala actualizada correctamente.");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al actualizar sala: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar la sala.");
+            return "redirect:/salas/edit?id=" + sala.getId();
         }
-
         return "redirect:/salas";
     }
-    private Sort getSort(String sort) {
-        if (sort == null) {
-            return Sort.by("id").ascending();
+
+    /**
+     * ELIMINAR SALA
+     * Permitido para: MANAGER, ADMIN
+     */
+    @PostMapping("/delete")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    public String deleteSala(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            salaRepository.deleteById(id);
+            logger.info("Sala con ID {} eliminada.", id);
+            redirectAttributes.addFlashAttribute("successMessage", "Sala eliminada con éxito.");
+        } catch (Exception e) {
+            logger.error("Error al eliminar la sala: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "No se puede eliminar la sala (posiblemente tiene funciones asignadas).");
         }
+        return "redirect:/salas";
+    }
+
+    private Sort getSort(String sort) {
+        if (sort == null) return Sort.by("id").ascending();
         return switch (sort) {
-            case "nameAsc" -> Sort.by("name").ascending();
-            case "nameDesc" -> Sort.by("name").descending();
-            case "idDesc" -> Sort.by("id").descending();
+            case "numAsc" -> Sort.by("numero").ascending();
+            case "numDesc" -> Sort.by("numero").descending();
+            case "capDesc" -> Sort.by("capacidad").descending();
             default -> Sort.by("id").ascending();
         };
     }
