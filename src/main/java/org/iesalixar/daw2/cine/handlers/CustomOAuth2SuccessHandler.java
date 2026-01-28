@@ -58,6 +58,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             // Como tú guardas el email en el campo 'username', usamos el email para buscar.
             usernameToSearch = (String) attributes.get("email");
             logger.info("Login OAuth2: Google detectado. Email: {}", usernameToSearch);
+        } else if ("gitlab".equals(clientRegistrationId)) {
+            // En GitLab, el identificador es el 'preferred_username' (configurado en application.properties).
+            usernameToSearch = (String) attributes.get("preferred_username");
+            logger.info("Login OAuth2: GitLab detectado. Usuario: {}", usernameToSearch);
         }
 
         // 3. Validación de seguridad

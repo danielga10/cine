@@ -73,11 +73,13 @@ VALUES
 (2, 'manager', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMpJ.z6yQMC6', true, 'Manager', 'User', NOW(), NOW(), NOW()),
 (3, 'normal', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMpJ.z6yQMC6', true, 'Regular', 'User',  NOW(), NOW(), NOW()),
 (4, 'ElDiavloLoKoTV', '', true, 'ElDiavloLoKoTV', 'Discord', NOW(), NOW(), NULL),
-(5, 'jaimeramirezmuela@gmail.com', '', true, 'Jaime', 'Ramirez', NOW(), NOW(), NOW());
+(5, 'jaimeramirezmuela@gmail.com', '', true, 'Jaime', 'Ramirez', NOW(), NOW(), NOW()),
+(6, 'Daniel-goga-GIT', '', true, 'Daniel', 'Gonzalez', NOW(), NOW(), NOW());
 
 INSERT INTO user_roles (user_id, role_id) VALUES
 (1, 1),
 (2, 2),
 (3, 3),
 (4, 2),
-(5, 2);
+(5, 2),
+(6, 2);
