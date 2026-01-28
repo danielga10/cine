@@ -101,13 +101,12 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     private void registerNewUser(String username, OAuth2User oAuth2User, String provider) {
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword("OAUTH2_USER_NO_PASS"); // Contraseña dummy para evitar error de Null
+        newUser.setPassword("OAUTH2_USER_NO_PASS");
         newUser.setEnabled(true);
         newUser.setCreatedDate(LocalDateTime.now());
         newUser.setLastModifiedDate(LocalDateTime.now());
         newUser.setLastPasswordChangeDate(LocalDateTime.now());
 
-        // Lógica para intentar sacar Nombre y Apellido según el proveedor
         String firstName = "Usuario";
         String lastName = provider;
 
